@@ -11,14 +11,13 @@ export function MobileProvider({ children }) {
 
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
+
 	console.log(filter);
 	console.log("RAm", ramFilter);
 
 	async function fetchAllMobiles() {
 		try {
-			const res = await axios.get(
-				"https://mobile-ordering-backend.onrender.com/mobiles/all"
-			);
+			const res = await axios.get(`${process.env.BASE_URL}/mobiles/all`);
 			console.log(res);
 
 			setAllMob(res.data.info);
@@ -51,15 +50,12 @@ export function MobileProvider({ children }) {
 		if (filter?.length === 0 && ramFilter?.length === 0) {
 			return fetchAllMobiles();
 		}
-		const res = await axios.get(
-			"https://mobile-ordering-backend.onrender.com/filter",
-			{
-				params: {
-					filter: JSON.stringify(filter),
-					ramFilter: JSON.stringify(ramFilter),
-				},
-			}
-		);
+		const res = await axios.get(`${process.env.BASE_URL}/filter`, {
+			params: {
+				filter: JSON.stringify(filter),
+				ramFilter: JSON.stringify(ramFilter),
+			},
+		});
 
 		console.log(res.data.message);
 		setAllMob(res.data.message);
