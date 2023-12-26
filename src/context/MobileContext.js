@@ -50,7 +50,7 @@ export function MobileProvider({ children }) {
 		if (filter?.length === 0 && ramFilter?.length === 0) {
 			return fetchAllMobiles();
 		}
-		const res = await axios.get(`${process.env.BASE_URL}/filter`, {
+		const res = await axios.get(`${process.env.BASE_URL}/mobiles/filter`, {
 			params: {
 				filter: JSON.stringify(filter),
 				ramFilter: JSON.stringify(ramFilter),
