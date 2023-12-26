@@ -17,7 +17,7 @@ export function MobileProvider({ children }) {
 	async function fetchAllMobiles() {
 		try {
 			const res = await axios.get(
-				"https://mobile-ordering-server.vercel.app/mobiles/all"
+				"https://mobile-ordering-backend.onrender.com/mobiles/all"
 			);
 			console.log(res);
 
@@ -52,7 +52,7 @@ export function MobileProvider({ children }) {
 			return fetchAllMobiles();
 		}
 		const res = await axios.get(
-			"https://mobile-ordering-server.vercel.app/mobiles/filter",
+			"https://mobile-ordering-backend.onrender.com/filter",
 			{
 				params: {
 					filter: JSON.stringify(filter),
