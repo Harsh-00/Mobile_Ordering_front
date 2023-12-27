@@ -7,8 +7,8 @@ export function MobileProvider({ children }) {
 	const [allMob, setAllMob] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-	const BASE_URL = "http://localhost:3001";
-	//  https://mobile-ordering-backend.onrender.com/
+	// const BASE_URL = "http://localhost:3001";
+	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	const [addProduct, setAddProduct] = useState(false);
 
