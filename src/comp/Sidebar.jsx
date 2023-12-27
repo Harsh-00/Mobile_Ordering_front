@@ -32,12 +32,14 @@ const Sidebar = () => {
 		}
 	}
 	return (
-		<div className="pl-3">
-			<h1 className="w-full  text-2xl font-semibold pt-6 underline pl-20 pb-4">
+		<div className="pl-3 pb-4">
+			<h1 className="w-full text-2xl font-semibold pt-6 underline text-center  ">
 				Filter
 			</h1>
-			<div className="mt-5 font-semibold text-lg mb-1">Brand</div>
-			<div className="pl-3">
+			<div className="mt-8 font-semibold text-lg mb-1 max-md:mt-4">
+				Brand
+			</div>
+			<div className="pl-3 flex flex-col flex-wrap max-md:flex-row max-md:gap-6">
 				{brand?.map((item, idx) => {
 					return (
 						<div key={idx}>
@@ -55,8 +57,10 @@ const Sidebar = () => {
 					);
 				})}
 			</div>
-			<div className="mt-6 font-semibold text-lg mb-1">RAM</div>
-			<div className="pl-3">
+			<div className="mt-6 font-semibold text-lg mb-1 max-md:mt-3">
+				RAM
+			</div>
+			<div className="pl-3 flex flex-col flex-wrap max-md:flex-row max-md:gap-6">
 				{ram?.map((item, idx) => {
 					return (
 						<div key={idx}>

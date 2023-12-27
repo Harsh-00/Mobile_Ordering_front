@@ -2,8 +2,8 @@ import React from "react";
 
 const Card = ({ info }) => {
 	return (
-		<div className="flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4">
-			<div className="w-[160px] h-[215px] shrink-0 mb-4">
+		<div className="flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4 max-sm:flex-wrap">
+			<div className="w-[160px] h-[215px] shrink-0 mb-4 ">
 				<img
 					src={info.mobImg}
 					alt="image of mobile"

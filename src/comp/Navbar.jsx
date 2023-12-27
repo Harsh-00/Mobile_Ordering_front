@@ -64,8 +64,8 @@ const Navbar = () => {
 				</nav>
 			</header>
 			{isMenuOpen && (
-				<div>
-					<nav className="fixed top-0 right-0 left-0 bottom-0 lg:bottom-auto bg-slate-100 ">
+				<div className="">
+					<nav className="fixed top-0 right-0 left-0 bottom-0 lg:bottom-auto bg-slate-100 z-40">
 						<div
 							className="hidden max-lg:block fixed right-0 px-8 py-4 cursor-pointer"
 							onClick={() => {
@@ -80,11 +80,24 @@ const Navbar = () => {
 									<Link
 										to={item.to}
 										className=" text-lg text-slate-gray"
+										onClick={() => {
+											setIsMenuOpen(false);
+										}}
 									>
 										{item.label}
 									</Link>
 								</li>
 							))}
+
+							<li
+								className="text-lg text-slate-gray"
+								onClick={() => {
+									setAddProduct(true);
+									setIsMenuOpen(false);
+								}}
+							>
+								Add Product
+							</li>
 						</ul>
 					</nav>
 				</div>

@@ -5,7 +5,7 @@ import { MobileContext } from "../context/MobileContext";
 const AddProduct = () => {
 	const { addProduct, setAddProduct, BASE_URL } = useContext(MobileContext);
 	return (
-		<div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-200 z-20">
+		<div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-200 z-20 flex ">
 			{addProduct && (
 				<AiOutlineClose
 					className="text-4xl cursor-pointer absolute top-4 right-8 "
@@ -15,7 +15,7 @@ const AddProduct = () => {
 			<form
 				action={`${BASE_URL}/mobiles/add`}
 				method="POST"
-				className="  bg-white p-4 py-8 shadow-2xl w-[700px] min-h-[500px] mx-auto mt-24 flex flex-col gap-4"
+				className="  bg-white p-4 py-8 shadow-2xl w-[700px] min-h-[500px] mx-auto my-auto flex flex-col gap-4"
 			>
 				<div className="grid grid-cols-2 gap-4 px-2">
 					<label>
