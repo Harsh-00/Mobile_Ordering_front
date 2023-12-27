@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../comp/Sidebar";
 import { MobileContext } from "../context/MobileContext";
+import Loader from "../comp/Loader";
 
 import Card from "../comp/Card";
 
 const Mobile = () => {
-	const { allMob, fetchAllMobiles } = useContext(MobileContext);
+	const { allMob, fetchAllMobiles, loading } = useContext(MobileContext);
 	console.log(allMob);
 
 	useEffect(() => {
@@ -13,14 +14,18 @@ const Mobile = () => {
 	}, []);
 
 	return (
-		<div className="flex w-full h-full">
-			<div className="bg-slate-200 min-h-screen w-[300px]">
+		<div className="flex w-full h-full bg-gray-200 gap-4 ">
+			<div className="bg-white ml-3  mb-6 h-screen w-[300px] rounded-lg shadow-xl border-2 border-gray-400 mt-4">
 				<Sidebar info={allMob} />
 			</div>
-			<div className="bg-blue-100 h-full w-full min-h-screen flex-grow flex flex-col gap-8 p-4 pb-10 mb-2">
-				{allMob.map((item) => {
-					return <Card key={item.key} info={item} />;
-				})}
+			<div className="relative bg-white rounded-lg h-full w-full min-h-screen flex-grow flex flex-col gap-8 p-4 pb-10 mb-6 shadow-xl border-2 border-gray-400 mr-3 pt-6 mt-4 ">
+				{loading ? (
+					<Loader />
+				) : (
+					allMob.map((item) => {
+						return <Card key={item.key} info={item} />;
+					})
+				)}
 			</div>
 		</div>
 	);

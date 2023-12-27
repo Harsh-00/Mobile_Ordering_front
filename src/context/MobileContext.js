@@ -5,6 +5,12 @@ export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
 	const [allMob, setAllMob] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	const BASE_URL = "http://localhost:3001";
+	//  https://mobile-ordering-backend.onrender.com/
+
+	const [addProduct, setAddProduct] = useState(false);
 
 	const [brand, setBrand] = useState([]);
 	const [filter, setFilter] = useState([]);
@@ -17,11 +23,10 @@ export function MobileProvider({ children }) {
 
 	async function fetchAllMobiles() {
 		try {
-			const res = await axios.get(
-				"https://mobile-ordering-backend.onrender.com/mobiles/all"
-			);
+			const res = await axios.get(`${BASE_URL}/mobiles/all`);
 			console.log(res);
 
+			setLoading(false);
 			setAllMob(res.data.info);
 		} catch (e) {
 			console.log("Error while fetching all mobile ", e);
@@ -52,15 +57,12 @@ export function MobileProvider({ children }) {
 		if (filter?.length === 0 && ramFilter?.length === 0) {
 			return fetchAllMobiles();
 		}
-		const res = await axios.get(
-			"https://mobile-ordering-backend.onrender.com/mobiles/filter",
-			{
-				params: {
-					filter: JSON.stringify(filter),
-					ramFilter: JSON.stringify(ramFilter),
-				},
-			}
-		);
+		const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
+			params: {
+				filter: JSON.stringify(filter),
+				ramFilter: JSON.stringify(ramFilter),
+			},
+		});
 
 		console.log(res.data.message);
 		setAllMob(res.data.message);
@@ -69,9 +71,14 @@ export function MobileProvider({ children }) {
 	const val = {
 		allMob,
 		setAllMob,
+		addProduct,
+		setAddProduct,
 		fetchAllMobiles,
 		storeBrands,
+		setLoading,
+		loading,
 		brand,
+		BASE_URL,
 		filter,
 		setFilter,
 		fetchFiltered,

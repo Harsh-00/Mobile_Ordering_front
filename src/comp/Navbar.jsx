@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import AddProduct from "./AddProduct";
+import { MobileContext } from "../context/MobileContext";
 
 const Navbar = () => {
 	const nav = useNavigate();
@@ -10,15 +12,21 @@ const Navbar = () => {
 	const navLinks = [
 		{ to: "/", label: "Home" },
 		{ to: "/mobiles", label: "Mobiles" },
-		{ to: "#about-us", label: "About Us" },
-		{ to: "#contact-us", label: "Contact Us" },
+		// { to: "#about-us", label: "About Us" },
+		// { to: "#contact-us", label: "Contact Us" },
 	];
 
+	const { addProduct, setAddProduct } = useContext(MobileContext);
+
 	return (
-		<div>
-			<header className="sm:px-8 px-4 py-2 z-10 w-full">
+		<div className="relative">
+			{addProduct && <AddProduct />}
+			<header className="sm:px-8 px-4 py-2 z-10 w-full bg-blue-400 ">
 				<nav className="flex justify-between items-center max-container">
-					<Link to="/" className="text-3xl font-bold">
+					<Link
+						to="/"
+						className="text-4xl font-bold text-green-200 pb-1"
+					>
 						Logo
 					</Link>
 					<ul className="flex-1  flex justify-center items-center gap-16 max-lg:hidden">
@@ -29,18 +37,21 @@ const Navbar = () => {
 									nav(item.to);
 									setCurrRoute(item.to);
 								}}
-								className={`text-lg text-slate-gray cursor-pointer ${
-									currRoute == item.to ? "bg-blue-500" : " "
+								className={`text-lg text-slate-gray cursor-pointer rounded-xl px-2 py-0.5 ${
+									currRoute == item.to
+										? "bg-white font-semibold"
+										: " "
 								} `}
 							>
 								{item.label}
 							</li>
 						))}
 					</ul>
-					<div className="flex gap-2 text-lg font-medium max-lg:hidden wide:mr-24">
-						<Link to="/">Login</Link>
-						<span>/</span>
-						<Link to="/">Sign Up</Link>
+					<div
+						className="flex gap-2 text-lg font-medium max-lg:hidden wide:mr-24 cursor-pointer rounded-xl px-3 py-0.5 bg-white"
+						onClick={() => setAddProduct(true)}
+					>
+						Add Product
 					</div>
 					<div
 						className="hidden max-lg:block cursor-pointer"

@@ -32,10 +32,12 @@ const Sidebar = () => {
 		}
 	}
 	return (
-		<div>
-			<h1>Filter</h1>
-			<div>Brand</div>
-			<div>
+		<div className="pl-3">
+			<h1 className="w-full  text-2xl font-semibold pt-6 underline pl-20 pb-4">
+				Filter
+			</h1>
+			<div className="mt-5 font-semibold text-lg mb-1">Brand</div>
+			<div className="pl-3">
 				{brand?.map((item, idx) => {
 					return (
 						<div key={idx}>
@@ -45,6 +47,7 @@ const Sidebar = () => {
 									value={item}
 									id={idx}
 									onChange={filterHandler}
+									className="mr-2 mb-2"
 								/>
 								{item}
 							</label>
@@ -52,8 +55,8 @@ const Sidebar = () => {
 					);
 				})}
 			</div>
-			<div>RAM</div>
-			<div>
+			<div className="mt-6 font-semibold text-lg mb-1">RAM</div>
+			<div className="pl-3">
 				{ram?.map((item, idx) => {
 					return (
 						<div key={idx}>
@@ -63,8 +66,9 @@ const Sidebar = () => {
 									value={item}
 									id={idx}
 									onChange={RAMHandler}
+									className="mr-2 mb-2"
 								/>
-								{item}
+								{item} GB
 							</label>
 						</div>
 					);
@@ -75,8 +79,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-//how to create a checkbox in react ?
-
-//how to create a radio button in react ?
-//how to create a dropdown in react ?
