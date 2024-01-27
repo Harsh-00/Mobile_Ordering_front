@@ -1,9 +1,20 @@
 import React, { useContext } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { MobileContext } from "../context/MobileContext";
+import axios from "axios";
 
 const AddProduct = () => {
 	const { addProduct, setAddProduct, BASE_URL } = useContext(MobileContext);
+
+	async function submitHandler(e) {
+		e.preventDefault();
+		const res = await axios.post(`${BASE_URL}/mobiles/add`, {
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("token"),
+			},
+		});
+		console.log(res);
+	}
 	return (
 		<div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-200 z-20 flex ">
 			{addProduct && (
@@ -12,11 +23,7 @@ const AddProduct = () => {
 					onClick={() => setAddProduct(false)}
 				/>
 			)}
-			<form
-				action={`${BASE_URL}/mobiles/add`}
-				method="POST"
-				className="  bg-white p-4 py-8 shadow-2xl w-[700px] min-h-[500px] mx-auto my-auto flex flex-col gap-4"
-			>
+			<form className="bg-white p-4 py-8 shadow-2xl w-[700px] min-h-[500px] mx-auto my-auto flex flex-col gap-4">
 				<div className="grid grid-cols-2 gap-4 px-2">
 					<label>
 						<span className="font-semibold ">Name:</span>
@@ -190,6 +197,7 @@ const AddProduct = () => {
 				<input
 					type="submit"
 					value="Submit"
+					onClick={submitHandler}
 					className="mx-auto bg-green-500 text-white font-semibold text-lg rounded-xl px-4 py-0.5 mt-4 whitespace-nowrap"
 				/>
 			</form>

@@ -4,11 +4,13 @@ import axios from "axios";
 export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
+	const [info, setInfo] = useState({ email: "", password: "" });
+
 	const [allMob, setAllMob] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-	// const BASE_URL = "http://localhost:3001";
-	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	const BASE_URL = "http://localhost:3001";
+	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	const [addProduct, setAddProduct] = useState(false);
 
@@ -18,14 +20,27 @@ export function MobileProvider({ children }) {
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
-	console.log(filter);
-	console.log("RAm", ramFilter);
+	// console.log(filter);
+	// console.log("RAm", ramFilter);
+
+	async function loginRequest(userData) {
+		try {
+			const res = await axios.post(`${BASE_URL}/mobiles/login`, userData);
+			localStorage.setItem("token", res.data.token);
+			console.log(res);
+		} catch (error) {
+			console.log("Error while login ", error);
+		}
+	}
 
 	async function fetchAllMobiles() {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/all`);
+			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
+				headers: {
+					Authorization: localStorage.getItem("token"),
+				},
+			});
 			console.log(res);
-
 			setLoading(false);
 			setAllMob(res.data.info);
 		} catch (e) {
@@ -69,6 +84,9 @@ export function MobileProvider({ children }) {
 	}
 
 	const val = {
+		info,
+		setInfo,
+		loginRequest,
 		allMob,
 		setAllMob,
 		addProduct,

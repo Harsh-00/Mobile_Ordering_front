@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Mobile from "./pages/Mobile";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
+import AddProduct from "./comp/AddProduct";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 				<Route path="/" element={<Login />} />
 				<Route path="/home" element={<Home />} />
 				<Route path="/mobiles" element={<Mobile />} />
+				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="*" element={<NoPage />} />
 			</Routes>
 		</div>

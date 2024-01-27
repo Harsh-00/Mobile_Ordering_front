@@ -10,8 +10,8 @@ const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [currRoute, setCurrRoute] = useState("/");
 	const navLinks = [
-		{ to: "/", label: "Home" },
 		{ to: "/mobiles", label: "Mobiles" },
+		{ to: "/add-product", label: "Home" },
 		// { to: "#about-us", label: "About Us" },
 		// { to: "#contact-us", label: "Contact Us" },
 	];
