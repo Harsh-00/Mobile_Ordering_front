@@ -7,6 +7,8 @@ export function MobileProvider({ children }) {
 	const [info, setInfo] = useState({ email: "", password: "" });
 
 	const [allMob, setAllMob] = useState([]);
+
+	const [wishList, setWishList] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	const BASE_URL = "http://localhost:3001";
@@ -89,6 +91,8 @@ export function MobileProvider({ children }) {
 		loginRequest,
 		allMob,
 		setAllMob,
+		wishList,
+		setWishList,
 		addProduct,
 		setAddProduct,
 		fetchAllMobiles,

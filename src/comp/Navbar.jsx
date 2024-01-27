@@ -4,6 +4,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import AddProduct from "./AddProduct";
 import { MobileContext } from "../context/MobileContext";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Navbar = () => {
 	const nav = useNavigate();
@@ -11,7 +12,7 @@ const Navbar = () => {
 	const [currRoute, setCurrRoute] = useState("/");
 	const navLinks = [
 		{ to: "/mobiles", label: "Mobiles" },
-		{ to: "/add-product", label: "Home" },
+		{ to: "/add-product", label: "Add Mobile" },
 		// { to: "#about-us", label: "About Us" },
 		// { to: "#contact-us", label: "Contact Us" },
 	];
@@ -47,12 +48,27 @@ const Navbar = () => {
 							</li>
 						))}
 					</ul>
-					<div
-						className="flex gap-2 text-lg font-medium max-lg:hidden wide:mr-24 cursor-pointer rounded-xl px-3 py-0.5 bg-white"
-						onClick={() => setAddProduct(true)}
-					>
-						Add Product
+					<div className="flex gap-2 justify-center items-center">
+						<div
+							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white mr-8"
+							onClick={() => setAddProduct(true)}
+						>
+							<p className="text-md ">Login</p>
+						</div>
+						<div
+							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
+							onClick={() => setAddProduct(true)}
+						>
+							<p className="text-md ">Wishlist</p>
+						</div>
+						<div
+							className="font-medium  wide:mr-24 cursor-pointer rounded-xl p-1.5 bg-white"
+							onClick={() => setAddProduct(true)}
+						>
+							<FaShoppingCart className="text-2xl text-green-600" />
+						</div>
 					</div>
+
 					<div
 						className="hidden max-lg:block cursor-pointer"
 						onClick={() => {

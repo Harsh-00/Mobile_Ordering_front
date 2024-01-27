@@ -1,8 +1,53 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { MdDelete } from "react-icons/md";
+import { MobileContext } from "../context/MobileContext";
+import { IoMdHeart } from "react-icons/io";
+import { IoMdHeartDislike } from "react-icons/io";
 
 const Card = ({ info }) => {
+	const { BASE_URL, wishList, setWishList } = useContext(MobileContext);
+
+	const [isLiked, setIsLiked] = useState(false);
+	async function likeHandler() {
+		setIsLiked(!isLiked);
+
+		if (isLiked) {
+			setWishList([...wishList, info]);
+		} else {
+			setWishList((prev) => prev.filter((item) => item.key !== info.key));
+		}
+	}
+
+	async function deleteMobile() {
+		console.log(info.key);
+		await axios.delete(`${BASE_URL}/mobiles/delete/${info.key}`, {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		});
+	}
 	return (
-		<div className="flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4 max-sm:flex-wrap">
+		<div className="relative flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4 max-sm:flex-wrap">
+			<div className="absolute -top-3 right-4 flex flex-col items-center justify-center gap-2">
+				<div
+					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
+					onClick={deleteMobile}
+				>
+					<MdDelete className=" text-xl  text-red-400 hover:text-red-500  " />
+				</div>
+
+				<div
+					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
+					onClick={likeHandler}
+				>
+					{isLiked ? (
+						<IoMdHeart className=" text-xl text-red-500 " />
+					) : (
+						<IoMdHeart className=" text-xl text-white " />
+					)}
+				</div>
+			</div>
 			<div className="w-[160px] h-[215px] shrink-0 mb-4 ">
 				<img
 					src={info.mobImg}

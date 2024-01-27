@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Mobile from "./pages/Mobile";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
-import AddProduct from "./comp/AddProduct";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
 	return (
