@@ -8,7 +8,11 @@ export function MobileProvider({ children }) {
 
 	const [allMob, setAllMob] = useState([]);
 
-	const [wishList, setWishList] = useState([]);
+	// var li = [];
+	// if (sessionStorage.getItem("user")) {
+	// 	li = JSON.parse(sessionStorage?.getItem("user")).wishlist;
+	// }
+	// const [wishList, setWishList] = useState(li);
 	const [loading, setLoading] = useState(true);
 
 	const BASE_URL = "http://localhost:3001";
@@ -28,8 +32,12 @@ export function MobileProvider({ children }) {
 	async function loginRequest(userData) {
 		try {
 			const res = await axios.post(`${BASE_URL}/mobiles/login`, userData);
-			localStorage.setItem("token", res.data.token);
+			sessionStorage.setItem("token", res.data.token);
+			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
 			console.log(res);
+
+			const list = JSON.parse(sessionStorage?.getItem("user"));
+			// setWishList(list?.wishlist || []);
 		} catch (error) {
 			console.log("Error while login ", error);
 		}
@@ -39,7 +47,7 @@ export function MobileProvider({ children }) {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
 				headers: {
-					Authorization: localStorage.getItem("token"),
+					Authorization: sessionStorage.getItem("token"),
 				},
 			});
 			console.log(res);
@@ -70,6 +78,25 @@ export function MobileProvider({ children }) {
 		setRam([...new Set(ram)]);
 	}
 
+	async function addToWishList(key) {
+		const res = await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+			headers: {
+				Authorization: sessionStorage.getItem("token"),
+			},
+		});
+		console.log(res);
+	}
+
+	// async function getWishList() {
+	// 	const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+	// 		headers: {
+	// 			Authorization: sessionStorage.getItem("token"),
+	// 		},
+	// 	});
+	// 	// console.log(res);
+	// 	// return res;
+	// }
+
 	async function fetchFiltered() {
 		if (filter?.length === 0 && ramFilter?.length === 0) {
 			return fetchAllMobiles();
@@ -91,8 +118,7 @@ export function MobileProvider({ children }) {
 		loginRequest,
 		allMob,
 		setAllMob,
-		wishList,
-		setWishList,
+		addToWishList,
 		addProduct,
 		setAddProduct,
 		fetchAllMobiles,

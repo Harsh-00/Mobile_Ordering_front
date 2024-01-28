@@ -6,6 +6,7 @@ import Mobile from "./pages/Mobile";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
 import AddProduct from "./pages/AddProduct";
+import WishList from "./pages/WishList";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Route path="/home" element={<Home />} />
 				<Route path="/mobiles" element={<Mobile />} />
 				<Route path="/add-product" element={<AddProduct />} />
+				<Route path="/wishlist" element={<WishList />} />
 				<Route path="*" element={<NoPage />} />
 			</Routes>
 		</div>

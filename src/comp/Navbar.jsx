@@ -57,7 +57,7 @@ const Navbar = () => {
 						</div>
 						<div
 							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
-							onClick={() => setAddProduct(true)}
+							onClick={() => nav("/wishlist")}
 						>
 							<p className="text-md ">Wishlist</p>
 						</div>

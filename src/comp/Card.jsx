@@ -1,32 +1,54 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartDislike } from "react-icons/io";
 
 const Card = ({ info }) => {
-	const { BASE_URL, wishList, setWishList } = useContext(MobileContext);
+	const [list, setList] = useState([]);
+	const { BASE_URL, addToWishList } = useContext(MobileContext);
+	var tmp;
+	useEffect(() => {
+		async function getWishList() {
+			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			// console.log(res);
+			// return res;
+			setList(res.data.list);
+		}
 
-	const [isLiked, setIsLiked] = useState(false);
+		getWishList();
+
+		tmp = list.map((item) => item.key).includes(info.key);
+		console.log("Tmp-> ", tmp);
+	}, []);
+
+	// console.log(list.map((item) => item.key));
+	// console.log(info.key);
+
+	const [isLiked, setIsLiked] = useState(tmp);
+	console.log(info, list, isLiked);
+
 	async function likeHandler() {
 		setIsLiked(!isLiked);
 
-		if (isLiked) {
-			setWishList([...wishList, info]);
-		} else {
-			setWishList((prev) => prev.filter((item) => item.key !== info.key));
-		}
+		//will add or remove from wishlist
+		addToWishList(info.key);
 	}
 
 	async function deleteMobile() {
 		console.log(info.key);
 		await axios.delete(`${BASE_URL}/mobiles/delete/${info.key}`, {
 			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
+				Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 			},
 		});
 	}
+
 	return (
 		<div className="relative flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4 max-sm:flex-wrap">
 			<div className="absolute -top-3 right-4 flex flex-col items-center justify-center gap-2">
