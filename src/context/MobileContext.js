@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
+	const nav = useNavigate();
 	const [info, setInfo] = useState({ email: "", password: "" });
 
 	const [allMob, setAllMob] = useState([]);
@@ -34,13 +37,15 @@ export function MobileProvider({ children }) {
 	async function loginRequest(userData) {
 		try {
 			const res = await axios.post(`${BASE_URL}/mobiles/login`, userData);
+			toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
 			console.log(res);
-
-			const list = JSON.parse(sessionStorage?.getItem("user"));
-			// setWishList(list?.wishlist || []);
+			nav("/");
 		} catch (error) {
+			if(error.response.status === 401){
+				toast.error("Invalid Credentials");
+			}
 			console.log("Error while login ", error);
 		}
 	}
@@ -55,8 +60,11 @@ export function MobileProvider({ children }) {
 			console.log(res);
 			setLoading(false);
 			setAllMob(res.data.info);
-		} catch (e) {
-			console.log("Error while fetching all mobile ", e);
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+			console.log("Error while fetching all mobile ", error);
 		}
 	}
 
@@ -81,57 +89,85 @@ export function MobileProvider({ children }) {
 	}
 
 	async function addToCart(key) {
-		const res = await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
-			headers: {
-				Authorization: sessionStorage.getItem("token"),
-			},
-		});
-		// console.log("Add to ", res);
-		getCart();
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			// console.log("Add to ", res);
+			getCart();
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 
 	async function getCart() {
-		const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
-			headers: {
-				Authorization: sessionStorage.getItem("token"),
-			},
-		});
-		setCart(res.data.list);
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setCart(res.data.list);
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 
 	async function addToWishList(key) {
-		const res = await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
-			headers: {
-				Authorization: sessionStorage.getItem("token"),
-			},
-		});
-		getWishList();
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			getWishList();
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 
 	async function getWishList() {
-		const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
-			headers: {
-				Authorization: sessionStorage.getItem("token"),
-			},
-		});
-		// console.log("Get to ", res.data);
-		// console.log("Get to ", res.data.list);
-		setWishList(res.data.list);
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setWishList(res.data.list);
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 
 	async function fetchFiltered() {
-		if (filter?.length === 0 && ramFilter?.length === 0) {
-			return fetchAllMobiles();
-		}
-		const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
-			params: {
-				filter: JSON.stringify(filter),
-				ramFilter: JSON.stringify(ramFilter),
-			},
-		});
+		try {
+			if (filter?.length === 0 && ramFilter?.length === 0) {
+				return fetchAllMobiles();
+			}
+			const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
+				params: {
+					filter: JSON.stringify(filter),
+					ramFilter: JSON.stringify(ramFilter),
+				},
+			});
 
-		console.log(res.data.message);
-		setAllMob(res.data.message);
+			console.log(res.data.message);
+			setAllMob(res.data.message);
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 
 	const val = {

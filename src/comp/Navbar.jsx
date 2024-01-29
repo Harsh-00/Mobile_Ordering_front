@@ -8,6 +8,8 @@ import { FaShoppingCart } from "react-icons/fa";
 
 const Navbar = () => {
 	const nav = useNavigate();
+	const checkUser = JSON.parse(sessionStorage?.getItem("user"));
+	console.log(checkUser);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [currRoute, setCurrRoute] = useState("/");
 	const navLinks = [
@@ -19,6 +21,11 @@ const Navbar = () => {
 
 	const { addProduct, setAddProduct } = useContext(MobileContext);
 
+	function logoutHandler() {
+		sessionStorage.removeItem("token");
+		sessionStorage.removeItem("user");
+		nav("/login");
+	}
 	return (
 		<div className="relative">
 			{addProduct && <AddProduct />}
@@ -49,12 +56,24 @@ const Navbar = () => {
 						))}
 					</ul>
 					<div className="flex gap-2 justify-center items-center">
-						<div
-							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white mr-8"
-							onClick={() => setAddProduct(true)}
-						>
-							<p className="text-md ">Login</p>
-						</div>
+						{checkUser ? (
+							<div className="flex gap-2 justify-center items-center">
+								<div className="font-semibold text-white text-lg hover:underline cursor-pointer mr-8">{`Hello, ${checkUser.firstName}`}</div>
+								<div
+									className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white "
+									onClick={logoutHandler}
+								>
+									<p className="text-md ">Logout</p>
+								</div>
+							</div>
+						) : (
+							<div
+								className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white mr-8"
+								onClick={() => nav("/login")}
+							>
+								<p className="text-md ">Login</p>
+							</div>
+						)}
 						<div
 							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
 							onClick={() => nav("/wishlist")}

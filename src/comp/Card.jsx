@@ -4,8 +4,10 @@ import { MdDelete } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartDislike } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ info }) => {
+	const nav = useNavigate();
 	const { BASE_URL, addToWishList, wishList, addToCart, cart } =
 		useContext(MobileContext);
 
@@ -28,12 +30,21 @@ const Card = ({ info }) => {
 	}
 
 	async function deleteMobile() {
-		console.log(info.key);
-		await axios.delete(`${BASE_URL}/mobiles/delete/${info.key}`, {
-			headers: {
-				Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-			},
-		});
+		try {
+			console.log(info.key);
+			await axios.delete(`${BASE_URL}/mobiles/delete/${info.key}`, {
+				headers: {
+					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+				},
+			});
+		} catch (error) {
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+			if (error.response.status === 403) {
+				alert("You are not authorized to delete this product");
+			}
+		}
 	}
 
 	return (

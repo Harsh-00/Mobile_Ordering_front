@@ -2,18 +2,29 @@ import React, { useContext } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { MobileContext } from "../context/MobileContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
+	const nav = useNavigate();
 	const { addProduct, setAddProduct, BASE_URL } = useContext(MobileContext);
 
 	async function submitHandler(e) {
-		e.preventDefault();
-		const res = await axios.post(`${BASE_URL}/mobiles/add`, {
-			headers: {
-				Authorization: "Bearer " + localStorage.getItem("token"),
-			},
-		});
-		console.log(res);
+		try {
+			e.preventDefault();
+			const res = await axios.post(`${BASE_URL}/mobiles/add`, {
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("token"),
+				},
+			});
+			console.log(res);
+		} catch (error) {
+			if (error.response.status === 403) {
+				alert("You are not authorized to delete this product");
+			}
+			if (error.response.status === 401) {
+				nav("/login");
+			}
+		}
 	}
 	return (
 		<div className="h-screen bg-slate-200 z-20 flex justify-center items-center ">
