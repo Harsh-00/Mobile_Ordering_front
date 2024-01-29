@@ -12,7 +12,9 @@ export function MobileProvider({ children }) {
 	// if (sessionStorage.getItem("user")) {
 	// 	li = JSON.parse(sessionStorage?.getItem("user")).wishlist;
 	// }
-	// const [wishList, setWishList] = useState(li);
+	const [wishList, setWishList] = useState([]);
+	const [cart, setCart] = useState([]);
+	console.log("Context Wishlist", wishList);
 	const [loading, setLoading] = useState(true);
 
 	const BASE_URL = "http://localhost:3001";
@@ -78,24 +80,44 @@ export function MobileProvider({ children }) {
 		setRam([...new Set(ram)]);
 	}
 
+	async function addToCart(key) {
+		const res = await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
+			headers: {
+				Authorization: sessionStorage.getItem("token"),
+			},
+		});
+		// console.log("Add to ", res);
+		getCart();
+	}
+
+	async function getCart() {
+		const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
+			headers: {
+				Authorization: sessionStorage.getItem("token"),
+			},
+		});
+		setCart(res.data.list);
+	}
+
 	async function addToWishList(key) {
 		const res = await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
 			headers: {
 				Authorization: sessionStorage.getItem("token"),
 			},
 		});
-		console.log(res);
+		getWishList();
 	}
 
-	// async function getWishList() {
-	// 	const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
-	// 		headers: {
-	// 			Authorization: sessionStorage.getItem("token"),
-	// 		},
-	// 	});
-	// 	// console.log(res);
-	// 	// return res;
-	// }
+	async function getWishList() {
+		const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+			headers: {
+				Authorization: sessionStorage.getItem("token"),
+			},
+		});
+		// console.log("Get to ", res.data);
+		// console.log("Get to ", res.data.list);
+		setWishList(res.data.list);
+	}
 
 	async function fetchFiltered() {
 		if (filter?.length === 0 && ramFilter?.length === 0) {
@@ -119,6 +141,11 @@ export function MobileProvider({ children }) {
 		allMob,
 		setAllMob,
 		addToWishList,
+		getWishList,
+		wishList,
+		cart,
+		addToCart,
+		getCart,
 		addProduct,
 		setAddProduct,
 		fetchAllMobiles,

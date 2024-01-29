@@ -6,38 +6,25 @@ import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartDislike } from "react-icons/io";
 
 const Card = ({ info }) => {
-	const [list, setList] = useState([]);
-	const { BASE_URL, addToWishList } = useContext(MobileContext);
-	var tmp;
-	useEffect(() => {
-		async function getWishList() {
-			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
-				headers: {
-					Authorization: sessionStorage.getItem("token"),
-				},
-			});
-			// console.log(res);
-			// return res;
-			setList(res.data.list);
-		}
+	const { BASE_URL, addToWishList, wishList, addToCart, cart } =
+		useContext(MobileContext);
 
-		getWishList();
-
-		tmp = list.map((item) => item.key).includes(info.key);
-		console.log("Tmp-> ", tmp);
-	}, []);
-
-	// console.log(list.map((item) => item.key));
-	// console.log(info.key);
-
-	const [isLiked, setIsLiked] = useState(tmp);
-	console.log(info, list, isLiked);
+	const list1 = wishList?.map((item) => item._id).includes(info._id);
+	const list2 = cart?.map((item) => item._id).includes(info._id);
+	const [isLiked, setIsLiked] = useState(list1);
+	const [inCart, setInCart] = useState(list2);
 
 	async function likeHandler() {
 		setIsLiked(!isLiked);
-
 		//will add or remove from wishlist
 		addToWishList(info.key);
+	}
+
+	async function cartHandler() {
+		setInCart(!inCart);
+
+		//will add or remove from cart
+		addToCart(info.key);
 	}
 
 	async function deleteMobile() {
@@ -105,8 +92,11 @@ const Card = ({ info }) => {
 				<p className="font-semibold text-xl whitespace-nowrap">
 					Price: ${info.price}
 				</p>
-				<div className="bg-green-500 text-white font-semibold text-lg rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap  cursor-not-allowed">
-					Buy Now
+				<div
+					className="bg-green-500 text-white font-semibold text-lg rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer "
+					onClick={cartHandler}
+				>
+					Add to Cart
 				</div>
 			</div>
 		</div>

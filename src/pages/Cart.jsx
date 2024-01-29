@@ -3,19 +3,19 @@ import { MobileContext } from "../context/MobileContext";
 import Card from "../comp/Card";
 import axios from "axios";
 
-const WishList = () => {
-	const { getWishList, wishList } = useContext(MobileContext);
+const Cart = () => {
+	const { getCart, cart } = useContext(MobileContext);
 
 	useEffect(() => {
-		getWishList();
+		getCart();
 	}, []);
 	return (
 		<div>
-			{wishList?.map((item) => {
+			{cart?.map((item) => {
 				return <Card key={item.key} info={item} />;
 			})}
 		</div>
 	);
 };
 
-export default WishList;
+export default Cart;

@@ -63,7 +63,7 @@ const Navbar = () => {
 						</div>
 						<div
 							className="font-medium  wide:mr-24 cursor-pointer rounded-xl p-1.5 bg-white"
-							onClick={() => setAddProduct(true)}
+							onClick={() => nav("/cart")}
 						>
 							<FaShoppingCart className="text-2xl text-green-600" />
 						</div>

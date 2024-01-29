@@ -7,6 +7,7 @@ import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
 import AddProduct from "./pages/AddProduct";
 import WishList from "./pages/WishList";
+import Cart from "./pages/Cart";
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 				<Route path="/mobiles" element={<Mobile />} />
 				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="/wishlist" element={<WishList />} />
+				<Route path="/cart" element={<Cart />} />
 				<Route path="*" element={<NoPage />} />
 			</Routes>
 		</div>
