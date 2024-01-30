@@ -5,11 +5,19 @@ import { MobileContext } from "../context/MobileContext";
 import { IoMdHeart } from "react-icons/io";
 import { IoMdHeartDislike } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Card = ({ info }) => {
 	const nav = useNavigate();
-	const { BASE_URL, addToWishList, wishList, addToCart, cart } =
-		useContext(MobileContext);
+	const {
+		BASE_URL,
+		addToWishList,
+		wishList,
+		addToCart,
+		cart,
+		fetchAllMobiles,
+	} = useContext(MobileContext);
 
 	const list1 = wishList?.map((item) => item._id).includes(info._id);
 	const list2 = cart?.map((item) => item._id).includes(info._id);
@@ -37,19 +45,20 @@ const Card = ({ info }) => {
 					Authorization: `Bearer ${sessionStorage.getItem("token")}`,
 				},
 			});
+			fetchAllMobiles();
 		} catch (error) {
 			if (error.response.status === 401) {
 				nav("/login");
 			}
 			if (error.response.status === 403) {
-				alert("You are not authorized to delete this product");
+				toast.error("Not Authorized");
 			}
 		}
 	}
 
 	return (
-		<div className="relative flex flex-row w-full gap-8 border-b-2 border-gray-400 p-4 max-sm:flex-wrap">
-			<div className="absolute -top-3 right-4 flex flex-col items-center justify-center gap-2">
+		<div className="relative flex flex-row w-full gap-8 border-b border-gray-400 p-4 max-sm:flex-wrap">
+			<div className="absolute top-3 right-4 flex flex-col items-center justify-center gap-2">
 				<div
 					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
 					onClick={deleteMobile}
@@ -57,7 +66,7 @@ const Card = ({ info }) => {
 					<MdDelete className=" text-xl  text-red-400 hover:text-red-500  " />
 				</div>
 
-				<div
+				{/* <div
 					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
 					onClick={likeHandler}
 				>
@@ -66,7 +75,7 @@ const Card = ({ info }) => {
 					) : (
 						<IoMdHeart className=" text-xl text-white " />
 					)}
-				</div>
+				</div> */}
 			</div>
 			<div className="w-[160px] h-[215px] shrink-0 mb-4 ">
 				<img
@@ -103,11 +112,25 @@ const Card = ({ info }) => {
 				<p className="font-semibold text-xl whitespace-nowrap">
 					Price: ${info.price}
 				</p>
+
 				<div
-					className="bg-green-500 text-white font-semibold text-lg rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer "
+					className={`${
+						inCart ? "bg-red-500" : "bg-green-500"
+					} text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
 					onClick={cartHandler}
 				>
-					Add to Cart
+					{inCart ? "Remove from " : "Add to "}
+					<FaShoppingCart className="text-xl" />
+				</div>
+
+				<div
+					className={`${
+						isLiked ? "bg-red-500" : "bg-green-500"
+					} text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
+					onClick={likeHandler}
+				>
+					{isLiked ? "Remove from " : "Add to "}
+					<IoMdHeart className=" text-xl" />
 				</div>
 			</div>
 		</div>

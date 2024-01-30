@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Waihou from "../assets/Inn.svg";
 import { MobileContext } from "../context/MobileContext";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 	const { info, setInfo, loginRequest } = useContext(MobileContext);
+	const nav = useNavigate();
 	function changeHandler(e) {
 		setInfo({ ...info, [e.target.name]: e.target.value });
 	}
@@ -19,6 +21,12 @@ const Login = () => {
 		loginRequest(userData);
 	}
 
+	useEffect(() => {
+		if (sessionStorage.getItem("token")) {
+			nav("/");
+		}
+	}, []);
+
 	return (
 		<div className="flex h-screen p-5 bg-gradient-to-b from-[#ebf4f5] to-[#F1EAFF]">
 			<div className="flex flex-col justify-center items-center w-[45%] ">
@@ -28,7 +36,7 @@ const Login = () => {
 							Welcome To Book My Phone
 						</h1>
 						<p className="mt-1 opacity-60 text-center ">
-							Order Mobile Phone with ease
+							Purchase Mobile Phone with ease
 						</p>
 					</div>
 					<div className="w-full pt-10 px-4">

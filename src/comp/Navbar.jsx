@@ -5,6 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import AddProduct from "./AddProduct";
 import { MobileContext } from "../context/MobileContext";
 import { FaShoppingCart } from "react-icons/fa";
+import toast from "react-hot-toast";
+
+import { IoMdHeart } from "react-icons/io";
 
 const Navbar = () => {
 	const nav = useNavigate();
@@ -13,23 +16,24 @@ const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [currRoute, setCurrRoute] = useState("/");
 	const navLinks = [
-		{ to: "/mobiles", label: "Mobiles" },
+		{ to: "/", label: "Mobiles" },
 		{ to: "/add-product", label: "Add Mobile" },
 		// { to: "#about-us", label: "About Us" },
 		// { to: "#contact-us", label: "Contact Us" },
 	];
 
-	const { addProduct, setAddProduct } = useContext(MobileContext);
+	// const { addProduct, setAddProduct } = useContext(MobileContext);
 
 	function logoutHandler() {
 		sessionStorage.removeItem("token");
 		sessionStorage.removeItem("user");
+		toast.success("Logged Out");
 		nav("/login");
 	}
 	return (
 		<div className="relative">
-			{addProduct && <AddProduct />}
-			<header className="sm:px-8 px-4 py-2 z-10 w-full bg-blue-400 ">
+			{/* {addProduct && <AddProduct />} */}
+			<header className="sm:px-8 px-4 py-2 z-10 w-full bg-[#2874f0] ">
 				<nav className="flex justify-between items-center max-container">
 					<Link
 						to="/"
@@ -56,15 +60,29 @@ const Navbar = () => {
 						))}
 					</ul>
 					<div className="flex gap-2 justify-center items-center">
+						{checkUser && (
+							<div className="font-semibold text-white text-lg hover:underline cursor-pointer mr-8">{`Hello, ${checkUser.firstName}`}</div>
+						)}
+
+						<div
+							className="font-medium  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-3 bg-white"
+							onClick={() => nav("/cart")}
+						>
+							<FaShoppingCart className="text-2xl text-green-600" />
+						</div>
+						<div
+							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
+							onClick={() => nav("/wishlist")}
+						>
+							{/* <p className="text-md ">Wishlist</p> */}
+							<IoMdHeart className=" text-xl text-red-500 " />
+						</div>
 						{checkUser ? (
-							<div className="flex gap-2 justify-center items-center">
-								<div className="font-semibold text-white text-lg hover:underline cursor-pointer mr-8">{`Hello, ${checkUser.firstName}`}</div>
-								<div
-									className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white "
-									onClick={logoutHandler}
-								>
-									<p className="text-md ">Logout</p>
-								</div>
+							<div
+								className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white "
+								onClick={logoutHandler}
+							>
+								<p className="text-md ">Logout</p>
 							</div>
 						) : (
 							<div
@@ -74,18 +92,6 @@ const Navbar = () => {
 								<p className="text-md ">Login</p>
 							</div>
 						)}
-						<div
-							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
-							onClick={() => nav("/wishlist")}
-						>
-							<p className="text-md ">Wishlist</p>
-						</div>
-						<div
-							className="font-medium  wide:mr-24 cursor-pointer rounded-xl p-1.5 bg-white"
-							onClick={() => nav("/cart")}
-						>
-							<FaShoppingCart className="text-2xl text-green-600" />
-						</div>
 					</div>
 
 					<div
@@ -124,7 +130,7 @@ const Navbar = () => {
 								</li>
 							))}
 
-							<li
+							{/* <li
 								className="text-lg text-slate-gray"
 								onClick={() => {
 									setAddProduct(true);
@@ -132,7 +138,7 @@ const Navbar = () => {
 								}}
 							>
 								Add Product
-							</li>
+							</li> */}
 						</ul>
 					</nav>
 				</div>

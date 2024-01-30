@@ -16,8 +16,8 @@ function App() {
 			{loc.pathname !== "/login" && <Navbar />}
 			<Routes>
 				<Route path="/login" element={<Login />} />
-				<Route path="/" element={<Home />} />
-				<Route path="/mobiles" element={<Mobile />} />
+				<Route path="/mobiles" element={<Home />} />
+				<Route path="/" element={<Mobile />} />
 				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="/wishlist" element={<WishList />} />
 				<Route path="/cart" element={<Cart />} />

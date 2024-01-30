@@ -10,29 +10,20 @@ export function MobileProvider({ children }) {
 	const [info, setInfo] = useState({ email: "", password: "" });
 
 	const [allMob, setAllMob] = useState([]);
-
-	// var li = [];
-	// if (sessionStorage.getItem("user")) {
-	// 	li = JSON.parse(sessionStorage?.getItem("user")).wishlist;
-	// }
 	const [wishList, setWishList] = useState([]);
 	const [cart, setCart] = useState([]);
-	console.log("Context Wishlist", wishList);
 	const [loading, setLoading] = useState(true);
-
-	const BASE_URL = "http://localhost:3001";
-	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	const [addProduct, setAddProduct] = useState(false);
 
 	const [brand, setBrand] = useState([]);
+	console.log("Bran", brand);
 	const [filter, setFilter] = useState([]);
-
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
-	// console.log(filter);
-	// console.log("RAm", ramFilter);
+	const BASE_URL = "http://localhost:3001";
+	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	async function loginRequest(userData) {
 		try {
@@ -43,7 +34,7 @@ export function MobileProvider({ children }) {
 			console.log(res);
 			nav("/");
 		} catch (error) {
-			if(error.response.status === 401){
+			if (error.response.status === 401) {
 				toast.error("Invalid Credentials");
 			}
 			console.log("Error while login ", error);
@@ -75,7 +66,7 @@ export function MobileProvider({ children }) {
 		allMob?.map((items) => {
 			brand.push(items.brand);
 		});
-		setBrand([...new Set(brand)]);
+		setBrand([...new Set(brand)].sort());
 	}
 
 	if (allMob?.length > 0 && ram?.length === 0) {
@@ -85,7 +76,7 @@ export function MobileProvider({ children }) {
 		allMob?.map((items) => {
 			ram.push(items.ram);
 		});
-		setRam([...new Set(ram)]);
+		setRam([...new Set(ram)].sort((a, b) => a - b));
 	}
 
 	async function addToCart(key) {
@@ -151,6 +142,7 @@ export function MobileProvider({ children }) {
 
 	async function fetchFiltered() {
 		try {
+			setLoading(true);
 			if (filter?.length === 0 && ramFilter?.length === 0) {
 				return fetchAllMobiles();
 			}
@@ -162,6 +154,7 @@ export function MobileProvider({ children }) {
 			});
 
 			console.log(res.data.message);
+			setLoading(false);
 			setAllMob(res.data.message);
 		} catch (error) {
 			if (error.response.status === 401) {
