@@ -22,8 +22,8 @@ export function MobileProvider({ children }) {
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
-	const BASE_URL = "http://localhost:3001";
-	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	// const BASE_URL = "http://localhost:3001";
+	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	async function loginRequest(userData) {
 		try {
