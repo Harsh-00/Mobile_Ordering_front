@@ -7,7 +7,10 @@ export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
 	const nav = useNavigate();
-	const [info, setInfo] = useState({ email: "", password: "" });
+	const [info, setInfo] = useState({
+		email: "customer@gmail.com",
+		password: "harsh123",
+	});
 
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
