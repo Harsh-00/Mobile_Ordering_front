@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { AiOutlineClose } from "react-icons/ai";
 import { MobileContext } from "../context/MobileContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,7 @@ import toast from "react-hot-toast";
 
 const AddProduct = () => {
 	const nav = useNavigate();
-	const { addProduct, setAddProduct, BASE_URL } = useContext(MobileContext);
+	const { BASE_URL } = useContext(MobileContext);
 
 	const [data, setdata] = useState({
 		mobName: undefined,
@@ -36,26 +35,31 @@ const AddProduct = () => {
 			}
 			e.preventDefault();
 
-			const res = await axios.post(
-				`${BASE_URL}/mobiles/add`,
-				{ data },
+			toast.promise(
+				await axios.post(
+					`${BASE_URL}/mobiles/add`,
+					{ data },
+					{
+						headers: {
+							Authorization:
+								"Bearer " + sessionStorage.getItem("token"),
+						},
+					}
+				),
 				{
-					headers: {
-						Authorization:
-							"Bearer " + sessionStorage.getItem("token"),
-					},
+					loading: "Storing...",
+					success: <b>Entry Added!</b>,
+					error: <b>Try again Later</b>,
 				}
 			);
-			console.log(res);
 		} catch (error) {
 			if (error.response.status === 403) {
-				alert("You are not authorized to add product");
+				return toast.error("You are not authorized");
 			}
 			if (error.response.status === 401) {
-				// nav("/login");
-
-				alert("You are not logged in");
+				return nav("/login");
 			}
+			alert("Error while adding mobile ");
 		}
 	}
 

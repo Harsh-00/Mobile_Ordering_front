@@ -1,9 +1,8 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 import { IoMdHeart } from "react-icons/io";
-import { IoMdHeartDislike } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -25,12 +24,16 @@ const Card = ({ info }) => {
 	const [inCart, setInCart] = useState(list2);
 
 	async function likeHandler() {
+		if (isLiked) toast.success("Removed from wishlist");
+		else toast.success("Added to wishlist");
 		setIsLiked(!isLiked);
 		//will add or remove from wishlist
 		addToWishList(info.key);
 	}
 
 	async function cartHandler() {
+		if (inCart) toast.success("Removed from Cart");
+		else toast.success("Added to Cart");
 		setInCart(!inCart);
 
 		//will add or remove from cart
@@ -53,6 +56,9 @@ const Card = ({ info }) => {
 			if (error.response.status === 403) {
 				toast.error("Not Authorized");
 			}
+			if (error.response.status === 404) {
+				toast.error("Mobile not found");
+			}
 		}
 	}
 
@@ -65,17 +71,6 @@ const Card = ({ info }) => {
 				>
 					<MdDelete className=" text-xl  text-red-400 hover:text-red-500  " />
 				</div>
-
-				{/* <div
-					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
-					onClick={likeHandler}
-				>
-					{isLiked ? (
-						<IoMdHeart className=" text-xl text-red-500 " />
-					) : (
-						<IoMdHeart className=" text-xl text-white " />
-					)}
-				</div> */}
 			</div>
 			<div className="w-[160px] h-[215px] shrink-0 mb-4 ">
 				<img

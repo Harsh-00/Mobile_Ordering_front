@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Waihou from "../assets/Inn.svg";
 import { MobileContext } from "../context/MobileContext";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

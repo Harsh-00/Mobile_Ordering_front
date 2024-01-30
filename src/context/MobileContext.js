@@ -35,9 +35,9 @@ export function MobileProvider({ children }) {
 			nav("/");
 		} catch (error) {
 			if (error.response.status === 401) {
-				toast.error("Invalid Credentials");
+				return toast.error("Invalid Credentials");
 			}
-			console.log("Error while login ", error);
+			alert("Error while login ");
 		}
 	}
 
@@ -53,9 +53,9 @@ export function MobileProvider({ children }) {
 			setAllMob(res.data.info);
 		} catch (error) {
 			if (error.response.status === 401) {
-				nav("/login");
+				return nav("/login");
 			}
-			console.log("Error while fetching all mobile ", error);
+			alert("Error while fetching all mobile ");
 		}
 	}
 
@@ -90,8 +90,9 @@ export function MobileProvider({ children }) {
 			getCart();
 		} catch (error) {
 			if (error.response.status === 401) {
-				nav("/login");
+				return nav("/login");
 			}
+			alert("Error while adding to cart ");
 		}
 	}
 
@@ -105,8 +106,9 @@ export function MobileProvider({ children }) {
 			setCart(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
-				nav("/login");
+				return nav("/login");
 			}
+			alert("Error while fetching cart ");
 		}
 	}
 
@@ -122,6 +124,7 @@ export function MobileProvider({ children }) {
 			if (error.response.status === 401) {
 				nav("/login");
 			}
+			alert("Error while adding to wishlist ");
 		}
 	}
 
@@ -135,8 +138,9 @@ export function MobileProvider({ children }) {
 			setWishList(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
-				nav("/login");
+				return nav("/login");
 			}
+			alert("Error while fetching wishlist ");
 		}
 	}
 
@@ -158,8 +162,9 @@ export function MobileProvider({ children }) {
 			setAllMob(res.data.message);
 		} catch (error) {
 			if (error.response.status === 401) {
-				nav("/login");
+				return nav("/login");
 			}
+			alert("Error while fetching filtered mobile ");
 		}
 	}
 
