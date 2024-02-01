@@ -12,6 +12,16 @@ export function MobileProvider({ children }) {
 		password: "harsh123",
 	});
 
+	const [regInfo, setRegInfo] = useState({
+		firstName: "",
+		lastName: "",
+		email: "",
+		password: "",
+		confirmPassword: "",
+		role: "",
+		mobileNo: "",
+	});
+
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
 	const [cart, setCart] = useState([]);
@@ -25,8 +35,10 @@ export function MobileProvider({ children }) {
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
+	// got it by ipconfig command in cmd
+	const BASE_URL = "http://192.168.22.197:3001";
 	// const BASE_URL = "http://localhost:3001";
-	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	async function loginRequest(userData) {
 		try {
@@ -42,6 +54,15 @@ export function MobileProvider({ children }) {
 			}
 			alert("Error while login ");
 		}
+	}
+
+	async function RegisterRequest() {
+		try {
+			const res = await axios.post(
+				`${BASE_URL}/mobiles/register`,
+				regInfo
+			);
+		} catch (error) {}
 	}
 
 	async function fetchAllMobiles() {
@@ -174,6 +195,8 @@ export function MobileProvider({ children }) {
 	const val = {
 		info,
 		setInfo,
+		regInfo,
+		setRegInfo,
 		loginRequest,
 		allMob,
 		setAllMob,
