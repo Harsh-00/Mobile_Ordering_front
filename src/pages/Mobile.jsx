@@ -6,7 +6,8 @@ import Loader from "../comp/Loader";
 import Card from "../comp/Card";
 
 const Mobile = () => {
-	const { allMob, fetchAllMobiles, loading } = useContext(MobileContext);
+	const { allMob, fetchAllMobiles, loading, getWishList, getCart } =
+		useContext(MobileContext);
 	console.log(allMob);
 
 	useEffect(() => {

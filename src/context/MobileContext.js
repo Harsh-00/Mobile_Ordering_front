@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -18,13 +18,16 @@ export function MobileProvider({ children }) {
 		email: "",
 		password: "",
 		confirmPassword: "",
-		role: "",
+		role: "Customer",
 		mobileNo: "",
 	});
 
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
+
+	console.log("Wishhh", wishList);
 	const [cart, setCart] = useState([]);
+	console.log("Carttt", cart);
 	const [loading, setLoading] = useState(true);
 
 	const [addProduct, setAddProduct] = useState(false);
@@ -47,6 +50,7 @@ export function MobileProvider({ children }) {
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
 			console.log(res);
+
 			nav("/");
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -56,12 +60,13 @@ export function MobileProvider({ children }) {
 		}
 	}
 
-	async function RegisterRequest() {
+	async function RegisterRequest(userData) {
 		try {
 			const res = await axios.post(
 				`${BASE_URL}/mobiles/register`,
-				regInfo
+				userData
 			);
+			toast.success("Registration Successfull");
 		} catch (error) {}
 	}
 
@@ -73,6 +78,8 @@ export function MobileProvider({ children }) {
 				},
 			});
 			console.log(res);
+			await getCart();
+			await getWishList();
 			setLoading(false);
 			setAllMob(res.data.info);
 		} catch (error) {
@@ -127,6 +134,7 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
+			console.log("in getcart", res);
 			setCart(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -159,6 +167,7 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
+			console.log("in getwishlist", res);
 			setWishList(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -196,6 +205,7 @@ export function MobileProvider({ children }) {
 		info,
 		setInfo,
 		regInfo,
+		RegisterRequest,
 		setRegInfo,
 		loginRequest,
 		allMob,

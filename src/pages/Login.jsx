@@ -3,17 +3,24 @@ import Waihou from "../assets/Inn.svg";
 import { MobileContext } from "../context/MobileContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { IoArrowBack } from "react-icons/io5";
 
 const Login = () => {
-	const { info, setInfo, loginRequest, regInfo, setRegInfo } =
-		useContext(MobileContext);
+	const {
+		info,
+		setInfo,
+		loginRequest,
+		regInfo,
+		setRegInfo,
+		RegisterRequest,
+	} = useContext(MobileContext);
 	const [register, setRegister] = useState(false);
 	const nav = useNavigate();
 	function changeHandler(e) {
 		setInfo({ ...info, [e.target.name]: e.target.value });
 	}
 	function regChangeHandler(e) {
-		setInfo({ ...regInfo, [e.target.name]: e.target.value });
+		setRegInfo({ ...regInfo, [e.target.name]: e.target.value });
 	}
 	function loginHandler(e) {
 		e.preventDefault();
@@ -26,6 +33,10 @@ const Login = () => {
 		loginRequest(userData);
 	}
 
+	function guestHandler(){
+		
+	}
+
 	function RegInfoHandler(e) {
 		e.preventDefault();
 		if (regInfo.password !== regInfo.confirmPassword) {
@@ -34,6 +45,16 @@ const Login = () => {
 		if (regInfo.password.length < 6) {
 			return toast.error("Password should be atleast 6 characters long");
 		}
+		const userData = {
+			firstName: regInfo.firstName,
+			lastName: regInfo.lastName,
+			email: regInfo.email,
+			password: regInfo.password,
+			role: regInfo.role,
+			mobileNo: regInfo.mobileNo,
+		};
+		console.log(userData);
+		RegisterRequest(userData);
 	}
 
 	useEffect(() => {
@@ -104,7 +125,10 @@ const Login = () => {
 								>
 									Register
 								</div>
-								<div className="w-full px-4  cursor-pointer rounded-lg text-center font-semibold py-1.5  bg-blue-500 text-white">
+								<div
+									className="w-full px-4  cursor-pointer rounded-lg text-center font-semibold py-1.5  bg-blue-500 text-white"
+									onClick={guestHandler}
+								>
 									Guest
 								</div>
 							</div>
@@ -125,9 +149,10 @@ const Login = () => {
 							</p>
 						</div>
 						<div
-							className="w-fit self-start mt-8 mb-6 cursor-pointer text-blue-500 hover:text-blue-700"
+							className="w-fit self-start mt-8 mb-6 cursor-pointer text-blue-500 hover:text-blue-700 flex gap-2 justify-center items-center"
 							onClick={() => setRegister(false)}
 						>
+							<IoArrowBack className="text-2xl" />
 							Back to Login
 						</div>
 						<div className="w-full ">
@@ -137,8 +162,8 @@ const Login = () => {
 										First Name
 									</p>
 									<input
-										type="email"
-										placeholder="Enter Your Email"
+										type="text"
+										placeholder="Enter Your First Name"
 										name="firstName"
 										value={regInfo.firstName}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
@@ -150,8 +175,8 @@ const Login = () => {
 										Last Name
 									</p>
 									<input
-										type="email"
-										placeholder="Enter Your Email"
+										type="text"
+										placeholder="Enter Your Last Name"
 										name="lastName"
 										value={regInfo.lastName}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
@@ -164,22 +189,36 @@ const Login = () => {
 									<p className="text-sm font-semibold ">
 										Role
 									</p>
-									<input
+									<select
+										value={regInfo.role}
+										name="role"
+										className="w-full rounded-lg px-2 py-2.5 text-sm "
+										onChange={regChangeHandler}
+									>
+										<option value="Customer" name="role">
+											Customer
+										</option>
+										<option value="Seller" name="role">
+											Seller
+										</option>
+									</select>
+									{/* <input
 										type="email"
 										placeholder="Enter Your Email"
 										name="role"
 										value={regInfo.role}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
 										onChange={regChangeHandler}
-									/>
+									/> */}
 								</label>
+
 								<label className="w-full mt-4">
 									<p className="text-sm font-semibold  ">
 										Mobile Number
 									</p>
 									<input
-										type="email"
-										placeholder="Enter Your Email"
+										type="number"
+										placeholder="Your Mobile Number"
 										name="mobileNo"
 										value={regInfo.mobileNo}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
@@ -204,8 +243,8 @@ const Login = () => {
 										Password
 									</p>
 									<input
-										type="email"
-										placeholder="Enter Your Email"
+										type="password"
+										placeholder="Enter Your Password"
 										name="password"
 										value={regInfo.password}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
@@ -217,8 +256,8 @@ const Login = () => {
 										Confirm Password
 									</p>
 									<input
-										type="email"
-										placeholder="Enter Your Email"
+										type="password"
+										placeholder="Confirm your Password"
 										name="confirmPassword"
 										value={regInfo.confirmPassword}
 										className="w-full rounded-lg px-2 py-2.5 text-sm "
