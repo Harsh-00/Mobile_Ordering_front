@@ -8,8 +8,8 @@ export const MobileContext = React.createContext();
 export function MobileProvider({ children }) {
 	const nav = useNavigate();
 	const [info, setInfo] = useState({
-		email: "customer@gmail.com",
-		password: "harsh123",
+		email: "",
+		password: "",
 	});
 
 	const [regInfo, setRegInfo] = useState({
@@ -39,9 +39,9 @@ export function MobileProvider({ children }) {
 	const [ramFilter, setRamFilter] = useState([]);
 
 	// got it by ipconfig command in cmd
-	const BASE_URL = "http://192.168.22.197:3001";
+	// const BASE_URL = "http://192.168.22.197:3001";
 	// const BASE_URL = "http://localhost:3001";
-	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	async function loginRequest(userData) {
 		try {

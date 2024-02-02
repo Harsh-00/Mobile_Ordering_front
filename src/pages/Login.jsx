@@ -31,10 +31,18 @@ const Login = () => {
 			password: info.password,
 		};
 		loginRequest(userData);
+		setInfo({ email: "", password: "" });
 	}
 
-	function guestHandler(){
-		
+	function guestHandler(e) {
+		e.preventDefault();
+		setInfo({ email: "test@customer.com", password: "customer123" });
+		const userData = {
+			email: "test@customer.com",
+			password: "customer123",
+		};
+		loginRequest(userData);
+		setInfo({ email: "", password: "" });
 	}
 
 	function RegInfoHandler(e) {
