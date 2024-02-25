@@ -52,28 +52,27 @@ const Navbar = () => {
 						)}
 
 						<div
-							className="font-medium  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-3 bg-white"
+							className="font-medium  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-3 bg-white"
 							onClick={() => nav("/cart")}
 						>
 							<FaShoppingCart className="text-2xl text-green-600" />
 						</div>
 						<div
-							className=" font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white"
+							className=" font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white"
 							onClick={() => nav("/wishlist")}
 						>
-							
 							<IoMdHeart className=" text-2xl text-red-500 " />
 						</div>
 						{checkUser ? (
 							<div
-								className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white "
+								className="font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white "
 								onClick={logoutHandler}
 							>
 								<p className="text-md ">Logout</p>
 							</div>
 						) : (
 							<div
-								className="font-semibold  wide:mr-24 cursor-pointer rounded-xl p-1.5 px-4 bg-white mr-8"
+								className="font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white mr-8"
 								onClick={() => nav("/login")}
 							>
 								<p className="text-md ">Login</p>
@@ -116,8 +115,6 @@ const Navbar = () => {
 									</Link>
 								</li>
 							))}
-
-						
 						</ul>
 					</nav>
 				</div>

@@ -4,13 +4,18 @@ import { MobileContext } from "../context/MobileContext";
 import Loader from "../comp/Loader";
 
 import Card from "../comp/Card";
+import { useNavigate } from "react-router-dom";
 
 const Mobile = () => {
+	const nav = useNavigate();
 	const { allMob, fetchAllMobiles, loading, getWishList, getCart } =
 		useContext(MobileContext);
 	console.log(allMob);
 
 	useEffect(() => {
+		if (!window.sessionStorage.getItem("token")) {
+			return nav("/login");
+		}
 		fetchAllMobiles();
 	}, []);
 

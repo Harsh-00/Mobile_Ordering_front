@@ -30,7 +30,12 @@ const Login = () => {
 			email: info.email,
 			password: info.password,
 		};
-		loginRequest(userData);
+		toast.promise(loginRequest(userData), {
+			loading: "Logging in...",
+			success: "Login Successfull",
+			error: "Invalid Credentials",
+		});
+		// loginRequest(userData);
 		setInfo({ email: "", password: "" });
 	}
 
@@ -41,7 +46,11 @@ const Login = () => {
 			email: "test@customer.com",
 			password: "customer123",
 		};
-		loginRequest(userData);
+		toast.promise(loginRequest(userData), {
+			loading: "Logging in...",
+			success: "Login Successfull",
+			error: "Invalid Credentials",
+		});
 		setInfo({ email: "", password: "" });
 	}
 

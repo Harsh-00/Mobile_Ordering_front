@@ -24,7 +24,7 @@ const Card = ({ info }) => {
 	const [inCart, setInCart] = useState(list2);
 
 	async function likeHandler() {
-		if (isLiked) toast.success("Removed from wishlist");
+		if (isLiked) toast.error("Removed from wishlist");
 		else toast.success("Added to wishlist");
 		setIsLiked(!isLiked);
 		//will add or remove from wishlist
@@ -32,7 +32,7 @@ const Card = ({ info }) => {
 	}
 
 	async function cartHandler() {
-		if (inCart) toast.success("Removed from Cart");
+		if (inCart) toast.error("Removed from Cart");
 		else toast.success("Added to Cart");
 		setInCart(!inCart);
 
