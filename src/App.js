@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import AddProduct from "./pages/AddProduct";
 import WishList from "./pages/WishList";
 import Cart from "./pages/Cart";
+import Test from "./pages/Test";
 
 function App() {
 	const loc = useLocation();
@@ -21,6 +22,8 @@ function App() {
 				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="/wishlist" element={<WishList />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/test" element={<Test/>} />
+
 				<Route path="*" element={<NoPage />} />
 			</Routes>
 		</div>

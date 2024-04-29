@@ -32,10 +32,7 @@ const Sidebar = () => {
 		}
 	}
 	return (
-		<div className="pl-3 pb-4">
-			<h1 className="w-full text-2xl font-semibold pt-6 underline text-center  ">
-				Filter
-			</h1>
+		<div className="w-full">
 			<div className="mt-8 font-semibold text-lg mb-1 max-md:mt-4">
 				Brand
 			</div>

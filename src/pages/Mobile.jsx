@@ -5,13 +5,14 @@ import Loader from "../comp/Loader";
 
 import Card from "../comp/Card";
 import { useNavigate } from "react-router-dom";
+import LeftDrawer from "../comp/LeftDrawer";
 
 const Mobile = () => {
 	const nav = useNavigate();
 	const { allMob, fetchAllMobiles, loading, getWishList, getCart } =
 		useContext(MobileContext);
 	console.log(allMob);
-
+	
 	useEffect(() => {
 		if (!window.sessionStorage.getItem("token")) {
 			return nav("/login");
@@ -21,6 +22,7 @@ const Mobile = () => {
 
 	return (
 		<div className="flex w-full h-full bg-[#f0f2f5] gap-3 max-md:flex-col ">
+			<LeftDrawer  />
 			<div className="bg-white ml-3  mb-6 h-screen w-[300px] shadow-xl mt-4 max-md:h-auto max-md:w-full">
 				<Sidebar info={allMob} />
 			</div>
