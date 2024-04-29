@@ -14,6 +14,7 @@ const Login = () => {
 		setRegInfo,
 		RegisterRequest,
 	} = useContext(MobileContext);
+
 	const [register, setRegister] = useState(false);
 	const nav = useNavigate();
 	function changeHandler(e) {
@@ -30,13 +31,19 @@ const Login = () => {
 			email: info.email,
 			password: info.password,
 		};
+
+		if (!userData.email || !userData.password) {
+			return toast.error("Please fill all the fields");
+		}
 		toast.promise(loginRequest(userData), {
 			loading: "Logging in...",
 			success: "Login Successfull",
 			error: "Invalid Credentials",
 		});
-		// loginRequest(userData);
 		setInfo({ email: "", password: "" });
+		// .then(() => setInfo({ email: "", password: "" }));
+		// loginRequest(userData);
+		// setInfo({ email: "", password: "" });
 	}
 
 	function guestHandler(e) {

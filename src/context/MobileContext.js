@@ -53,10 +53,7 @@ export function MobileProvider({ children }) {
 
 			nav("/");
 		} catch (error) {
-			// if (error.response.status === 401) {
-			// 	return toast.error("Invalid Credentials");
-			// }
-			// alert("Error while login ");
+			throw error;
 		}
 	}
 
