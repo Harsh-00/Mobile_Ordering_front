@@ -25,7 +25,7 @@ const Login = () => {
 	}
 	function loginHandler(e) {
 		e.preventDefault();
-		console.log(info);
+		// console.log(info);
 
 		const userData = {
 			email: info.email,
@@ -77,7 +77,7 @@ const Login = () => {
 			role: regInfo.role,
 			mobileNo: regInfo.mobileNo,
 		};
-		console.log(userData);
+		// console.log(userData);
 		RegisterRequest(userData);
 	}
 

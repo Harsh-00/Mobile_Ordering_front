@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MobileContext } from "../context/MobileContext";
-import Card from "../comp/Card";
+import ProductCard from "../comp/ProductCard";
 import empty from "../assets/empty.svg";
 
 const Cart = () => {
@@ -24,7 +24,7 @@ const Cart = () => {
 				</div>
 			)}
 			{cart?.map((item) => {
-				return <Card key={item.key} info={item} />;
+				return <ProductCard key={item.key} info={item} />;
 			})}
 		</div>
 	);

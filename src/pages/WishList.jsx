@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { MobileContext } from "../context/MobileContext";
 import empty from "../assets/empty.svg";
-import Card from "../comp/Card";
+import ProductCard from "../comp/ProductCard";
 
 const WishList = () => {
 	const { getWishList, wishList } = useContext(MobileContext);
@@ -9,7 +9,7 @@ const WishList = () => {
 	useEffect(() => {
 		getWishList();
 	}, []);
-	console.log(wishList);
+	// console.log(wishList);
 	return (
 		<div className="max-w-5xl mx-auto flex flex-col gap-6 pt-4">
 			{wishList?.length === 0 && (
@@ -25,7 +25,7 @@ const WishList = () => {
 				</div>
 			)}
 			{wishList?.map((item) => {
-				return <Card key={item.key} info={item} />;
+				return <ProductCard key={item.key} info={item} />;
 			})}
 		</div>
 	);

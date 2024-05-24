@@ -25,18 +25,17 @@ export function MobileProvider({ children }) {
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
 
-	console.log("Wishhh", wishList);
 	const [cart, setCart] = useState([]);
-	console.log("Carttt", cart);
 	const [loading, setLoading] = useState(true);
 
 	const [addProduct, setAddProduct] = useState(false);
 
 	const [brand, setBrand] = useState([]);
-	console.log("Bran", brand);
 	const [filter, setFilter] = useState([]);
+	console.log(filter);
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
+	console.log(ramFilter);
 
 	// got it by ipconfig command in cmd
 	// const BASE_URL = "http://192.168.22.197:3001";
@@ -49,7 +48,7 @@ export function MobileProvider({ children }) {
 			// toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
-			console.log(res);
+			// console.log(res);
 
 			nav("/");
 		} catch (error) {
@@ -74,7 +73,7 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log(res);
+			// console.log(res);
 			await getCart();
 			await getWishList();
 			setLoading(false);
@@ -131,7 +130,7 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getcart", res);
+			// console.log("in getcart", res);
 			setCart(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -164,7 +163,7 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getwishlist", res);
+			// console.log("in getwishlist", res);
 			setWishList(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -187,7 +186,7 @@ export function MobileProvider({ children }) {
 				},
 			});
 
-			console.log(res.data.message);
+			// console.log(res.data.message);
 			setLoading(false);
 			setAllMob(res.data.message);
 		} catch (error) {

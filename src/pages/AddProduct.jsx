@@ -26,7 +26,7 @@ const AddProduct = () => {
 		video: undefined,
 		displayRes: undefined,
 	});
-	console.log(data);
+	// console.log(data);
 	async function submitHandler(e) {
 		try {
 			if (!data.mobName || !data.brand || !data.price || !data.ram) {

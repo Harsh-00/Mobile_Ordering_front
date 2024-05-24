@@ -10,7 +10,7 @@ import { IoMdHeart } from "react-icons/io";
 const Navbar = () => {
 	const nav = useNavigate();
 	const checkUser = JSON.parse(sessionStorage?.getItem("user"));
-	console.log(checkUser);
+	// console.log(checkUser);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const navLinks = [
 		{ to: "/", label: "Mobiles" },

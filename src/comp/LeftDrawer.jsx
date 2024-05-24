@@ -21,7 +21,7 @@ export default function LeftDrawer() {
     const btnRef = React.useRef()
   
     return (
-      <div className="absolute">
+      <div className="relative">
         <Button ref={btnRef} colorScheme='teal' onClick={onOpen}>
           Open
         </Button>
@@ -32,10 +32,11 @@ export default function LeftDrawer() {
           onClose={onClose}
           finalFocusRef={btnRef}
         >
+        
           <DrawerOverlay />
-          <DrawerContent display="flex" alignItems="center" justifyContent="space-between">
+          <DrawerContent >
             <DrawerCloseButton />
-            <DrawerHeader>Filter</DrawerHeader>
+            <DrawerHeader fontSize='4xl' fontWeight='semibold' >Filter</DrawerHeader>
   
             <DrawerBody>
               <Sidebar/>
