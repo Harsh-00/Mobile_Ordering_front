@@ -40,8 +40,8 @@ export function MobileProvider({ children }) {
 
 	// got it by ipconfig command in cmd
 	// const BASE_URL = "http://192.168.22.197:3001";
-	// const BASE_URL = "http://localhost:3001";
-	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	const BASE_URL = "http://localhost:3001";
+	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
 
 	async function loginRequest(userData) {
 		try {

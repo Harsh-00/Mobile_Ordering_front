@@ -5,6 +5,7 @@ import { MobileContext } from "../context/MobileContext";
 import { IoMdHeart } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import { FaStar } from "react-icons/fa6";
 import toast from "react-hot-toast";
 
 const Card = ({ info }) => {
@@ -63,33 +64,78 @@ const Card = ({ info }) => {
 	}
 
 	return (
-		<div className="relative flex flex-row w-full gap-8 border-b border-gray-400 p-4 max-sm:flex-wrap">
-			<div className="absolute top-3 right-4 flex flex-col items-center justify-center gap-2">
+        <div className="relative flex flex-row w-fit gap-8 border-b border-gray-400 p-4 max-sm:flex-wrap">
+            <div className="absolute top-3 right-4 flex flex-col items-center justify-center gap-2">
+                <div
+                    className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
+                    onClick={deleteMobile}
+                >
+                    <MdDelete className=" text-xl  text-red-400 hover:text-red-500  " />
+                </div>
+            </div>
+            <div className="w-[160px] h-[215px] shrink-0 mb-4 ">
+                <img
+                    src={info.mobImg}
+                    alt="image of mobile"
+                    className="w-full object-cover h-full rounded-xl"
+                />
+            </div>
+            <div className=" flex-grow max-w-[600px]">
+                <div className="inline-flex justify-center items-center gap-4 mb-2">
+                    <h1 className="font-semibold text-2xl leading-wide ">
+                        {info.mobName}
+                    </h1>
+                    <div className="bg-green-500 w-fit px-2 text-white font-bold text-sm rounded-xl h-6 ">
+                        {info.brand}
+                    </div>
+                </div>
+
+                <div className="mt-3 flex items-center gap-2 w-fit">
+                    <div className="flex items-center ">
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                            <FaStar
+                                key={rating}
+                                className={`h-4.5 w-4.5 flex-shrink-0 ${
+                                    4 > rating
+                                        ? "text-yellow-400"
+                                        : "text-gray-200"
+                                }`}
+                                aria-hidden="true"
+                            />
+                        ))}
+                    </div>
+                    <p className="text-sm text-gray-500 ">(5 reviews)</p>
+                </div>
+
+				<p className="text-sm text-gray-500 mt-1 ">500+ sold</p>
+
+				<p className="font-semibold text-xl whitespace-nowrap">
+                    Price: ${info.price}
+                </p>
+
+				<div className="flex gap-2" >
 				<div
-					className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
-					onClick={deleteMobile}
-				>
-					<MdDelete className=" text-xl  text-red-400 hover:text-red-500  " />
-				</div>
-			</div>
-			<div className="w-[160px] h-[215px] shrink-0 mb-4 ">
-				<img
-					src={info.mobImg}
-					alt="image of mobile"
-					className="w-full object-cover h-full rounded-xl"
-				/>
-			</div>
-			<div className=" flex-grow max-w-[600px]">
-				<div className="inline-flex justify-center items-center gap-4 mb-2">
-					<h1 className="font-semibold text-2xl leading-wide ">
-						{info.mobName}
-					</h1>
-					<div className="bg-green-500 w-fit px-2 text-white font-bold text-sm rounded-xl h-6 ">
-						{info.brand}
-					</div>
+                    className={`${
+                        inCart ? "bg-red-500" : "bg-green-500"
+                    } text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
+                    onClick={cartHandler}
+                >
+                    {inCart ? "Remove from " : "Add to "}
+                    <FaShoppingCart className="text-xl" />
+                </div>
+
+                <div
+                    className={`${
+                        isLiked ? "bg-red-500" : "bg-green-500"
+                    } text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
+                    onClick={likeHandler}
+                >
+                    {isLiked ? "Remove from " : "Add to "}
+                    <IoMdHeart className=" text-xl" />
+                </div>
 				</div>
 
-				<div className="pl-3">
+                {/* <div className="pl-3">
 					<p>
 						• {info.ram}GB RAM | {info.osType} OS
 					</p>
@@ -101,35 +147,35 @@ const Card = ({ info }) => {
 					</p>
 					<p>• {info.storage}</p>
 					<p>• Releasing Date: {info.relasingDate}</p>
-				</div>
-			</div>
-			<div className="mr-4">
-				<p className="font-semibold text-xl whitespace-nowrap">
-					Price: ${info.price}
-				</p>
+				</div> */}
+            </div>
+            {/* <div className="mr-4"> */}
+                {/* <p className="font-semibold text-xl whitespace-nowrap">
+                    Price: ${info.price}
+                </p> */}
 
-				<div
-					className={`${
-						inCart ? "bg-red-500" : "bg-green-500"
-					} text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
-					onClick={cartHandler}
-				>
-					{inCart ? "Remove from " : "Add to "}
-					<FaShoppingCart className="text-xl" />
-				</div>
+                {/* <div
+                    className={`${
+                        inCart ? "bg-red-500" : "bg-green-500"
+                    } text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
+                    onClick={cartHandler}
+                >
+                    {inCart ? "Remove from " : "Add to "}
+                    <FaShoppingCart className="text-xl" />
+                </div>
 
-				<div
-					className={`${
-						isLiked ? "bg-red-500" : "bg-green-500"
-					} text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
-					onClick={likeHandler}
-				>
-					{isLiked ? "Remove from " : "Add to "}
-					<IoMdHeart className=" text-xl" />
-				</div>
-			</div>
-		</div>
-	);
+                <div
+                    className={`${
+                        isLiked ? "bg-red-500" : "bg-green-500"
+                    } text-white font-semibold rounded-xl w-fit px-3 py-0.5 mt-3 whitespace-nowrap cursor-pointer flex justify-center items-center gap-2`}
+                    onClick={likeHandler}
+                >
+                    {isLiked ? "Remove from " : "Add to "}
+                    <IoMdHeart className=" text-xl" />
+                </div> */}
+            {/* </div> */}
+        </div>
+    );
 };
 
 export default Card;
