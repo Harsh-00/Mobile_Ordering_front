@@ -14,9 +14,24 @@ export function MobileProvider({ children }) {
 	const [ratingFilter, setRatingFilter] = useState([]);
 
 	
-
-	const [price, setPrice] = useState({});
-	const [rating, setRating] = useState({});
+	const [brand, setBrand] = useState([]);
+	const [ram, setRam] = useState([]);
+	const [price, setPrice] = useState([
+        { name: "0 - $500", value: [0, 500] },
+        { name: "$500 - $1000", value: [501, 1000] },
+        { name: "$1000 - $1500", value: [1001, 1500] },
+        { name: "$1500 - $2000", value: [1501, 2000] },
+        { name: "$2000 - $2500", value: [2001, 2500] },
+        { name: "$2500 - $3000", value: [2501, 3000] },
+        { name: "Above $3000", value: [3001, 1000000] },
+    ]);
+    const [rating, setRating] = useState([
+        { name: "1 ", value: 1 },
+        { name: "2 ", value: 2 },
+        { name: "3 ", value: 3 },
+        { name: "4 ", value: 4 },
+        { name: "5 ", value: 5 },
+    ]);
 
 
 	const nav = useNavigate();
@@ -43,9 +58,7 @@ export function MobileProvider({ children }) {
 
 	const [addProduct, setAddProduct] = useState(false);
 
-	const [brand, setBrand] = useState([]);
 	const [filter, setFilter] = useState([]);
-	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
 	// got it by ipconfig command in cmd
@@ -87,7 +100,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log(res);
 			await getCart();
 			await getWishList();
 			setLoading(false);
@@ -127,7 +139,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			// console.log("Add to ", res);
 			getCart();
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -144,7 +155,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getcart", res);
 			setCart(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -177,7 +187,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getwishlist", res);
 			setWishList(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -186,18 +195,23 @@ export function MobileProvider({ children }) {
 			alert("Error while fetching wishlist ");
 		}
 	}
+	
 	async function fetchFilteredd() {
 		try {
+
 			setLoading(true);
-			
+			if (brandFilter?.length === 0 && ramFil?.length === 0 && priceFilter?.length === 0 && ratingFilter?.length === 0) {
+				return fetchAllMobiles();
+			}
 			const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
 				params: {
-					brand : JSON.stringify(brandFilter),
-					ram: JSON.stringify(ramFil),
-					price: JSON.stringify(priceFilter),
-					rating: JSON.stringify(ratingFilter)
+					brandFilter: JSON.stringify(brandFilter),
+					ramFil: JSON.stringify(ramFil),
+					priceFilter: JSON.stringify(priceFilter),
+					ratingFilter: JSON.stringify(ratingFilter),
 				},
 			});
+
 			console.log(res.data.message);
 			setLoading(false);
 			setAllMob(res.data.message);
@@ -210,27 +224,30 @@ export function MobileProvider({ children }) {
 	}
 
 	async function fetchFiltered() {
-		try {
-			setLoading(true);
-			if (filter?.length === 0 && ramFilter?.length === 0) {
-				return fetchAllMobiles();
-			}
-			const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
-				params: {
-					filter: JSON.stringify(filter),
-					ramFilter: JSON.stringify(ramFilter),
-				},
-			});
+		// try {
+		// 	console.log("I am in fetchFiltered");
+			
+		//     console.log(filter);
+		// 	setLoading(true);
+		// 	if (filter?.length === 0 && ramFilter?.length === 0) {
+		// 		return fetchAllMobiles();
+		// 	}
+		// 	const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
+		// 		params: {
+		// 			filter: JSON.stringify(filter),
+		// 			ramFilter: JSON.stringify(ramFilter),
+		// 		},
+		// 	});
 
-			console.log(res.data.message);
-			setLoading(false);
-			setAllMob(res.data.message);
-		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while fetching filtered mobile ");
-		}
+		// 	console.log(res.data.message);
+		// 	setLoading(false);
+		// 	setAllMob(res.data.message);
+		// } catch (error) {
+		// 	if (error.response.status === 401) {
+		// 		return nav("/login");
+		// 	}
+		// 	alert("Error while fetching filtered mobile ");
+		// }
 	}
 
 	const val = {
@@ -272,6 +289,8 @@ export function MobileProvider({ children }) {
 		setPriceFilter,
 		ratingFilter,
 		setRatingFilter,
+		price, setPrice,
+		rating, setRating,
 	};
 	return (
 		<MobileContext.Provider value={val}>{children}</MobileContext.Provider>

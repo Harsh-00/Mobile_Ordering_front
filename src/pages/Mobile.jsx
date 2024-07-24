@@ -11,7 +11,6 @@ const Mobile = () => {
 	const nav = useNavigate();
 	const { allMob, fetchAllMobiles, loading, getWishList, getCart } =
 		useContext(MobileContext);
-	console.log(allMob);
 
 	useEffect(() => {
 		if (!window.sessionStorage.getItem("token")) {

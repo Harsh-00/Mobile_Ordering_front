@@ -2,20 +2,22 @@ import React, { useContext, useEffect } from "react";
 import { MdFilterListAlt } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 
+import { FaStar } from "react-icons/fa6";
+
 const Filterbar = () => {
     const {
 		AllFilters, setAllFilters,brandFilter,
-		setBrandFilter,
-		ramFil,
+		setBrandFilter,priceFilter,
+		setPriceFilter,
+		ramFil,price, setPrice,
 		setRamFil,brand,setBrand,ram,setRam,
-		fetchFilteredd,count,setCount
+		fetchFilteredd,rating, setRating,ratingFilter, setRatingFilter
 	} = useContext(MobileContext);
 
-    
 
     useEffect(() => {
 		fetchFilteredd();
-	}, [brandFilter, ramFil]);
+	}, [brandFilter, ramFil, priceFilter,ratingFilter]);
 
 	function brandHandler(e) {
 		if (e.target.checked) {
@@ -32,40 +34,24 @@ const Filterbar = () => {
 			setRamFil(ramFil.filter((item) => item !== e.target.value));
 		}
 	}
-      
-      
 
-    const filters = {
-        price: [
-          { value: '0', label: '$0 - $25', checked: false },
-          { value: '25', label: '$25 - $50', checked: false },
-          { value: '50', label: '$50 - $75', checked: false },
-          { value: '75', label: '$75+', checked: false },
-        ],
-        color: [
-          { value: 'white', label: 'White', checked: false },
-          { value: 'beige', label: 'Beige', checked: false },
-          { value: 'blue', label: 'Blue', checked: true },
-          { value: 'brown', label: 'Brown', checked: false },
-          { value: 'green', label: 'Green', checked: false },
-          { value: 'purple', label: 'Purple', checked: false },
-        ],
-        size: [
-          { value: 'xs', label: 'XS', checked: false },
-          { value: 's', label: 'S', checked: true },
-          { value: 'm', label: 'M', checked: false },
-          { value: 'l', label: 'L', checked: false },
-          { value: 'xl', label: 'XL', checked: false },
-          { value: '2xl', label: '2XL', checked: false },
-        ],
-        category: [
-          { value: 'all-new-arrivals', label: 'All New Arrivals', checked: false },
-          { value: 'tees', label: 'Tees', checked: false },
-          { value: 'objects', label: 'Objects', checked: false },
-          { value: 'sweatshirts', label: 'Sweatshirts', checked: false },
-          { value: 'pants-and-shorts', label: 'Pants & Shorts', checked: false },
-        ],
-      }
+    function priceHandler(e) {
+        if (e.target.checked) {
+            setPriceFilter([...priceFilter, e.target.value]);
+        } else {
+            setPriceFilter(priceFilter.filter((item) => item !== e.target.value));
+        }
+    }
+
+    function ratingHandler(e) {
+        if (e.target.checked) {
+            setRatingFilter([...ratingFilter, e.target.value]);
+        } else {
+            setRatingFilter(ratingFilter.filter((item) => item !== e.target.value));
+        }
+    }
+      
+      
       const sortOptions = [
         { name: 'Most Popular', href: '#', current: true },
         { name: 'Best Rating', href: '#', current: false },
@@ -113,12 +99,12 @@ const Filterbar = () => {
                                             name="Brand"
                                             className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             value={item}
-                                            id={idx}
+                                            id={`brand-${idx}`}
                                             onChange={brandHandler}
                                             // onChange={filterHandler}
                                         />
                                         <label
-                                            htmlFor={idx}
+                                            htmlFor={`brand-${idx}`}
                                             className="ml-3 min-w-0 flex-1 text-gray-600"
                                         >
                                             {item}
@@ -140,12 +126,12 @@ const Filterbar = () => {
                                             name="Ram"
                                             className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                             value={item}
-                                            id={idx}
+                                            id={`ram-${idx}`}
                                             onChange={ramHandler}
                                             // onChange={filterHandler}
                                         />
                                         <label
-                                            htmlFor={idx}
+                                            htmlFor={`ram-${idx}`}
                                             className="ml-3 min-w-0 flex-1 text-gray-600"
                                         >
                                             {item} GB
@@ -157,54 +143,53 @@ const Filterbar = () => {
                     </div>
                     <div className="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
                         <fieldset>
-                            <legend className="block font-medium">Size</legend>
+                            <legend className="block font-medium">Price</legend>
                             <div className="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-                                {filters.size.map((option, optionIdx) => (
+                                {price?.map((item, idx) => (
                                     <div
-                                        key={option.value}
+                                        key={idx}
                                         className="flex items-center text-base sm:text-sm"
                                     >
                                         <input
-                                            id={`size-${optionIdx}`}
-                                            name="size[]"
-                                            defaultValue={option.value}
                                             type="checkbox"
+                                            name="Price"
                                             className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                            defaultChecked={option.checked}
+                                            value={item.value}
+                                            id={`price-${idx}`}
+                                            onChange={priceHandler}
                                         />
                                         <label
-                                            htmlFor={`size-${optionIdx}`}
+                                            htmlFor={`price-${idx}`}
                                             className="ml-3 min-w-0 flex-1 text-gray-600"
                                         >
-                                            {option.label}
+                                            {item.name} 
                                         </label>
                                     </div>
                                 ))}
                             </div>
                         </fieldset>
                         <fieldset>
-                            <legend className="block font-medium">
-                                Category
-                            </legend>
+                            <legend className="block font-medium">Rating</legend>
                             <div className="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
-                                {filters.category.map((option, optionIdx) => (
+                                {rating?.map((item, idx) => (
                                     <div
-                                        key={option.value}
+                                        key={idx}
                                         className="flex items-center text-base sm:text-sm"
                                     >
                                         <input
-                                            id={`category-${optionIdx}`}
-                                            name="category[]"
-                                            defaultValue={option.value}
                                             type="checkbox"
+                                            name="Rating"
                                             className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                            defaultChecked={option.checked}
+                                            value={item.value}
+                                            id={`rating-${idx}`}
+                                            onChange={ratingHandler}
                                         />
                                         <label
-                                            htmlFor={`category-${optionIdx}`}
-                                            className="ml-3 min-w-0 flex-1 text-gray-600"
+                                            htmlFor={`rating-${idx}`}
+                                            className="ml-3 min-w-0 flex-1 text-gray-600 flex items-center gap-1"
                                         >
-                                            {option.label}
+                                            {item.name} 
+                                            <FaStar className="h-4.5 w-4.5 text-yellow-400" />
                                         </label>
                                     </div>
                                 ))}
