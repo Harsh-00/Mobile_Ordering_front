@@ -6,6 +6,19 @@ import toast from "react-hot-toast";
 export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
+
+	
+	const [brandFilter, setBrandFilter] = useState([]);
+	const [ramFil, setRamFil] = useState([]);
+	const [priceFilter, setPriceFilter] = useState([]);
+	const [ratingFilter, setRatingFilter] = useState([]);
+
+	
+
+	const [price, setPrice] = useState({});
+	const [rating, setRating] = useState({});
+
+
 	const nav = useNavigate();
 	const [info, setInfo] = useState({
 		email: "",
@@ -25,15 +38,12 @@ export function MobileProvider({ children }) {
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
 
-	console.log("Wishhh", wishList);
 	const [cart, setCart] = useState([]);
-	console.log("Carttt", cart);
 	const [loading, setLoading] = useState(true);
 
 	const [addProduct, setAddProduct] = useState(false);
 
 	const [brand, setBrand] = useState([]);
-	console.log("Bran", brand);
 	const [filter, setFilter] = useState([]);
 	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
@@ -176,6 +186,28 @@ export function MobileProvider({ children }) {
 			alert("Error while fetching wishlist ");
 		}
 	}
+	async function fetchFilteredd() {
+		try {
+			setLoading(true);
+			
+			const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
+				params: {
+					brand : JSON.stringify(brandFilter),
+					ram: JSON.stringify(ramFil),
+					price: JSON.stringify(priceFilter),
+					rating: JSON.stringify(ratingFilter)
+				},
+			});
+			console.log(res.data.message);
+			setLoading(false);
+			setAllMob(res.data.message);
+		} catch (error) {
+			if (error.response.status === 401) {
+				return nav("/login");
+			}
+			alert("Error while fetching filtered mobile ");
+		}
+	}
 
 	async function fetchFiltered() {
 		try {
@@ -227,10 +259,19 @@ export function MobileProvider({ children }) {
 		filter,
 		setFilter,
 		fetchFiltered,
+		fetchFilteredd,
 		ram,
 		setRam,
 		ramFilter,
 		setRamFilter,
+		brandFilter,
+		setBrandFilter,
+		ramFil,
+		setRamFil,
+		priceFilter,
+		setPriceFilter,
+		ratingFilter,
+		setRatingFilter,
 	};
 	return (
 		<MobileContext.Provider value={val}>{children}</MobileContext.Provider>
