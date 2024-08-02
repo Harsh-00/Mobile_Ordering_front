@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import {loadStripe} from '@stripe/stripe-js';
+
 
 export const MobileContext = React.createContext();
 
@@ -13,7 +15,6 @@ export function MobileProvider({ children }) {
 	const [priceFilter, setPriceFilter] = useState([]);
 	const [ratingFilter, setRatingFilter] = useState([]);
 
-	
 	const [brand, setBrand] = useState([]);
 	const [ram, setRam] = useState([]);
 	const [price, setPrice] = useState([
@@ -32,7 +33,6 @@ export function MobileProvider({ children }) {
         { name: "4 ", value: 4 },
         { name: "5 ", value: 5 },
     ]);
-
 
 	const nav = useNavigate();
 	const [info, setInfo] = useState({
@@ -61,10 +61,44 @@ export function MobileProvider({ children }) {
 	const [filter, setFilter] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
+	const [filterCount, setFilterCount] = useState(0);
+
 	// got it by ipconfig command in cmd
 	// const BASE_URL = "http://192.168.22.197:3001";
 	const BASE_URL = "http://localhost:3001";
 	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+
+	async function clearFilters(){
+		setBrandFilter([]);
+		setRamFil([]);
+		setPriceFilter([]);
+		setRatingFilter([]);
+	}
+
+	const[resa,setRes]=useState(null);
+	useEffect(() => {
+		console.log(resa);
+	}, [resa]);
+	async function stripeCheckout(amount){
+		try {
+			console.log(amount,cart);
+			const stripe = await loadStripe('pk_test_51PhHGb2MC8OfjujqziyQCTWmfQy4fdPcPwNrNj8FQNc4sJC7M1aHKAoUWZoqxRSzDyPXAYPR2xRFvY0mREBXjjyt00XHPvrcaG');
+			if (!stripe) {
+				throw new Error('Stripe failed to initialize');
+			}
+			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart} );
+
+			setRes(res);
+			const session = res.data;
+			console.log(session);
+
+			const result= await stripe.redirectToCheckout({
+				sessionId: session.id,
+			});
+		} catch (error) {
+			alert("Error while fetching filtered mobile ",error);
+		}
+	}
 
 	async function loginRequest(userData) {
 		try {
@@ -93,6 +127,28 @@ export function MobileProvider({ children }) {
 		} catch (error) {}
 	}
 
+	async function sortAllMob(check){
+		console.log(check);
+		let sortedArr =[...allMob];
+		if(check==="priceAsc"){
+			console.log(check);
+			sortedArr.sort((a, b) => a.price - b.price);
+		}
+		else if(check==="priceDesc"){
+			console.log(check);
+			sortedArr.sort((a, b) => b.price - a.price);
+		}
+		else if(check==="ratingAsc"){
+			sortedArr.sort((a, b) => a.rating - b.rating);
+		}
+		else if(check==="ratingDesc"){
+			sortedArr.sort((a, b) => b.rating - a.rating);
+		}
+		console.log(sortedArr);
+		setAllMob(sortedArr);
+
+	}
+
 	async function fetchAllMobiles() {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
@@ -103,6 +159,7 @@ export function MobileProvider({ children }) {
 			await getCart();
 			await getWishList();
 			setLoading(false);
+			console.log(res.data.info);
 			setAllMob(res.data.info);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -268,6 +325,7 @@ export function MobileProvider({ children }) {
 		addProduct,
 		setAddProduct,
 		fetchAllMobiles,
+		sortAllMob,
 		storeBrands,
 		setLoading,
 		loading,
@@ -290,7 +348,7 @@ export function MobileProvider({ children }) {
 		ratingFilter,
 		setRatingFilter,
 		price, setPrice,
-		rating, setRating,
+		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout
 	};
 	return (
 		<MobileContext.Provider value={val}>{children}</MobileContext.Provider>
