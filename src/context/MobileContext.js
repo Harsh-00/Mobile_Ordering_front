@@ -64,11 +64,8 @@ export function MobileProvider({ children }) {
 	const [ramFilter, setRamFilter] = useState([]);
 
 	const [filterCount, setFilterCount] = useState(0);
-
-	// got it by ipconfig command in cmd
-	// const BASE_URL = "http://192.168.22.197:3001";
-	const BASE_URL = "http://localhost:3001";
-	// const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+ 
+	const BASE_URL = process.env.REACT_APP_BASE_URL;   
 
 	async function clearFilters(){
 		setBrandFilter([]);
@@ -84,7 +81,7 @@ export function MobileProvider({ children }) {
 	async function stripeCheckout(amount){
 		try {
 			console.log(amount,cart);
-			const stripe = await loadStripe('pk_test_51PhHGb2MC8OfjujqziyQCTWmfQy4fdPcPwNrNj8FQNc4sJC7M1aHKAoUWZoqxRSzDyPXAYPR2xRFvY0mREBXjjyt00XHPvrcaG');
+			const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
 			if (!stripe) {
 				throw new Error('Stripe failed to initialize');
 			}
@@ -281,33 +278,7 @@ export function MobileProvider({ children }) {
 			alert("Error while fetching filtered mobile ");
 		}
 	}
-
-	async function fetchFiltered() {
-		// try {
-		// 	console.log("I am in fetchFiltered");
-			
-		//     console.log(filter);
-		// 	setLoading(true);
-		// 	if (filter?.length === 0 && ramFilter?.length === 0) {
-		// 		return fetchAllMobiles();
-		// 	}
-		// 	const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
-		// 		params: {
-		// 			filter: JSON.stringify(filter),
-		// 			ramFilter: JSON.stringify(ramFilter),
-		// 		},
-		// 	});
-
-		// 	console.log(res.data.message);
-		// 	setLoading(false);
-		// 	setAllMob(res.data.message);
-		// } catch (error) {
-		// 	if (error.response.status === 401) {
-		// 		return nav("/login");
-		// 	}
-		// 	alert("Error while fetching filtered mobile ");
-		// }
-	}
+ 
 
 	const val = {
 		info,
@@ -334,8 +305,7 @@ export function MobileProvider({ children }) {
 		brand,
 		BASE_URL,
 		filter,
-		setFilter,
-		fetchFiltered,
+		setFilter, 
 		fetchFilteredd,
 		ram,
 		setRam,
