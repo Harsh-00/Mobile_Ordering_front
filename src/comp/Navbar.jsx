@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
 import { IoSearchSharp } from "react-icons/io5";
@@ -7,14 +7,18 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import toast from "react-hot-toast";
 import logo from "../assets/logo.png";
-
+  
 import { IoMdHeart } from "react-icons/io";
+import { MobileContext } from "../context/MobileContext";
 
 const Navbar = () => {
     const nav = useNavigate();
+    const ref=useRef();
     const checkUser = JSON.parse(sessionStorage?.getItem("user"));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [profile, setProfile] = useState(false);
+
+    const {navMenu, setNavMenu}=useContext(MobileContext);
+
     const navLinks = [
         { to: "/", label: "Mobiles" },
         { to: "/add-product", label: "Add Mobile" },
@@ -27,6 +31,22 @@ const Navbar = () => {
         toast.success("Logged Out");
         nav("/login");
     }
+
+    useEffect(() => {
+        const checkIfClickedOutside = e => { 
+          if (navMenu && ref.current && !ref.current.contains(e.target)) {
+            setNavMenu(false)
+          }
+        }
+    
+        document.addEventListener("mousedown", checkIfClickedOutside)
+    
+        return () => {
+          // Cleanup the event listener
+          document.removeEventListener("mousedown", checkIfClickedOutside)
+        }
+      }, [navMenu])
+
     return (
         <div className="relative">
             {/* <header className="sm:px-8 px-4 py-2 z-10 w-full bg-[#2874f0] "> */}
@@ -70,7 +90,7 @@ const Navbar = () => {
                                 <div
                                 className="cursor-pointer hover:scale-110"
                                     onClick={() => {
-                                        setProfile(!profile);
+                                        setNavMenu(!navMenu);
                                     }}
                                 >
                                     <div className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -87,7 +107,7 @@ const Navbar = () => {
                                         />
                                     </div>
                                 </div>
-                                {profile && (
+                                {navMenu && (
                                     <div
                                         enter="transition ease-out duration-100"
                                         enterFrom="transform opacity-0 scale-95"
@@ -95,6 +115,7 @@ const Navbar = () => {
                                         leave="transition ease-in duration-75"
                                         leaveFrom="transform opacity-100 scale-100"
                                         leaveTo="transform opacity-0 scale-95"
+                                        ref={ref}
                                     >
                                         <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                             

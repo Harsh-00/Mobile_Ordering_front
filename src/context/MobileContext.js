@@ -50,6 +50,8 @@ export function MobileProvider({ children }) {
 		mobileNo: "",
 	});
 
+	const [navMenu, setNavMenu] = useState(false);
+
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
 
@@ -86,7 +88,7 @@ export function MobileProvider({ children }) {
 			if (!stripe) {
 				throw new Error('Stripe failed to initialize');
 			}
-			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart} );
+			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:sessionStorage.getItem("user")._id} );
 
 			setRes(res);
 			const session = res.data;
@@ -348,7 +350,7 @@ export function MobileProvider({ children }) {
 		ratingFilter,
 		setRatingFilter,
 		price, setPrice,
-		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout
+		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout,navMenu, setNavMenu
 	};
 	return (
 		<MobileContext.Provider value={val}>{children}</MobileContext.Provider>

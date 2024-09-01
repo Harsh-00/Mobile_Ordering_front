@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdFilterListAlt } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 
@@ -27,6 +27,7 @@ const Filterbar = () => {
         setRatingFilter,
         clearFilters,sortAllMob,
     } = useContext(MobileContext);
+    const ref=useRef();
 
     useEffect(() => {
         setFilterCount(
@@ -82,6 +83,21 @@ const Filterbar = () => {
             );
         }
     }
+
+    useEffect(() => {
+        const checkIfClickedOutside = e => { 
+          if (sortPanel && ref.current && !ref.current.contains(e.target)) {
+            setSortPanel(false)
+          }
+        }
+    
+        document.addEventListener("mousedown", checkIfClickedOutside)
+    
+        return () => {
+          // Cleanup the event listener
+          document.removeEventListener("mousedown", checkIfClickedOutside)
+        }
+      }, [sortPanel])
 
     return (
         <div>
@@ -378,7 +394,7 @@ const Filterbar = () => {
                     </div>
                 </div>
 
-                <div class="relative inline-block text-left mr-4">
+                <div class="relative inline-block text-left mr-4" ref={ref}>
                     <div onClick={() => setSortPanel(!sortPanel)}>
                         <button
                             type="button"

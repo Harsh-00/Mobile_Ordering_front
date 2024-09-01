@@ -1,75 +1,3 @@
-<!-- # Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) -->
-
-
 
 # MERN Stack Mobile Ordering Project
 
@@ -119,9 +47,9 @@ To get started with the project, follow these steps:
 
 4. Create a `.env` file in the server directory and add the following environment variables:
     ```env
-    MONGODB_URI=your_mongodb_connection_string
-    JWT_SECRET=your_jwt_secret
-    STRIPE_SECRET_KEY=your_stripe_secret_key
+    DB_URL = your_mongodb_connection_string
+    JWT_SECRET_KEY = your_jwt_secret
+    STRIPE_SECRET_KEY = your_stripe_secret_key
     ```
 
 5. Start the development server:
@@ -186,38 +114,34 @@ The checkout process is integrated with Stripe, providing a secure and smooth pa
 
 ### Authentication
 
-- **POST** `/api/auth/register`: Register a new user
-- **POST** `/api/auth/login`: Log in a user
-- **POST** `/api/auth/guest-login`: Log in as a guest
+- **POST** `/mobiles/register`: Register a new user
+- **POST** `/mobiles/login`: Log in a user 
 
 ### Products
 
-- **GET** `/api/products`: Get all products
-- **GET** `/api/products/:id`: Get a single product by ID
-- **POST** `/api/products`: Add a new product (future feature for sellers)
-- **PUT** `/api/products/:id`: Update a product by ID (future feature for sellers)
-- **DELETE** `/api/products/:id`: Delete a product by ID (future feature for sellers)
+- **GET** `/mobiles/all`: Get all mobiles
+- **GET** `/mobiles/:id`: Get a single mobile by ID
+- **POST** `/mobiles/add`: Adds a new mobile device to the marketplace (future feature for sellers)
+- **PUT** `/mobiles/update/:id`: Update a product by ID.
+- **DELETE** `/mobiles/delete/:id`: Delete a product by ID.
 
 ### Filtering and Sorting
 
-- **GET** `/api/products?brand=&price=&rating=&ram=&sort=`: Get filtered and sorted products
+- **GET** `/mobiles/products?brand=&price=&rating=&ram=&sort=`: Get filtered and sorted products
 
 ### Cart
 
-- **GET** `/api/cart`: Get user's cart
-- **POST** `/api/cart`: Add an item to the cart
-- **PUT** `/api/cart/:id`: Update cart item quantity
-- **DELETE** `/api/cart/:id`: Remove an item from the cart
+- **GET** `/mobiles/cart`: Get user cart
+- **POST** `/mobiles/cart/:key`: Add/Remove particular mobile from the user cart based on its current state.
 
 ### Wishlist
 
-- **GET** `/api/wishlist`: Get user's wishlist
-- **POST** `/api/wishlist`: Add an item to the wishlist
-- **DELETE** `/api/wishlist/:id`: Remove an item from the wishlist
+- **GET** `/mobiles/wishlist`: Get user wishlist
+- **POST** `/mobiles/wishlist/:key`:Add/Remove particular mobile from the user wishlist based on its current state.
 
 ### Checkout
 
-- **POST** `/api/checkout`: Process a checkout using Stripe
+- **POST** `/mobiles/checkout`: Process a checkout using Stripe
 
 ## State Management
 
@@ -245,3 +169,9 @@ We welcome contributions to the project! To contribute, follow these steps:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+
+
+ 
+

@@ -1,14 +1,30 @@
+/* HTML: <div class="spinner"></div> */
 .spinner {
-	width: 56px;
-	height: 56px;
-	border: 11.2px #474bff double;
-	border-left-style: solid;
-	border-radius: 50%;
-	animation: spinner-aib1d7 0.75s infinite linear;
-}
-
-@keyframes spinner-aib1d7 {
-	to {
-		transform: rotate(360deg);
-	}
-}
+	width: 50px;
+	aspect-ratio: 1.154;
+	position: absolute;
+	background: conic-gradient(from 120deg at 50% 64%,#0000, #408df1 1deg 120deg,#0000 121deg);
+	animation: l27-0 1.5s infinite cubic-bezier(0.3,1,0,1);
+  }
+  .spinner:before,
+  .spinner:after {
+	content:'';
+	position: absolute;
+	inset:0;
+	background:inherit;
+	transform-origin: 50% 66%;
+	animation: l27-1 1.5s infinite;
+  }
+  .spinner:after {
+	--s:-1;
+  }
+  @keyframes l27-0 {
+	 0%,30%      {transform: rotate(0)}
+	 70%         {transform: rotate(120deg)}
+	 70.01%,100% {transform: rotate(360deg)}
+  }
+  @keyframes l27-1 {
+	 0%      {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
+	 30%,70% {transform: rotate(calc(var(--s,1)*120deg)) translate(calc(var(--s,1)*-5px),10px)}
+	 100%    {transform: rotate(calc(var(--s,1)*120deg)) translate(0)}
+  }
