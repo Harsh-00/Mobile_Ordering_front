@@ -2,10 +2,38 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import {loadStripe} from '@stripe/stripe-js';
+
 
 export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
+
+	
+	const [brandFilter, setBrandFilter] = useState([]);
+	const [ramFil, setRamFil] = useState([]);
+	const [priceFilter, setPriceFilter] = useState([]);
+	const [ratingFilter, setRatingFilter] = useState([]);
+
+	const [brand, setBrand] = useState([]);
+	const [ram, setRam] = useState([]);
+	const [price, setPrice] = useState([
+        { name: "0 - $500", value: [0, 500] },
+        { name: "$500 - $1000", value: [501, 1000] },
+        { name: "$1000 - $1500", value: [1001, 1500] },
+        { name: "$1500 - $2000", value: [1501, 2000] },
+        { name: "$2000 - $2500", value: [2001, 2500] },
+        { name: "$2500 - $3000", value: [2501, 3000] },
+        { name: "Above $3000", value: [3001, 1000000] },
+    ]);
+    const [rating, setRating] = useState([
+        { name: "1 ", value: 1 },
+        { name: "2 ", value: 2 },
+        { name: "3 ", value: 3 },
+        { name: "4 ", value: 4 },
+        { name: "5 ", value: 5 },
+    ]);
+
 	const nav = useNavigate();
 	const [info, setInfo] = useState({
 		email: "",
@@ -22,26 +50,54 @@ export function MobileProvider({ children }) {
 		mobileNo: "",
 	});
 
+	const [navMenu, setNavMenu] = useState(false);
+
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
 
-	console.log("Wishhh", wishList);
 	const [cart, setCart] = useState([]);
-	console.log("Carttt", cart);
 	const [loading, setLoading] = useState(true);
 
 	const [addProduct, setAddProduct] = useState(false);
 
-	const [brand, setBrand] = useState([]);
-	console.log("Bran", brand);
 	const [filter, setFilter] = useState([]);
-	const [ram, setRam] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
 
-	// got it by ipconfig command in cmd
-	// const BASE_URL = "http://192.168.22.197:3001";
-	// const BASE_URL = "http://localhost:3001";
-	const BASE_URL = "https://mobile-ordering-backend.onrender.com";
+	const [filterCount, setFilterCount] = useState(0);
+ 
+	const BASE_URL = process.env.REACT_APP_BASE_URL;   
+
+	async function clearFilters(){
+		setBrandFilter([]);
+		setRamFil([]);
+		setPriceFilter([]);
+		setRatingFilter([]);
+	}
+
+	const[resa,setRes]=useState(null);
+	useEffect(() => {
+		console.log(resa);
+	}, [resa]);
+	async function stripeCheckout(amount){
+		try {
+			console.log(amount,cart);
+			const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
+			if (!stripe) {
+				throw new Error('Stripe failed to initialize');
+			}
+			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:sessionStorage.getItem("user")._id} );
+
+			setRes(res);
+			const session = res.data;
+			console.log(session);
+
+			const result= await stripe.redirectToCheckout({
+				sessionId: session.id,
+			});
+		} catch (error) {
+			alert("Error while fetching filtered mobile ",error);
+		}
+	}
 
 	async function loginRequest(userData) {
 		try {
@@ -70,6 +126,28 @@ export function MobileProvider({ children }) {
 		} catch (error) {}
 	}
 
+	async function sortAllMob(check){
+		console.log(check);
+		let sortedArr =[...allMob];
+		if(check==="priceAsc"){
+			console.log(check);
+			sortedArr.sort((a, b) => a.price - b.price);
+		}
+		else if(check==="priceDesc"){
+			console.log(check);
+			sortedArr.sort((a, b) => b.price - a.price);
+		}
+		else if(check==="ratingAsc"){
+			sortedArr.sort((a, b) => a.rating - b.rating);
+		}
+		else if(check==="ratingDesc"){
+			sortedArr.sort((a, b) => b.rating - a.rating);
+		}
+		console.log(sortedArr);
+		setAllMob(sortedArr);
+
+	}
+
 	async function fetchAllMobiles() {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
@@ -77,10 +155,10 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log(res);
 			await getCart();
 			await getWishList();
 			setLoading(false);
+			console.log(res.data.info);
 			setAllMob(res.data.info);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -117,7 +195,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			// console.log("Add to ", res);
 			getCart();
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -134,7 +211,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getcart", res);
 			setCart(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -167,7 +243,6 @@ export function MobileProvider({ children }) {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			console.log("in getwishlist", res);
 			setWishList(res.data.list);
 		} catch (error) {
 			if (error.response.status === 401) {
@@ -176,17 +251,20 @@ export function MobileProvider({ children }) {
 			alert("Error while fetching wishlist ");
 		}
 	}
-
-	async function fetchFiltered() {
+	
+	async function fetchFilteredd() {
 		try {
+
 			setLoading(true);
-			if (filter?.length === 0 && ramFilter?.length === 0) {
+			if (brandFilter?.length === 0 && ramFil?.length === 0 && priceFilter?.length === 0 && ratingFilter?.length === 0) {
 				return fetchAllMobiles();
 			}
-			const res = await axios.get(`${BASE_URL}/mobiles/filter`, {
+			const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
 				params: {
-					filter: JSON.stringify(filter),
-					ramFilter: JSON.stringify(ramFilter),
+					brandFilter: JSON.stringify(brandFilter),
+					ramFil: JSON.stringify(ramFil),
+					priceFilter: JSON.stringify(priceFilter),
+					ratingFilter: JSON.stringify(ratingFilter),
 				},
 			});
 
@@ -200,6 +278,7 @@ export function MobileProvider({ children }) {
 			alert("Error while fetching filtered mobile ");
 		}
 	}
+ 
 
 	const val = {
 		info,
@@ -219,18 +298,29 @@ export function MobileProvider({ children }) {
 		addProduct,
 		setAddProduct,
 		fetchAllMobiles,
+		sortAllMob,
 		storeBrands,
 		setLoading,
 		loading,
 		brand,
 		BASE_URL,
 		filter,
-		setFilter,
-		fetchFiltered,
+		setFilter, 
+		fetchFilteredd,
 		ram,
 		setRam,
 		ramFilter,
 		setRamFilter,
+		brandFilter,
+		setBrandFilter,
+		ramFil,
+		setRamFil,
+		priceFilter,
+		setPriceFilter,
+		ratingFilter,
+		setRatingFilter,
+		price, setPrice,
+		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout,navMenu, setNavMenu
 	};
 	return (
 		<MobileContext.Provider value={val}>{children}</MobileContext.Provider>

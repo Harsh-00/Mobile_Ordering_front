@@ -8,11 +8,15 @@ import Login from "./pages/Login";
 import AddProduct from "./pages/AddProduct";
 import WishList from "./pages/WishList";
 import Cart from "./pages/Cart";
+import Success from "./pages/Success";
+import Failed from "./pages/Failed";
+import { useContext, useEffect, useState } from "react";
+import { MobileContext } from "./context/MobileContext";
 
 function App() {
-	const loc = useLocation();
-	return (
-		<div className="">
+	const loc = useLocation();  
+	return ( 
+		<div className=""  >
 			{loc.pathname !== "/login" && <Navbar />}
 			<Routes>
 				<Route path="/login" element={<Login />} />
@@ -21,6 +25,8 @@ function App() {
 				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="/wishlist" element={<WishList />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/success" element={<Success/>} />
+				<Route path="/failed" element={<Failed/>} />
 				<Route path="*" element={<NoPage />} />
 			</Routes>
 		</div>
