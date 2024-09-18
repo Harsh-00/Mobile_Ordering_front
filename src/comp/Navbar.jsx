@@ -17,7 +17,7 @@ const Navbar = () => {
     const checkUser = JSON.parse(sessionStorage?.getItem("user"));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const {navMenu, setNavMenu}=useContext(MobileContext);
+    const {navMenu, setNavMenu,logoutHandler}=useContext(MobileContext);
 
     const navLinks = [
         { to: "/", label: "Mobiles" },
@@ -25,12 +25,12 @@ const Navbar = () => {
         // { to: "/mobiles", label: "Home" },
     ];
 
-    function logoutHandler() {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        toast.success("Logged Out");
-        nav("/login");
-    }
+    // function logoutHandler() {
+    //     sessionStorage.removeItem("token");
+    //     sessionStorage.removeItem("user");
+    //     toast.success("Logged Out");
+    //     nav("/login");
+    // }
 
     useEffect(() => {
         const checkIfClickedOutside = e => { 
@@ -140,6 +140,15 @@ const Navbar = () => {
                                                     className="block px-4 py-2 text-sm text-gray-700"
                                                 >
                                                     Your Wishlist
+                                                </a>
+                                            </div>
+
+                                            <div className="hover:bg-gray-100">
+                                                <a
+                                                    href="/orders"
+                                                    className="block px-4 py-2 text-sm text-gray-700"
+                                                >
+                                                    Your Orders
                                                 </a>
                                             </div>
                                             {checkUser && (

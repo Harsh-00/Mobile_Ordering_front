@@ -12,6 +12,9 @@ const WishList = () => {
 	console.log(wishList);
 	return (
 		<div className="max-w-5xl mx-auto flex flex-col gap-6 pt-4">
+		<div className="mx-auto text-3xl font-semibold leading-6 py-6 pb-10 text-gray-800 underline">
+                Wishlist
+            </div>
 			{wishList?.length === 0 && (
 				<div className="flex flex-col justify-center items-center gap-6 mt-24">
 					<img

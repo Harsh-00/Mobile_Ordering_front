@@ -64,38 +64,78 @@ export function MobileProvider({ children }) {
 	const [ramFilter, setRamFilter] = useState([]);
 
 	const [filterCount, setFilterCount] = useState(0);
- 
-	const BASE_URL = process.env.REACT_APP_BASE_URL;   
 
+	const [orders, setOrders] = useState([]);
+	
+	const BASE_URL = process.env.REACT_APP_BASE_URL;
+	
 	async function clearFilters(){
 		setBrandFilter([]);
 		setRamFil([]);
 		setPriceFilter([]);
 		setRatingFilter([]);
 	}
-
+	
 	const[resa,setRes]=useState(null);
+	// useEffect(() => {
+		// 	console.log(resa);
+		// }, [resa]);
+		
+	const [user, setUser] = useState(null); 
 	useEffect(() => {
-		console.log(resa);
-	}, [resa]);
+        const storedUser = sessionStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
 	async function stripeCheckout(amount){
 		try {
-			console.log(amount,cart);
 			const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
 			if (!stripe) {
 				throw new Error('Stripe failed to initialize');
 			}
-			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:sessionStorage.getItem("user")._id} );
+			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:JSON.parse(sessionStorage.getItem('user'))?._id} );
 
 			setRes(res);
-			const session = res.data;
-			console.log(session);
+			const session = res.data; 
 
 			const result= await stripe.redirectToCheckout({
 				sessionId: session.id,
 			});
 		} catch (error) {
-			alert("Error while fetching filtered mobile ",error);
+			console.log(error);
+			return toast.error("Error while processing payment");
+		}
+	}
+
+	async function stripeOrder(id,status){
+		try{ 
+
+			const res = await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`  ); 
+		}
+		catch(e)
+		{
+			console.log(e);
+			toast.error("Error while fetching order status"); 
+		}
+	}
+
+	async function orderHistoryUser()
+	{
+		try {
+			if(user==null) throw new Error("User not logged in");
+			const id=JSON.parse(user)?._id;
+			const res = await axios.get(`${BASE_URL}/mobiles/orders/user/${id}` , {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setOrders(res.data.message);
+
+		} catch (e) {
+			toast.error(e.message);
+			return nav("/login");
 		}
 	}
 
@@ -105,14 +145,12 @@ export function MobileProvider({ children }) {
 			// toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
-			console.log(res);
+			setUser(res.data.verifyUser);
 
 			nav("/");
 		} catch (error) {
-			// if (error.response.status === 401) {
-			// 	return toast.error("Invalid Credentials");
-			// }
-			// alert("Error while login ");
+			console.log(error);
+			return toast.error("Invalid Credentials"); 
 		}
 	}
 
@@ -123,28 +161,48 @@ export function MobileProvider({ children }) {
 				userData
 			);
 			toast.success("Registration Successfull");
-		} catch (error) {}
+		} catch (error) {
+			console.log(error);
+			return toast.error("Registration Failed");
+		}
+	}
+
+	async function logoutHandler()
+	{
+		try{
+			sessionStorage.removeItem("token");
+        	sessionStorage.removeItem("user");
+        	toast.success("Logged Out");
+        	nav("/login"); 
+			setUser(null);
+		}
+		catch(e)
+		{
+			console.log(e);
+			return toast.error("Error while logging out");
+		}
 	}
 
 	async function sortAllMob(check){
-		console.log(check);
-		let sortedArr =[...allMob];
-		if(check==="priceAsc"){
-			console.log(check);
-			sortedArr.sort((a, b) => a.price - b.price);
+		try {
+			let sortedArr =[...allMob];
+			if(check==="priceAsc"){
+				sortedArr.sort((a, b) => a.price - b.price);
+			}
+			else if(check==="priceDesc"){
+				sortedArr.sort((a, b) => b.price - a.price);
+			}
+			else if(check==="ratingAsc"){
+				sortedArr.sort((a, b) => a.rating - b.rating);
+			}
+			else if(check==="ratingDesc"){
+				sortedArr.sort((a, b) => b.rating - a.rating);
+				setAllMob(sortedArr);
+				}
+		} catch (error) {
+			console.log(error);
+			toast.error("Error while fetching all mobile ");
 		}
-		else if(check==="priceDesc"){
-			console.log(check);
-			sortedArr.sort((a, b) => b.price - a.price);
-		}
-		else if(check==="ratingAsc"){
-			sortedArr.sort((a, b) => a.rating - b.rating);
-		}
-		else if(check==="ratingDesc"){
-			sortedArr.sort((a, b) => b.rating - a.rating);
-		}
-		console.log(sortedArr);
-		setAllMob(sortedArr);
 
 	}
 
@@ -158,13 +216,11 @@ export function MobileProvider({ children }) {
 			await getCart();
 			await getWishList();
 			setLoading(false);
-			console.log(res.data.info);
 			setAllMob(res.data.info);
 		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while fetching all mobile ");
+			console.log(error);
+			toast.error("Error while fetching all mobile ");
+			return nav("/login");
 		}
 	}
 
@@ -172,35 +228,45 @@ export function MobileProvider({ children }) {
 		storeBrands();
 	}
 	async function storeBrands() {
-		allMob?.map((items) => {
-			brand.push(items.brand);
-		});
-		setBrand([...new Set(brand)].sort());
+		try {
+			allMob?.map((items) => {
+				brand.push(items.brand);
+			});
+			setBrand([...new Set(brand)].sort());
+		} catch (error) {
+			
+			console.log(error);
+			toast.error("Error while fetching all Brands");
+		}
 	}
 
 	if (allMob?.length > 0 && ram?.length === 0) {
 		storeRam();
 	}
 	async function storeRam() {
-		allMob?.map((items) => {
-			ram.push(items.ram);
-		});
-		setRam([...new Set(ram)].sort((a, b) => a - b));
+		try {
+			allMob?.map((items) => {
+				ram.push(items.ram);
+			});
+			setRam([...new Set(ram)].sort((a, b) => a - b));
+		} catch (error) {
+			console.log(error);
+			toast.error("Error while fetching all Ram");
+		}
 	}
 
 	async function addToCart(key) {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
+			await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
 			getCart();
 		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while adding to cart ");
+			console.log(error);
+			toast.error("Error while adding to cart ");
+			return nav("/");
 		}
 	}
 
@@ -213,10 +279,9 @@ export function MobileProvider({ children }) {
 			});
 			setCart(res.data.list);
 		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while fetching cart ");
+			console.log(error);
+			toast.error("Error while fetching cart ");
+			return nav("/");
 		}
 	}
 
@@ -229,10 +294,9 @@ export function MobileProvider({ children }) {
 			});
 			getWishList();
 		} catch (error) {
-			if (error.response.status === 401) {
-				nav("/login");
-			}
-			alert("Error while adding to wishlist ");
+			console.log(error);
+			toast.error("Error while adding to wishlist ");
+			return nav("/");
 		}
 	}
 
@@ -245,10 +309,9 @@ export function MobileProvider({ children }) {
 			});
 			setWishList(res.data.list);
 		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while fetching wishlist ");
+			console.log(error);
+			toast.error("Error while fetching wishlist ");
+			return nav("/");
 		}
 	}
 	
@@ -267,15 +330,11 @@ export function MobileProvider({ children }) {
 					ratingFilter: JSON.stringify(ratingFilter),
 				},
 			});
-
-			console.log(res.data.message);
 			setLoading(false);
 			setAllMob(res.data.message);
 		} catch (error) {
-			if (error.response.status === 401) {
-				return nav("/login");
-			}
-			alert("Error while fetching filtered mobile ");
+			console.log(error);
+			toast.error("Error while fetching filtered mobile ");
 		}
 	}
  
@@ -315,11 +374,12 @@ export function MobileProvider({ children }) {
 		setBrandFilter,
 		ramFil,
 		setRamFil,
+		stripeOrder,
 		priceFilter,
 		setPriceFilter,
 		ratingFilter,
 		setRatingFilter,
-		price, setPrice,
+		price, setPrice,orderHistoryUser,orders,logoutHandler,
 		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout,navMenu, setNavMenu
 	};
 	return (

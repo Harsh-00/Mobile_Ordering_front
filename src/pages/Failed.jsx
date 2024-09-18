@@ -1,7 +1,17 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { MobileContext } from '../context/MobileContext';
 
 const Failed = () => {
+    const {stripeOrder}=useContext(MobileContext);
+    const loc=useLocation();
+    const param= new URLSearchParams(loc.search);
+    const session_id=param.get('session_id');
+
+    useEffect(()=>{
+        stripeOrder(session_id,"failed");
+    },[])
+    
   return (
     <div>
             <div class="bg-gray-100 flex justify-center items-center h-screen">
