@@ -9,9 +9,8 @@ import AddProduct from "./pages/AddProduct";
 import WishList from "./pages/WishList";
 import Cart from "./pages/Cart";
 import Success from "./pages/Success";
-import Failed from "./pages/Failed";
-import { useContext, useEffect, useState } from "react";
-import { MobileContext } from "./context/MobileContext";
+import Failed from "./pages/Failed"; 
+import Orders from "./pages/Orders";
 
 function App() {
 	const loc = useLocation();  
@@ -24,6 +23,7 @@ function App() {
 				<Route path="/" element={<Mobile />} />
 				<Route path="/add-product" element={<AddProduct />} />
 				<Route path="/wishlist" element={<WishList />} />
+				<Route path="/orders" element={<Orders />} />
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/success" element={<Success/>} />
 				<Route path="/failed" element={<Failed/>} />

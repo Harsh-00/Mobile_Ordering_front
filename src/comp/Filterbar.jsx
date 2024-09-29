@@ -39,7 +39,7 @@ const Filterbar = () => {
         fetchFilteredd();
     }, [brandFilter, ramFil, priceFilter, ratingFilter]);
 
-    const [filtPanel, setFiltPanel] = useState(false);
+    // const [filtPanel, setFiltPanel] = useState(false);
     const [sortPanel, setSortPanel] = useState(false);
     const [brandPanel, setBrandPanel] = useState(false);
     const [ramPanel, setRamPanel] = useState(false);
@@ -101,33 +101,34 @@ const Filterbar = () => {
 
     return (
         <div>
-            <div className="relative w-full py-4 flex justify-between">
-                <div className=" flex space-x-6 divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
-                    <div className="flex flex-col gap-y-1 justify-center items-center">
+            <div className="relative bg-white w-full flex justify-between p-4 rounded-lg shadow-sm">
+            <div className="flex justify-center items-center">
                         <div
-                            onClick={() => setFiltPanel(!filtPanel)}
+                            // onClick={() => setFiltPanel(!filtPanel)}
                             className="group cursor-pointer flex items-center font-medium text-gray-700"
                         >
                             <MdFilterListAlt
-                                className="mr-2 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500"
+                                className="mr-2 h-5 w-5 flex-none text-gray-400 "
                                 aria-hidden="true"
                             />
                             {filterCount} Filters
                         </div>
 
-                        <div className="pl-6">
+                        <div className="pl-2">
                             <button
                                 type="button"
-                                className="text-gray-500 text-xs hover:underline "
+                                className="text-gray-500 text-xs hover:text-gray-400 hover:underline "
                                 onClick={() => {
                                     clearFilters();
-                                    setFiltPanel(false);
+                                    // setFiltPanel(false);
                                 }}
                             >
                                 ( Clear all )
                             </button>
                         </div>
                     </div>
+                <div className=" flex space-x-6 px-4 text-sm sm:px-6 lg:px-8">
+                    
 
                     <div
                         onMouseEnter={() => setBrandPanel(true)}
@@ -150,9 +151,9 @@ const Filterbar = () => {
                                     aria-hidden="true"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
@@ -214,9 +215,9 @@ const Filterbar = () => {
                                     aria-hidden="true"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
@@ -280,9 +281,9 @@ const Filterbar = () => {
                                     aria-hidden="true"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
@@ -345,9 +346,9 @@ const Filterbar = () => {
                                     aria-hidden="true"
                                 >
                                     <path
-                                        fill-rule="evenodd"
+                                        fillRule="evenodd"
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                        clip-rule="evenodd"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
@@ -411,9 +412,9 @@ const Filterbar = () => {
                                 aria-hidden="true"
                             >
                                 <path
-                                    fill-rule="evenodd"
+                                    fillRule="evenodd"
                                     d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                                    clip-rule="evenodd"
+                                    clipRule="evenodd"
                                 />
                             </svg>
                         </button>
@@ -487,147 +488,6 @@ const Filterbar = () => {
                     )}
                 </div>
             </div>
-            {/* Sort Panel */}
-
-            {/* filter panel */}
-
-            {filtPanel && (
-                <div className="border-t border-gray-200 py-10">
-                    <div className="mx-auto flex flex-col max-w-7xl grid-cols-2 gap-y-6 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
-                        <div className="flex flex-col gap-y-8 md:grid-cols-2 md:gap-x-6">
-                            <fieldset>
-                                <legend className="block font-medium underline">
-                                    Brand
-                                </legend>
-                                <div className="flex justify-start flex-wrap items-baseline gap-x-8 gap-y-2  sm:space-y-4 sm:pt-4">
-                                    {brand?.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center text-base sm:text-sm"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="Brand"
-                                                className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                value={item}
-                                                id={`brand-${idx}`}
-                                                onChange={brandHandler}
-                                                checked={brandFilter.includes(
-                                                    item
-                                                )}
-                                                // onChange={filterHandler}
-                                            />
-                                            <label
-                                                htmlFor={`brand-${idx}`}
-                                                className="ml-1.5 min-w-0 flex-1 text-gray-600"
-                                            >
-                                                {item}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend className="block font-medium underline">
-                                    Ram
-                                </legend>
-                                <div className="flex justify-start flex-wrap items-baseline gap-x-8 gap-y-2 pt-6 sm:space-y-4 sm:pt-4">
-                                    {ram?.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center text-base sm:text-sm"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="Ram"
-                                                className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                value={item}
-                                                id={`ram-${idx}`}
-                                                onChange={ramHandler}
-                                                checked={ramFil.includes(
-                                                    String(item)
-                                                )}
-                                                // onChange={filterHandler}
-                                            />
-                                            <label
-                                                htmlFor={`ram-${idx}`}
-                                                className="ml-3 min-w-0 flex-1 text-gray-600"
-                                            >
-                                                {item} GB
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div className="flex flex-col gap-y-8 md:grid-cols-2 md:gap-x-6">
-                            <fieldset>
-                                <legend className="block font-medium underline">
-                                    Price
-                                </legend>
-                                <div className=" flex justify-start flex-wrap items-baseline gap-x-8 gap-y-2 pt-6 sm:space-y-4 sm:pt-4">
-                                    {price?.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center text-base sm:text-sm"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="Price"
-                                                className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                value={item.value}
-                                                id={`price-${idx}`}
-                                                onChange={priceHandler}
-                                                checked={priceFilter.includes(
-                                                    String(item.value)
-                                                )}
-                                            />
-                                            <label
-                                                htmlFor={`price-${idx}`}
-                                                className="ml-3 min-w-0 flex-1 text-gray-600"
-                                            >
-                                                {item.name}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend className="block font-medium underline">
-                                    Rating
-                                </legend>
-                                <div className="flex justify-start flex-wrap items-baseline gap-x-8 gap-y-2 pt-6 sm:space-y-4 sm:pt-4">
-                                    {rating?.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center text-base sm:text-sm"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="Rating"
-                                                className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                value={item.value}
-                                                id={`rating-${idx}`}
-                                                onChange={ratingHandler}
-                                                checked={ratingFilter.includes(
-                                                    String(item.value)
-                                                )}
-                                            />
-                                            <label
-                                                htmlFor={`rating-${idx}`}
-                                                className="ml-3 min-w-0 flex-1 text-gray-600 flex items-center gap-1"
-                                            >
-                                                {item.name}
-                                                <FaStar className="h-4.5 w-4.5 text-yellow-400" />
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

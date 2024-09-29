@@ -7,55 +7,49 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdNotifications } from "react-icons/md";
 import toast from "react-hot-toast";
 import logo from "../assets/logo.png";
-  
+
 import { IoMdHeart } from "react-icons/io";
 import { MobileContext } from "../context/MobileContext";
 
 const Navbar = () => {
     const nav = useNavigate();
-    const ref=useRef();
+    const ref = useRef();
     const checkUser = JSON.parse(sessionStorage?.getItem("user"));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const {navMenu, setNavMenu}=useContext(MobileContext);
+    const { navMenu, setNavMenu, logoutHandler } = useContext(MobileContext);
 
     const navLinks = [
         { to: "/", label: "Mobiles" },
-        { to: "/add-product", label: "Add Mobile" },
+        checkUser?.role!='Customer' && { to: "/add-product", label: "Add Mobile" },
         // { to: "/mobiles", label: "Home" },
     ];
-
-    function logoutHandler() {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        toast.success("Logged Out");
-        nav("/login");
-    }
+ 
 
     useEffect(() => {
-        const checkIfClickedOutside = e => { 
-          if (navMenu && ref.current && !ref.current.contains(e.target)) {
-            setNavMenu(false)
-          }
-        }
-    
-        document.addEventListener("mousedown", checkIfClickedOutside)
-    
+        const checkIfClickedOutside = (e) => {
+            if (navMenu && ref.current && !ref.current.contains(e.target)) {
+                setNavMenu(false);
+            }
+        };
+
+        document.addEventListener("mousedown", checkIfClickedOutside);
+
         return () => {
-          // Cleanup the event listener
-          document.removeEventListener("mousedown", checkIfClickedOutside)
-        }
-      }, [navMenu])
+            // Cleanup the event listener
+            document.removeEventListener("mousedown", checkIfClickedOutside);
+        };
+    }, [navMenu]);
 
     return (
-        <div className="relative">
+        <div className="relative  ">
             {/* <header className="sm:px-8 px-4 py-2 z-10 w-full bg-[#2874f0] "> */}
 
-            <header className="sm:px-8 px-4 py-2 z-10 w-full bg-transparent text-red-300 ">
+            <header className="sm:px-8 px-4 py-2 z-10 w-full bg-white text-red-300 shadow-lg  ">
                 <nav className="flex justify-between items-center max-container">
                     <Link
                         to="/"
-                        className="text-4xl font-bold text-green-200 pb-1 flex items-center gap-2"
+                        className="text-4xl font-bold text-green-400 pb-1 flex items-center gap-2"
                     >
                         <img
                             src={logo}
@@ -65,9 +59,9 @@ const Navbar = () => {
                         <span className="">MobiMart</span>
                     </Link>
                     <ul className="hidden lg:ml-6 lg:flex lg:space-x-8">
-                        {navLinks.map((item) => (
+                        {navLinks.map((item,index) => (
                             <li
-                                key={item.label}
+                                key={index}
                                 onClick={() => {
                                     nav(item.to);
                                 }}
@@ -77,36 +71,42 @@ const Navbar = () => {
                             </li>
                         ))}
                     </ul>
-                    
-                    <div className="flex gap-4 justify-center items-center">
-                        
 
+                    <div className="flex gap-4 justify-center items-center">
                         {/* Profile dropdown */}
                         {checkUser ? (
                             <div
                                 as="div"
                                 className="relative ml-4 flex-shrink-0"
                             >
-                                <div
-                                className="cursor-pointer hover:scale-110"
-                                    onClick={() => {
-                                        setNavMenu(!navMenu);
-                                    }}
-                                >
-                                    <div className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                        <span className="absolute -inset-1.5" />
-                                        <span className="sr-only">
-                                            Open user menu
-                                        </span>
-                                        <img
-                                            className="h-10 w-10 rounded-full"
-                                            src={`https://api.multiavatar.com/${checkUser.firstName}.png`}
-                                            // src="https://xsgames.co/randomusers/avatar.php?g=pixel"
-                                            // src="https://xsgames.co/randomusers/avatar.php?g=male"
-                                            alt=""
-                                        />
+                                <div className="flex gap-6">
+                                    {checkUser.role == "Admin" && (
+                                        <div className=" rounded-md border-2 px-2 font-semibold flex justify-center items-center text-red-400">
+                                            Administrator
+                                        </div>
+                                    )}
+                                    <div
+                                        className="cursor-pointer hover:scale-110"
+                                        onClick={() => {
+                                            setNavMenu(!navMenu);
+                                        }}
+                                    >
+                                        <div className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            <span className="absolute -inset-1.5" />
+                                            <span className="sr-only">
+                                                Open user menu
+                                            </span>
+                                            <img
+                                                className="h-10 w-10 rounded-full"
+                                                src={`https://api.multiavatar.com/${checkUser.firstName}.png`}
+                                                // src="https://xsgames.co/randomusers/avatar.php?g=pixel"
+                                                // src="https://xsgames.co/randomusers/avatar.php?g=male"
+                                                alt=""
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+
                                 {navMenu && (
                                     <div
                                         enter="transition ease-out duration-100"
@@ -118,12 +118,11 @@ const Navbar = () => {
                                         ref={ref}
                                     >
                                         <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                            
-                                            {checkUser &&<div className="px-4 py-2 text-sm text-gray-700 font-semibold underline "> 
-                                                {`Hello, ${checkUser.firstName}`}
-                                
-                                            </div>}
-                                            
+                                            {checkUser && (
+                                                <div className="px-4 py-2 text-sm text-gray-700 font-semibold underline ">
+                                                    {`Hello, ${checkUser.firstName}`}
+                                                </div>
+                                            )}
 
                                             <div className="hover:bg-gray-100">
                                                 <a
@@ -142,6 +141,15 @@ const Navbar = () => {
                                                     Your Wishlist
                                                 </a>
                                             </div>
+
+                                            <div className="hover:bg-gray-100">
+                                                <a
+                                                    href="/orders"
+                                                    className="block px-4 py-2 text-sm text-gray-700"
+                                                >
+                                                    Your Orders
+                                                </a>
+                                            </div>
                                             {checkUser && (
                                                 <div
                                                     className="hover:bg-gray-100"
@@ -155,7 +163,6 @@ const Navbar = () => {
                                                     </a>
                                                 </div>
                                             )}
-                                            
                                         </div>
                                     </div>
                                 )}
@@ -168,39 +175,7 @@ const Navbar = () => {
                             >
                                 Login
                             </button>
-                        )}
-
-                        {/* {checkUser && (
-                            <div className="font-semibold  text-lg hover:underline cursor-pointer mr-8">{`Hello, ${checkUser.firstName}`}</div>
-                        )} */}
-
-                        {/* <div
-                            className="font-medium  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-3 bg-white"
-                            onClick={() => nav("/cart")}
-                        >
-                            <FaShoppingCart className="text-2xl text-green-600" />
-                        </div>
-                        <div
-                            className=" font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white"
-                            onClick={() => nav("/wishlist")}
-                        >
-                            <IoMdHeart className=" text-2xl text-red-500 " />
-                        </div> */}
-                        {/* {checkUser ? (
-                            <div
-                                className="font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white "
-                                onClick={logoutHandler}
-                            >
-                                <p className="text-md ">Logout</p>
-                            </div>
-                        ) : (
-                            <div
-                                className="font-semibold  wide:mr-24 cursor-pointer rounded-lg p-1.5 px-4 bg-white mr-8"
-                                onClick={() => nav("/login")}
-                            >
-                                <p className="text-md ">Login</p>
-                            </div>
-                        )} */}
+                        )}                       
                     </div>
 
                     <div
@@ -213,35 +188,6 @@ const Navbar = () => {
                     </div>
                 </nav>
             </header>
-            {/* {isMenuOpen && (
-                <div className="">
-                    <nav className="fixed top-0 right-0 left-0 bottom-0 lg:bottom-auto bg-slate-100 z-40">
-                        <div
-                            className="hidden max-lg:block fixed right-0 px-8 py-4 cursor-pointer"
-                            onClick={() => {
-                                setIsMenuOpen(false);
-                            }}
-                        >
-                            <AiOutlineClose className="text-4xl" />
-                        </div>
-                        <ul className=" lg:hidden flex flex-col items-center justify-center h-full ">
-                            {navLinks.map((item) => (
-                                <li key={item.label}>
-                                    <Link
-                                        to={item.to}
-                                        className=" text-lg text-slate-gray"
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                </div>
-            )} */}
         </div>
     );
 };
