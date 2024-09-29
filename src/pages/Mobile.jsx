@@ -21,8 +21,8 @@ const Mobile = () => {
 	}, []);
 
 	return (
-		<div className="relative flex flex-col w-full h-full bg-[#f0f2f5] gap-3 max-md:flex-col" onClick={() => setNavMenu(false)}>
-			<div className="bg-white mb-6 h-fit w-full shadow-xl mt-4 max-md:h-auto max-md:w-full">
+		<div className="relative flex flex-col w-full h-full min-h-screen bg-[#f0f2f5]   max-md:flex-col" onClick={() => setNavMenu(false)}>
+			<div className="   h-fit w-full mx-auto px-4   mt-4 max-md:h-auto max-md:w-full">
 				{/* <Sidebar info={allMob} /> */}
 				<Filterbar info={allMob}/>
 			</div>
@@ -33,7 +33,7 @@ const Mobile = () => {
 					<div className="min-h-screen">
 						<Loader />
 					</div>
-				) :(<div className="relative bg-white h-full w-full min-h-screen grid grid-cols-2 gap-8 p-4 pb-10 mb-6 shadow-xl mr-3 pt-6 mt-4 max-md:mr-2  max-md:ml-2 max-lg:grid-cols-1  ">
+				) :(<div className="relative   h-full w-full   grid grid-cols-2 gap-8 p-4 pb-10 mb-6   mr-3 pt-6 mt-4 max-md:mr-2  max-md:ml-2 max-lg:grid-cols-1  ">
 				
 					{allMob.map((item) => {
 						return <Card key={item.key} info={item} />;

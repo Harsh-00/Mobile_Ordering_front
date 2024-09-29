@@ -81,13 +81,15 @@ export function MobileProvider({ children }) {
 		// 	console.log(resa);
 		// }, [resa]);
 		
-	const [user, setUser] = useState(null); 
-	useEffect(() => {
-        const storedUser = sessionStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
+	// const [user, setUser] = useState(null); 
+
+	// console.log("ujd",user);
+	// useEffect(() => {
+    //     const storedUser = sessionStorage.getItem("user");
+    //     if (storedUser) {
+    //         setUser(JSON.parse(storedUser));
+    //     }
+    // }, []);
 
 	async function stripeCheckout(amount){
 		try {
@@ -124,7 +126,10 @@ export function MobileProvider({ children }) {
 	async function orderHistoryUser()
 	{
 		try {
-			if(user==null) throw new Error("User not logged in");
+		
+			const user = sessionStorage.getItem("user");
+			if (!user) throw new Error("User not logged in");
+			 
 			const id=JSON.parse(user)?._id;
 			const res = await axios.get(`${BASE_URL}/mobiles/orders/user/${id}` , {
 				headers: {
@@ -145,7 +150,7 @@ export function MobileProvider({ children }) {
 			// toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
-			setUser(res.data.verifyUser);
+			// setUser(res.data.verifyUser);
 
 			nav("/");
 		} catch (error) {
@@ -174,7 +179,8 @@ export function MobileProvider({ children }) {
         	sessionStorage.removeItem("user");
         	toast.success("Logged Out");
         	nav("/login"); 
-			setUser(null);
+			// setNavMenu(false);
+			// setUser(null);
 		}
 		catch(e)
 		{
@@ -186,7 +192,9 @@ export function MobileProvider({ children }) {
 	async function sortAllMob(check){
 		try {
 			let sortedArr =[...allMob];
+			console.log(check);
 			if(check==="priceAsc"){
+				console.log("reached");
 				sortedArr.sort((a, b) => a.price - b.price);
 			}
 			else if(check==="priceDesc"){
@@ -197,8 +205,9 @@ export function MobileProvider({ children }) {
 			}
 			else if(check==="ratingDesc"){
 				sortedArr.sort((a, b) => b.rating - a.rating);
-				setAllMob(sortedArr);
-				}
+			}
+			setAllMob(sortedArr);
+				
 		} catch (error) {
 			console.log(error);
 			toast.error("Error while fetching all mobile ");
@@ -218,7 +227,16 @@ export function MobileProvider({ children }) {
 			setLoading(false);
 			setAllMob(res.data.info);
 		} catch (error) {
-			console.log(error);
+			if(error.response.status===401){
+				toast(
+					"Please Login to Continue.",
+					{
+					  duration: 4000,
+					  icon: '🔒',
+					}
+				  );
+				return nav("/login");
+			}
 			toast.error("Error while fetching all mobile ");
 			return nav("/login");
 		}

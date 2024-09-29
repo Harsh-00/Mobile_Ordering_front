@@ -16,6 +16,7 @@ function classNames(...classes) {
 
 export default function Orders() {
     const { orderHistoryUser, orders } = useContext(MobileContext);
+    
     useEffect(() => {
         orderHistoryUser();
     }, []);
@@ -57,6 +58,7 @@ export default function Orders() {
                                     >
                                         {project.status}
                                     </p>
+                                    
                                 </div>
                                 <div className=" flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                                     <p className="whitespace-nowrap">
@@ -65,7 +67,7 @@ export default function Orders() {
                                     </p>
                                      
                                 </div>
-                                <div className="grid grid-cols-3 gap-x-10 gap-y-4 flex-wrap mt-3">
+                                <div className="grid grid-cols-3 gap-x-10 gap-y-4 flex-wrap mt-3 pl-6">
                                 {project.products.map((product) => (
                                     <div className="flex gap-x-2 mt-1">
                                         <img

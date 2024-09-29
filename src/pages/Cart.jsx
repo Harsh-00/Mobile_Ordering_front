@@ -27,19 +27,16 @@ const Cart = () => {
 
         <div className="bg-white">
             <div className="relative mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-            <div className="mx-auto w-full text-center text-3xl font-semibold leading-6 pb-2 text-gray-800 underline">
-                Your Cart
-            </div>
+                <div className="mx-auto w-full text-center text-3xl font-semibold leading-6 pb-2 text-gray-800 underline">
+                    Your Cart
+                </div>
                 <form className="relative mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
                     <section
                         aria-labelledby="cart-heading"
                         className="lg:col-span-7"
                     >
-                        <ul
-                            role="list"
-                            className="divide-y divide-gray-200 border-b border-t border-gray-200"
-                        >
-                            {cart?.length === 0 && (
+                        <div>
+                            {cart?.length === 0 ? (
                                 <div className="flex flex-col justify-center items-center gap-6 my-24">
                                     <img
                                         src={empty}
@@ -50,11 +47,16 @@ const Cart = () => {
                                         No Data Found
                                     </p>
                                 </div>
+                            ) : (
+                                <div className="relative h-full w-full grid grid-cols-1 gap-8 p-4 pb-10 mb-6 mr-3 pt-6 mt-4  ">
+                                    {cart?.map((item) => {
+                                        return (
+                                            <Card key={item.key} info={item} />
+                                        );
+                                    })}
+                                </div>
                             )}
-                            {cart?.map((item) => {
-                                return <Card key={item.key} info={item} />;
-                            })}
-                        </ul>
+                        </div>
                     </section>
 
                     {/* Order summary */}
@@ -85,7 +87,6 @@ const Cart = () => {
                                         href="#"
                                         className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
                                     >
-                                        
                                         <div
                                             className="h-5 w-5"
                                             aria-hidden="true"
@@ -103,7 +104,6 @@ const Cart = () => {
                                         href="#"
                                         className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
                                     >
-                                        
                                         <div
                                             className="h-5 w-5"
                                             aria-hidden="true"
@@ -126,7 +126,10 @@ const Cart = () => {
 
                         <div className="mt-6">
                             <button
-                                onClick={(e)=>{e.preventDefault();stripeCheckout(total)}}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    stripeCheckout(total);
+                                }}
                                 className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                             >
                                 Checkout
