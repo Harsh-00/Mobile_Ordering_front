@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdFilterListAlt } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
-
 import { FaStar } from "react-icons/fa6";
 
 const Filterbar = () => {
@@ -12,17 +11,13 @@ const Filterbar = () => {
         setPriceFilter,
         ramFil,
         price,
-        setPrice,
         setRamFil,
         brand,
-        setBrand,
         ram,
-        setRam,
         filterCount,
         setFilterCount,
         fetchFilteredd,
         rating,
-        setRating,
         ratingFilter,
         setRatingFilter,
         clearFilters,sortAllMob,
@@ -37,7 +32,7 @@ const Filterbar = () => {
                 ratingFilter.length
         );
         fetchFilteredd();
-    }, [brandFilter, ramFil, priceFilter, ratingFilter]);
+    }, [brandFilter, ramFil, priceFilter, ratingFilter,fetchFilteredd,setFilterCount]);
 
     // const [filtPanel, setFiltPanel] = useState(false);
     const [sortPanel, setSortPanel] = useState(false);

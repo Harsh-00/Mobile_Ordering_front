@@ -10,7 +10,7 @@ const Failed = () => {
 
     useEffect(()=>{
         stripeOrder(session_id,"failed");
-    },[])
+    },[stripeOrder,session_id])
     
   return (
     <div>

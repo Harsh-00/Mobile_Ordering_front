@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import Sidebar from "../comp/Sidebar";
+import React, { useContext, useEffect } from "react";
 import { MobileContext } from "../context/MobileContext";
 import Loader from "../comp/Loader";
 
@@ -10,7 +9,7 @@ import Filterbar from "../comp/Filterbar";
 const Mobile = () => {
 	const nav = useNavigate();
 	
-	const { allMob, fetchAllMobiles, loading, getWishList, getCart,navMenu,setNavMenu } =
+	const { allMob, fetchAllMobiles, loading,setNavMenu } =
 		useContext(MobileContext);
 
 	useEffect(() => {
@@ -18,7 +17,7 @@ const Mobile = () => {
 			return nav("/login");
 		}
 		fetchAllMobiles();
-	}, []);
+	}, [fetchAllMobiles,nav]);
 
 	return (
 		<div className="relative flex flex-col w-full h-full min-h-screen bg-[#f0f2f5]   max-md:flex-col" onClick={() => setNavMenu(false)}>

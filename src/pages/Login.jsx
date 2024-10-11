@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import Waihou from "../assets/Inn.svg";
 import logo from "../assets/logo.png";
 import { MobileContext } from "../context/MobileContext";
 import { useNavigate } from "react-router-dom";
@@ -24,8 +23,7 @@ const Login = () => {
         setRegInfo({ ...regInfo, [e.target.name]: e.target.value });
     }
     function loginHandler(e) {
-        e.preventDefault();
-        console.log(info);
+        e.preventDefault(); 
 
         const userData = {
             email: info.email,
@@ -70,8 +68,7 @@ const Login = () => {
             password: regInfo.password,
             role: regInfo.role,
             mobileNo: regInfo.mobileNo,
-        };
-        console.log(userData);
+        }; 
         RegisterRequest(userData);
     }
 
@@ -79,7 +76,7 @@ const Login = () => {
         if (sessionStorage.getItem("token")) {
             nav("/");
         }
-    }, []);
+    }, [nav]);
 
     return (
         <div className="flex min-h-screen flex-1  bg-gradient-to-b from-[#ebf4f5] to-[#F1EAFF] lg:grid lg:grid-cols-5 max-lg:justify-center max-lg:item-center">
@@ -155,12 +152,11 @@ const Login = () => {
                                 </div>
 
                                 <div className="text-sm leading-6">
-                                    <a
-                                        href="#"
+                                    <div 
                                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                                     >
                                         Forgot password?
-                                    </a>
+                                    </div>
                                 </div>
                             </div>
 

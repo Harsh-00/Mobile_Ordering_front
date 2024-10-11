@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { MobileContext } from "../context/MobileContext";
 import empty from "../assets/empty.svg";
 import Card from "../comp/Card";
@@ -8,8 +8,8 @@ const WishList = () => {
 
 	useEffect(() => {
 		getWishList();
-	}, []);
-	console.log(wishList);
+	}, [getWishList]); 
+	
 	return (
 		<div className="max-w-5xl mx-auto flex flex-col gap-6 py-4 pb-10">
 		<div className="mx-auto text-3xl font-semibold leading-6 py-6 pb-10 text-gray-800 underline">

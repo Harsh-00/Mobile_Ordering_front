@@ -12,7 +12,7 @@ const Success = () => {
 
     useEffect(()=>{
         stripeOrder(session_id,"success");
-    },[])
+    },[stripeOrder,session_id])
     return (
         <div>
             <div class="bg-gray-100 flex justify-center items-center h-screen">

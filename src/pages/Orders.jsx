@@ -19,9 +19,8 @@ export default function Orders() {
     
     useEffect(() => {
         orderHistoryUser();
-    }, []);
-
-    console.log(orders);
+    }, [orderHistoryUser]);
+ 
     return (
         <div className="max-w-5xl mx-auto flex flex-col gap-10 pt-4 mb-8">
             <div className="mx-auto text-3xl font-semibold leading-6 py-6 text-gray-800 underline">

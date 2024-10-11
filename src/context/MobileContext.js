@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -76,20 +76,6 @@ export function MobileProvider({ children }) {
 		setRatingFilter([]);
 	}
 	
-	const[resa,setRes]=useState(null);
-	// useEffect(() => {
-		// 	console.log(resa);
-		// }, [resa]);
-		
-	// const [user, setUser] = useState(null); 
-
-	// console.log("ujd",user);
-	// useEffect(() => {
-    //     const storedUser = sessionStorage.getItem("user");
-    //     if (storedUser) {
-    //         setUser(JSON.parse(storedUser));
-    //     }
-    // }, []);
 
 	async function stripeCheckout(amount){
 		try {
@@ -99,10 +85,9 @@ export function MobileProvider({ children }) {
 			}
 			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:JSON.parse(sessionStorage.getItem('user'))?._id} );
 
-			setRes(res);
 			const session = res.data; 
 
-			const result= await stripe.redirectToCheckout({
+			await stripe.redirectToCheckout({
 				sessionId: session.id,
 			});
 		} catch (error) {
@@ -114,7 +99,7 @@ export function MobileProvider({ children }) {
 	async function stripeOrder(id,status){
 		try{ 
 
-			const res = await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`  ); 
+			await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`  ); 
 		}
 		catch(e)
 		{
@@ -161,7 +146,7 @@ export function MobileProvider({ children }) {
 
 	async function RegisterRequest(userData) {
 		try {
-			const res = await axios.post(
+			await axios.post(
 				`${BASE_URL}/mobiles/register`,
 				userData
 			);
@@ -191,8 +176,7 @@ export function MobileProvider({ children }) {
 
 	async function sortAllMob(check){
 		try {
-			let sortedArr =[...allMob];
-			console.log(check);
+			let sortedArr =[...allMob]; 
 			if(check==="priceAsc"){
 				console.log("reached");
 				sortedArr.sort((a, b) => a.price - b.price);
@@ -247,7 +231,7 @@ export function MobileProvider({ children }) {
 	}
 	async function storeBrands() {
 		try {
-			allMob?.map((items) => {
+			allMob?.forEach((items) => {
 				brand.push(items.brand);
 			});
 			setBrand([...new Set(brand)].sort());
@@ -263,7 +247,7 @@ export function MobileProvider({ children }) {
 	}
 	async function storeRam() {
 		try {
-			allMob?.map((items) => {
+			allMob?.forEach((items) => {
 				ram.push(items.ram);
 			});
 			setRam([...new Set(ram)].sort((a, b) => a - b));
@@ -305,7 +289,7 @@ export function MobileProvider({ children }) {
 
 	async function addToWishList(key) {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+			await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},

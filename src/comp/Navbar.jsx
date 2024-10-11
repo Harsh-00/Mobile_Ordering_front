@@ -1,27 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { AiOutlineClose } from "react-icons/ai";
-import { IoSearchSharp } from "react-icons/io5";
+import React, { useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
-import { MdNotifications } from "react-icons/md";
-import toast from "react-hot-toast";
 import logo from "../assets/logo.png";
-
-import { IoMdHeart } from "react-icons/io";
 import { MobileContext } from "../context/MobileContext";
 
 const Navbar = () => {
     const nav = useNavigate();
     const ref = useRef();
     const checkUser = JSON.parse(sessionStorage?.getItem("user"));
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const { navMenu, setNavMenu, logoutHandler } = useContext(MobileContext);
 
     const navLinks = [
         { to: "/", label: "Mobiles" },
-        checkUser?.role!='Customer' && { to: "/add-product", label: "Add Mobile" },
+        checkUser?.role!=="Customer" && { to: "/add-product", label: "Add Mobile" },
         // { to: "/mobiles", label: "Home" },
     ];
  
@@ -39,7 +30,7 @@ const Navbar = () => {
             // Cleanup the event listener
             document.removeEventListener("mousedown", checkIfClickedOutside);
         };
-    }, [navMenu]);
+    }, [navMenu,setNavMenu]);
 
     return (
         <div className="relative  ">
@@ -80,7 +71,7 @@ const Navbar = () => {
                                 className="relative ml-4 flex-shrink-0"
                             >
                                 <div className="flex gap-6">
-                                    {checkUser.role == "Admin" && (
+                                    {checkUser.role === "Admin" && (
                                         <div className=" rounded-md border-2 px-2 font-semibold flex justify-center items-center text-red-400">
                                             Administrator
                                         </div>
@@ -156,7 +147,7 @@ const Navbar = () => {
                                                     onClick={logoutHandler}
                                                 >
                                                     <a
-                                                        href="#"
+                                                        href="/login"
                                                         className="block px-4 py-2 text-sm text-gray-700"
                                                     >
                                                         Log Out
@@ -176,15 +167,6 @@ const Navbar = () => {
                                 Login
                             </button>
                         )}                       
-                    </div>
-
-                    <div
-                        className="hidden max-lg:block cursor-pointer"
-                        onClick={() => {
-                            setIsMenuOpen(true);
-                        }}
-                    >
-                        <RxHamburgerMenu className="text-4xl" />
                     </div>
                 </nav>
             </header>

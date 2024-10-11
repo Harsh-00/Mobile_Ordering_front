@@ -6,19 +6,21 @@ const Cart = () => {
     const { getCart, cart,stripeCheckout } = useContext(MobileContext);
 	const [total, setTotal] = useState(0);
 
-	async function getTotal() {
-		let sum = 0;
-		cart.forEach((item) => {
-			sum += item.price;
-		});
-		setTotal(sum);
-	}
+	
 
     useEffect(() => {
         getCart();
-    }, []);
+    }, [getCart]);
 
 	useEffect(() => {
+        async function getTotal() {
+            let sum = 0;
+            cart.forEach((item) => {
+                sum += item.price;
+            });
+            setTotal(sum);
+        }
+
 		getTotal();
 	},[cart]);
 
@@ -83,15 +85,14 @@ const Cart = () => {
                             <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                                 <dt className="flex items-center text-sm text-gray-600">
                                     <span>Shipping estimate</span>
-                                    <a
-                                        href="#"
+                                    <div 
                                         className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
                                     >
                                         <div
                                             className="h-5 w-5"
                                             aria-hidden="true"
                                         />
-                                    </a>
+                                    </div>
                                 </dt>
                                 <dd className="text-sm font-medium text-gray-900">
                                     $0
@@ -100,15 +101,14 @@ const Cart = () => {
                             <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                                 <dt className="flex text-sm text-gray-600">
                                     <span>Tax estimate</span>
-                                    <a
-                                        href="#"
+                                    <div 
                                         className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
                                     >
                                         <div
                                             className="h-5 w-5"
                                             aria-hidden="true"
                                         />
-                                    </a>
+                                    </div>
                                 </dt>
                                 <dd className="text-sm font-medium text-gray-900">
                                     $0
