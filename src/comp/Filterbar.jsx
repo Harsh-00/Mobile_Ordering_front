@@ -24,6 +24,7 @@ const Filterbar = () => {
     } = useContext(MobileContext);
     const ref=useRef();
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
         setFilterCount(
             brandFilter.length +
@@ -32,7 +33,8 @@ const Filterbar = () => {
                 ratingFilter.length
         );
         fetchFilteredd();
-    }, [brandFilter, ramFil, priceFilter, ratingFilter,fetchFilteredd,setFilterCount]);
+    }, [brandFilter, ramFil, priceFilter, ratingFilter,setFilterCount]); 
+    /* eslint-enable react-hooks/exhaustive-deps */
 
     // const [filtPanel, setFiltPanel] = useState(false);
     const [sortPanel, setSortPanel] = useState(false);
@@ -128,19 +130,19 @@ const Filterbar = () => {
                     <div
                         onMouseEnter={() => setBrandPanel(true)}
                         onMouseLeave={() => setBrandPanel(false)}
-                        class="relative inline-block text-left mr-4"
+                        className="relative inline-block text-left mr-4"
                     >
                         <div>
                             <button
                                 type="button"
-                                class="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline hover:bg-gray-50"
+                                className="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline hover:bg-gray-50"
                                 id="menu-button"
                                 aria-expanded="true"
                                 aria-haspopup="true"
                             >
                                 Brand
                                 <svg
-                                    class="-mr-1 h-5 w-5 text-gray-400"
+                                    className="-mr-1 h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -156,7 +158,7 @@ const Filterbar = () => {
 
                         {brandPanel && (
                             <div
-                                class="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
@@ -192,19 +194,19 @@ const Filterbar = () => {
                     <div
                         onMouseEnter={() => setRamPanel(true)}
                         onMouseLeave={() => setRamPanel(false)}
-                        class="relative inline-block text-left mr-4"
+                        className="relative inline-block text-left mr-4"
                     >
                         <div>
                             <button
                                 type="button"
-                                class="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold hover:text-blue-600 hover:underline  hover:bg-gray-50"
+                                className="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold hover:text-blue-600 hover:underline  hover:bg-gray-50"
                                 id="menu-button"
                                 aria-expanded="true"
                                 aria-haspopup="true"
                             >
                                 Ram
                                 <svg
-                                    class="-mr-1 h-5 w-5 text-gray-400"
+                                    className="-mr-1 h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -220,7 +222,7 @@ const Filterbar = () => {
 
                         {ramPanel && (
                             <div
-                                class="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
@@ -258,19 +260,19 @@ const Filterbar = () => {
                     <div
                         onMouseEnter={() => setPricePanel(true)}
                         onMouseLeave={() => setPricePanel(false)}
-                        class="relative inline-block text-left mr-4 "
+                        className="relative inline-block text-left mr-4 "
                     >
                         <div>
                             <button
                                 type="button"
-                                class="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline  hover:bg-gray-50"
+                                className="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline  hover:bg-gray-50"
                                 id="menu-button"
                                 aria-expanded="true"
                                 aria-haspopup="true"
                             >
                                 Price
                                 <svg
-                                    class="-mr-1 h-5 w-5 text-gray-400"
+                                    className="-mr-1 h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -286,7 +288,7 @@ const Filterbar = () => {
 
                         {pricePanel && (
                             <div
-                                class="absolute p-6 grid grid-cols-1 gap-4 gap-x-8 left-0 z-10 mt-1 w-44 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-1 gap-4 gap-x-8 left-0 z-10 mt-1 w-44 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
@@ -323,19 +325,19 @@ const Filterbar = () => {
                     <div
                         onMouseEnter={() => setRatingPanel(true)}
                         onMouseLeave={() => setRatingPanel(false)}
-                        class="relative inline-block text-left mr-4"
+                        className="relative inline-block text-left mr-4"
                     >
                         <div>
                             <button
                                 type="button"
-                                class="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline  hover:bg-gray-50"
+                                className="inline-flex w-full justify-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:text-blue-600 hover:underline  hover:bg-gray-50"
                                 id="menu-button"
                                 aria-expanded="true"
                                 aria-haspopup="true"
                             >
                                 Rating
                                 <svg
-                                    class="-mr-1 h-5 w-5 text-gray-400"
+                                    className="-mr-1 h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -351,7 +353,7 @@ const Filterbar = () => {
 
                         {ratingPanel && (
                             <div
-                                class="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
@@ -390,18 +392,18 @@ const Filterbar = () => {
                     </div>
                 </div>
 
-                <div class="relative inline-block text-left mr-4" ref={ref}>
+                <div className="relative inline-block text-left mr-4" ref={ref}>
                     <div onClick={() => setSortPanel(!sortPanel)}>
                         <button
                             type="button"
-                            class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             id="menu-button"
                             aria-expanded="true"
                             aria-haspopup="true"
                         >
                             Sort By
                             <svg
-                                class="-mr-1 h-5 w-5 text-gray-400"
+                                className="-mr-1 h-5 w-5 text-gray-400"
                                 viewBox="0 0 20 20"
                                 fill="currentColor"
                                 aria-hidden="true"
@@ -417,16 +419,16 @@ const Filterbar = () => {
 
                     {sortPanel && (
                         <div
-                            class="absolute right-0 z-10 mt-2   w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            className="absolute right-0 z-10 mt-2   w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                             role="menu"
                             aria-orientation="vertical"
                             aria-labelledby="menu-button"
                             tabindex="-1"
                         >
-                            <div class="py-1" role="none">
+                            <div className="py-1" role="none">
                                 <button
                                     href="#"
-                                    class="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
@@ -439,7 +441,7 @@ const Filterbar = () => {
                                 </button>
                                 <button
                                     href="#"
-                                    class="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
@@ -452,7 +454,7 @@ const Filterbar = () => {
                                 </button>
                                 <button
                                     href="#"
-                                    class="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
@@ -465,7 +467,7 @@ const Filterbar = () => {
                                 </button>
                                 <button
                                     href="#"
-                                    class="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"

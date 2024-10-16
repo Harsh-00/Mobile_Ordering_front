@@ -54,7 +54,6 @@ const AddProduct = () => {
             );
 			nav("/");
         } catch (error) {
-			console.log(error);
 			toast.error("Error while adding product");
 			return nav("/");
         }

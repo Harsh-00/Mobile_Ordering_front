@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -69,46 +69,38 @@ export function MobileProvider({ children }) {
 	
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	
-	async function clearFilters(){
-		setBrandFilter([]);
-		setRamFil([]);
-		setPriceFilter([]);
-		setRatingFilter([]);
-	}
+	const clearFilters = useCallback(() => {
+        setBrandFilter([]);
+        setRamFil([]);
+        setPriceFilter([]);
+        setRatingFilter([]);
+    }, []);
 	
 
-	async function stripeCheckout(amount){
-		try {
-			const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
-			if (!stripe) {
-				throw new Error('Stripe failed to initialize');
-			}
-			const res = await axios.post(`${BASE_URL}/mobiles/checkout` , {amount: amount,products: cart,userId:JSON.parse(sessionStorage.getItem('user'))?._id} );
+	const stripeCheckout = useCallback(async (amount) => {
+        try {
+            const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
+            if (!stripe) throw new Error('Stripe failed to initialize');
 
-			const session = res.data; 
+            const res = await axios.post(`${BASE_URL}/mobiles/checkout`, { amount, products: cart, userId: JSON.parse(sessionStorage.getItem('user'))?._id });
 
-			await stripe.redirectToCheckout({
-				sessionId: session.id,
-			});
-		} catch (error) {
-			console.log(error);
-			return toast.error("Error while processing payment");
-		}
-	}
+            await stripe.redirectToCheckout({
+                sessionId: res.data.id,
+            });
+        } catch (error) {
+            toast.error("Error while processing payment");
+        }
+    }, [BASE_URL, cart]);
 
-	async function stripeOrder(id,status){
-		try{ 
+	const stripeOrder = useCallback(async (id, status) => {
+        try {
+            await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`);
+        } catch (error) {
+            toast.error("Error while fetching order status");
+        }
+    }, [BASE_URL]);
 
-			await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`  ); 
-		}
-		catch(e)
-		{
-			console.log(e);
-			toast.error("Error while fetching order status"); 
-		}
-	}
-
-	async function orderHistoryUser()
+	const orderHistoryUser=useCallback(async()=>
 	{
 		try {
 		
@@ -127,7 +119,7 @@ export function MobileProvider({ children }) {
 			toast.error(e.message);
 			return nav("/login");
 		}
-	}
+	},[BASE_URL, nav]);
 
 	async function loginRequest(userData) {
 		try {
@@ -139,7 +131,6 @@ export function MobileProvider({ children }) {
 
 			nav("/");
 		} catch (error) {
-			console.log(error);
 			return toast.error("Invalid Credentials"); 
 		}
 	}
@@ -152,53 +143,31 @@ export function MobileProvider({ children }) {
 			);
 			toast.success("Registration Successfull");
 		} catch (error) {
-			console.log(error);
 			return toast.error("Registration Failed");
 		}
 	}
 
-	async function logoutHandler()
-	{
-		try{
-			sessionStorage.removeItem("token");
-        	sessionStorage.removeItem("user");
-        	toast.success("Logged Out");
-        	nav("/login"); 
-			// setNavMenu(false);
-			// setUser(null);
-		}
-		catch(e)
-		{
-			console.log(e);
-			return toast.error("Error while logging out");
-		}
-	}
+	const logoutHandler = useCallback(() => {
+        try {
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("user");
+            toast.success("Logged Out");
+            nav("/login");
+        } catch (error) { 
+            toast.error("Error while logging out");
+        }
+    }, [nav]);
 
-	async function sortAllMob(check){
-		try {
-			let sortedArr =[...allMob]; 
-			if(check==="priceAsc"){
-				console.log("reached");
-				sortedArr.sort((a, b) => a.price - b.price);
-			}
-			else if(check==="priceDesc"){
-				sortedArr.sort((a, b) => b.price - a.price);
-			}
-			else if(check==="ratingAsc"){
-				sortedArr.sort((a, b) => a.rating - b.rating);
-			}
-			else if(check==="ratingDesc"){
-				sortedArr.sort((a, b) => b.rating - a.rating);
-			}
-			setAllMob(sortedArr);
-				
-		} catch (error) {
-			console.log(error);
-			toast.error("Error while fetching all mobile ");
-		}
+	const sortAllMob = useCallback((check) => {
+        let sortedArr = [...allMob];
+        if (check === "priceAsc") sortedArr.sort((a, b) => a.price - b.price);
+        else if (check === "priceDesc") sortedArr.sort((a, b) => b.price - a.price);
+        else if (check === "ratingAsc") sortedArr.sort((a, b) => a.rating - b.rating);
+        else if (check === "ratingDesc") sortedArr.sort((a, b) => b.rating - a.rating);
 
-	}
-
+        setAllMob(sortedArr);
+    }, [allMob]);
+	
 	async function fetchAllMobiles() {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
@@ -237,7 +206,6 @@ export function MobileProvider({ children }) {
 			setBrand([...new Set(brand)].sort());
 		} catch (error) {
 			
-			console.log(error);
 			toast.error("Error while fetching all Brands");
 		}
 	}
@@ -252,27 +220,11 @@ export function MobileProvider({ children }) {
 			});
 			setRam([...new Set(ram)].sort((a, b) => a - b));
 		} catch (error) {
-			console.log(error);
 			toast.error("Error while fetching all Ram");
 		}
 	}
 
-	async function addToCart(key) {
-		try {
-			await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
-				headers: {
-					Authorization: sessionStorage.getItem("token"),
-				},
-			});
-			getCart();
-		} catch (error) {
-			console.log(error);
-			toast.error("Error while adding to cart ");
-			return nav("/");
-		}
-	}
-
-	async function getCart() {
+	const getCart = useCallback(async () => {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
 				headers: {
@@ -281,28 +233,26 @@ export function MobileProvider({ children }) {
 			});
 			setCart(res.data.list);
 		} catch (error) {
-			console.log(error);
-			toast.error("Error while fetching cart ");
-			return nav("/");
+			toast.error("Error while fetching cart");
+			nav("/");
 		}
-	}
+	}, [setCart, nav, BASE_URL]);
 
-	async function addToWishList(key) {
+	const addToCart = useCallback(async (key) => {
 		try {
-			await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+			await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			getWishList();
+			await getCart();
 		} catch (error) {
-			console.log(error);
-			toast.error("Error while adding to wishlist ");
-			return nav("/");
+			toast.error("Error while adding to cart");
+			nav("/");
 		}
-	}
+	}, [ getCart, nav, BASE_URL]);
 
-	async function getWishList() {
+	const getWishList = useCallback(async () => {
 		try {
 			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
 				headers: {
@@ -311,34 +261,51 @@ export function MobileProvider({ children }) {
 			});
 			setWishList(res.data.list);
 		} catch (error) {
-			console.log(error);
-			toast.error("Error while fetching wishlist ");
-			return nav("/");
+			toast.error("Error while fetching wishlist");
+			nav("/");
 		}
-	}
-	
-	async function fetchFilteredd() {
-		try {
+	}, [setWishList, nav, BASE_URL]);
+	 
 
-			setLoading(true);
-			if (brandFilter?.length === 0 && ramFil?.length === 0 && priceFilter?.length === 0 && ratingFilter?.length === 0) {
-				return fetchAllMobiles();
-			}
-			const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
-				params: {
-					brandFilter: JSON.stringify(brandFilter),
-					ramFil: JSON.stringify(ramFil),
-					priceFilter: JSON.stringify(priceFilter),
-					ratingFilter: JSON.stringify(ratingFilter),
+	const addToWishList = useCallback(async (key) => {
+		try {
+			await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			setLoading(false);
-			setAllMob(res.data.message);
+			getWishList();
 		} catch (error) {
-			console.log(error);
-			toast.error("Error while fetching filtered mobile ");
+			toast.error("Error while adding to wishlist");
+			nav("/");
 		}
-	}
+	}, [ getWishList, nav, BASE_URL]);
+
+	 
+	/* eslint-disable react-hooks/exhaustive-deps */
+	const fetchFilteredd = useCallback(async () => {
+        try {
+            setLoading(true);
+            if (brandFilter.length === 0 && ramFil.length === 0 && priceFilter.length === 0 && ratingFilter.length === 0) {
+                return fetchAllMobiles();
+            }
+            const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
+                params: {
+                    brandFilter: JSON.stringify(brandFilter),
+                    ramFil: JSON.stringify(ramFil),
+                    priceFilter: JSON.stringify(priceFilter),
+                    ratingFilter: JSON.stringify(ratingFilter),
+                },
+            });
+            setLoading(false);
+            setAllMob(res.data.message);
+        } catch (error) {
+            toast.error("Error while fetching filtered mobile");
+        }
+    }, [ brandFilter, ramFil, priceFilter, ratingFilter]); 
+	/* eslint-enable react-hooks/exhaustive-deps */
+	
+
  
 
 	const val = {

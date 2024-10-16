@@ -3,14 +3,13 @@ import { MobileContext } from "../context/MobileContext";
 import Card from "../comp/Card";
 import empty from "../assets/empty.svg";
 const Cart = () => {
-    const { getCart, cart,stripeCheckout } = useContext(MobileContext);
+    const { getCart,getWishList, cart,stripeCheckout } = useContext(MobileContext);
 	const [total, setTotal] = useState(0);
-
-	
 
     useEffect(() => {
         getCart();
-    }, [getCart]);
+        getWishList();
+    }, [getCart,getWishList]);
 
 	useEffect(() => {
         async function getTotal() {
