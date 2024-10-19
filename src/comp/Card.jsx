@@ -143,9 +143,9 @@ const Card = ({ info }) => {
                     </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 flex items-center gap-y-2 flex-wrap justify-between content-center">
                   <span className="text-xl font-bold text-gray-800">${info.price}</span>
-                  <div className="space-x-2">
+                  <div className="space-x-2 flex flex-wrap justify-center items-center">
                     <button  
                       onClick={likeHandler}
                       className={`p-2 rounded-full ${ isLiked ? 'bg-red-100 text-red-500' : 'text-gray-400 hover:bg-gray-100'}`}

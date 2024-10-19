@@ -20,9 +20,10 @@ const Filterbar = () => {
         rating,
         ratingFilter,
         setRatingFilter,
-        clearFilters,sortAllMob,
+        clearFilters,
+        sortAllMob,
     } = useContext(MobileContext);
-    const ref=useRef();
+    const ref = useRef();
 
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
@@ -33,7 +34,7 @@ const Filterbar = () => {
                 ratingFilter.length
         );
         fetchFilteredd();
-    }, [brandFilter, ramFil, priceFilter, ratingFilter,setFilterCount]); 
+    }, [brandFilter, ramFil, priceFilter, ratingFilter, setFilterCount]);
     /* eslint-enable react-hooks/exhaustive-deps */
 
     // const [filtPanel, setFiltPanel] = useState(false);
@@ -82,51 +83,49 @@ const Filterbar = () => {
     }
 
     useEffect(() => {
-        const checkIfClickedOutside = e => { 
-          if (sortPanel && ref.current && !ref.current.contains(e.target)) {
-            setSortPanel(false)
-          }
-        }
-    
-        document.addEventListener("mousedown", checkIfClickedOutside)
-    
+        const checkIfClickedOutside = (e) => {
+            if (sortPanel && ref.current && !ref.current.contains(e.target)) {
+                setSortPanel(false);
+            }
+        };
+
+        document.addEventListener("mousedown", checkIfClickedOutside);
+
         return () => {
-          // Cleanup the event listener
-          document.removeEventListener("mousedown", checkIfClickedOutside)
-        }
-      }, [sortPanel])
+            // Cleanup the event listener
+            document.removeEventListener("mousedown", checkIfClickedOutside);
+        };
+    }, [sortPanel]);
 
     return (
         <div>
-            <div className="relative bg-white w-full flex justify-between p-4 rounded-lg shadow-sm">
-            <div className="flex justify-center items-center">
-                        <div
-                            // onClick={() => setFiltPanel(!filtPanel)}
-                            className="group cursor-pointer flex items-center font-medium text-gray-700"
-                        >
-                            <MdFilterListAlt
-                                className="mr-2 h-5 w-5 flex-none text-gray-400 "
-                                aria-hidden="true"
-                            />
-                            {filterCount} Filters
-                        </div>
-
-                        <div className="pl-2">
-                            <button
-                                type="button"
-                                className="text-gray-500 text-xs hover:text-gray-400 hover:underline "
-                                onClick={() => {
-                                    clearFilters();
-                                    // setFiltPanel(false);
-                                }}
-                            >
-                                ( Clear all )
-                            </button>
-                        </div>
+            <div className="relative bg-white w-full flex flex-wrap items-center gap-y-4 gap-x-2 justify-center sm:justify-between p-4 rounded-lg shadow-sm">
+                <div className="flex justify-center items-center max-md:flex-col">
+                    <div
+                        // onClick={() => setFiltPanel(!filtPanel)}
+                        className="group cursor-pointer flex items-center font-medium text-gray-700"
+                    >
+                        <MdFilterListAlt
+                            className="mr-2 h-5 w-5 flex-none text-gray-400 "
+                            aria-hidden="true"
+                        />
+                        {filterCount} Filters
                     </div>
-                <div className=" flex space-x-6 px-4 text-sm sm:px-6 lg:px-8">
-                    
 
+                    <div className="pl-2">
+                        <button
+                            type="button"
+                            className="text-gray-500 text-xs hover:text-gray-400 hover:underline "
+                            onClick={() => {
+                                clearFilters();
+                                // setFiltPanel(false);
+                            }}
+                        >
+                            ( Clear all )
+                        </button>
+                    </div>
+                </div>
+                <div className="  grid grid-cols-4 justify-items-start  max-sm:grid-cols-2 space-x-6 px-4 text-sm sm:px-6  lg:px-8">
                     <div
                         onMouseEnter={() => setBrandPanel(true)}
                         onMouseLeave={() => setBrandPanel(false)}
@@ -142,7 +141,7 @@ const Filterbar = () => {
                             >
                                 Brand
                                 <svg
-                                    className="-mr-1 h-5 w-5 text-gray-400"
+                                    className="  h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -206,7 +205,7 @@ const Filterbar = () => {
                             >
                                 Ram
                                 <svg
-                                    className="-mr-1 h-5 w-5 text-gray-400"
+                                    className="h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -272,7 +271,7 @@ const Filterbar = () => {
                             >
                                 Price
                                 <svg
-                                    className="-mr-1 h-5 w-5 text-gray-400"
+                                    className="  h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -337,7 +336,7 @@ const Filterbar = () => {
                             >
                                 Rating
                                 <svg
-                                    className="-mr-1 h-5 w-5 text-gray-400"
+                                    className="  h-5 w-5 text-gray-400"
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                     aria-hidden="true"
@@ -403,7 +402,7 @@ const Filterbar = () => {
                         >
                             Sort By
                             <svg
-                                className="-mr-1 h-5 w-5 text-gray-400"
+                                className="  h-5 w-5 text-gray-400"
                                 viewBox="0 0 20 20"
                                 fill="currentColor"
                                 aria-hidden="true"
@@ -432,9 +431,9 @@ const Filterbar = () => {
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
-                                    onClick={()=>{
-                                        sortAllMob("priceAsc")
-                                        setSortPanel(false)
+                                    onClick={() => {
+                                        sortAllMob("priceAsc");
+                                        setSortPanel(false);
                                     }}
                                 >
                                     Price (Low to High)
@@ -445,9 +444,9 @@ const Filterbar = () => {
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
-                                    onClick={()=>{
-                                        sortAllMob("priceDesc")
-                                        setSortPanel(false)
+                                    onClick={() => {
+                                        sortAllMob("priceDesc");
+                                        setSortPanel(false);
                                     }}
                                 >
                                     Price (High to Low)
@@ -458,9 +457,9 @@ const Filterbar = () => {
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
-                                    onClick={()=>{
-                                        sortAllMob("ratingAsc")
-                                        setSortPanel(false)
+                                    onClick={() => {
+                                        sortAllMob("ratingAsc");
+                                        setSortPanel(false);
                                     }}
                                 >
                                     Rating (Low to High)
@@ -471,15 +470,13 @@ const Filterbar = () => {
                                     role="menuitem"
                                     tabindex="-1"
                                     id="menu-item-0"
-                                    onClick={()=>{
-                                        sortAllMob("ratingDesc")
-                                        setSortPanel(false)
+                                    onClick={() => {
+                                        sortAllMob("ratingDesc");
+                                        setSortPanel(false);
                                     }}
                                 >
                                     Rating (high to Low)
                                 </button>
-                                
-                                
                             </div>
                         </div>
                     )}
