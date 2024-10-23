@@ -6,24 +6,33 @@ import Card from "../comp/Card";
 import { useNavigate } from "react-router-dom";
 import Filterbar from "../comp/Filterbar";
 
+
 const Mobile = () => {
     const nav = useNavigate();
 
-    const { allMob, fetchAllMobiles, loading, setNavMenu } =
+    const { allMob,user, fetchAllMobiles, loading,getCart,getWishList,getCompare, setNavMenu } =
         useContext(MobileContext);
+    
+    
 
     /* eslint-disable react-hooks/exhaustive-deps */
-    useEffect(() => {
-        if (!window.sessionStorage.getItem("token")) {
+    useEffect(() => { 
+        if (!user) {
             return nav("/login");
         }
-        fetchAllMobiles();
-    }, []);
+        else{
+            fetchAllMobiles();
+			getCart();
+			getWishList();
+			getCompare();
+        }
+        
+    }, [user]);
     /* eslint-enable react-hooks/exhaustive-deps */
 
     return (
         <div
-            className="relative flex flex-col w-full h-full min-h-screen bg-[#f0f2f5]   max-md:flex-col"
+            className="relative flex flex-col w-full h-full min-h-screen bg-[#f0f2f5]  max-md:flex-col"
             onClick={() => setNavMenu(false)}
         >
             <div className="   h-fit w-full mx-auto px-4   mt-4 max-md:h-auto max-md:w-full">

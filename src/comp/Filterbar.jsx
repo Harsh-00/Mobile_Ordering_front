@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdFilterListAlt } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
 import { FaStar } from "react-icons/fa6";
+import { Navigate } from "react-router-dom"; 
 
 const Filterbar = () => {
     const {
@@ -22,11 +23,13 @@ const Filterbar = () => {
         setRatingFilter,
         clearFilters,
         sortAllMob,
+        user
     } = useContext(MobileContext);
     const ref = useRef();
 
     /* eslint-disable react-hooks/exhaustive-deps */
     useEffect(() => {
+        if (!user) return <Navigate to="/login" />;
         setFilterCount(
             brandFilter.length +
                 ramFil.length +
@@ -34,7 +37,7 @@ const Filterbar = () => {
                 ratingFilter.length
         );
         fetchFilteredd();
-    }, [brandFilter, ramFil, priceFilter, ratingFilter, setFilterCount]);
+    }, [user,brandFilter, ramFil, priceFilter, ratingFilter, setFilterCount]);
     /* eslint-enable react-hooks/exhaustive-deps */
 
     // const [filtPanel, setFiltPanel] = useState(false);

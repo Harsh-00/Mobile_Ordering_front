@@ -1,16 +1,18 @@
 import React, { useContext, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { MobileContext } from '../context/MobileContext';
+import { Navigate } from "react-router-dom"; 
 
 const Failed = () => {
-    const {stripeOrder}=useContext(MobileContext);
+    const {stripeOrder,user}=useContext(MobileContext);
     const loc=useLocation();
     const param= new URLSearchParams(loc.search);
     const session_id=param.get('session_id');
 
     useEffect(()=>{
+        if (!user) return <Navigate to="/login" />;
         stripeOrder(session_id,"failed");
-    },[stripeOrder,session_id])
+    },[user,stripeOrder,session_id])
     
   return (
     <div>

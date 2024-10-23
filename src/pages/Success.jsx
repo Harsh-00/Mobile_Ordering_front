@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { MobileContext } from "../context/MobileContext";
 
 
+
 const Success = () => {
     const loc=useLocation();
     const param= new URLSearchParams(loc.search);

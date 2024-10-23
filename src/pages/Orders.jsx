@@ -3,6 +3,7 @@ import moment from "moment";
 import { MobileContext } from "../context/MobileContext";
 
 import empty from "../assets/empty.svg";
+import { Navigate } from "react-router-dom"; 
 
 const statuses = {
     Complete: "text-green-700 bg-green-50 ring-green-600/20", 
@@ -15,11 +16,12 @@ function classNames(...classes) {
 }
 
 export default function Orders() {
-    const { orderHistoryUser, orders } = useContext(MobileContext);
+    const { orderHistoryUser, orders,user } = useContext(MobileContext);
     
     useEffect(() => {
+        if (!user) return <Navigate to="/login" />;
         orderHistoryUser();
-    }, [orderHistoryUser]);
+    }, [user,orderHistoryUser]);
  
     return (
         <div className="max-w-5xl mx-auto flex flex-col gap-10 pt-4 mb-8">

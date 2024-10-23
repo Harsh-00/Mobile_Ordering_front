@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { MobileContext } from "../context/MobileContext";
 
+
 const Navbar = () => {
     const nav = useNavigate();
     const ref = useRef();
@@ -13,6 +14,7 @@ const Navbar = () => {
     const navLinks = [
         { to: "/", label: "Mobiles" },
         checkUser?.role!=="Customer" && { to: "/add-product", label: "Add Mobile" },
+        { to: "/compare", label: "Compare" },
         // { to: "/mobiles", label: "Home" },
     ];
  
@@ -36,7 +38,7 @@ const Navbar = () => {
         <div className="relative  ">
             {/* <header className="sm:px-8 px-4 py-2 z-10 w-full bg-[#2874f0] "> */}
 
-            <header className="sm:px-8 px-4 py-2 z-10 w-full bg-white text-red-300 shadow-lg  ">
+            <header className="sm:px-8 px-4 py-2 w-full bg-white text-red-300 shadow-md ">
                 <nav className="flex justify-between items-center max-container">
                     <Link
                         to="/"

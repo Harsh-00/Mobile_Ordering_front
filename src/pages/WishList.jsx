@@ -2,13 +2,15 @@ import React, { useContext, useEffect } from "react";
 import { MobileContext } from "../context/MobileContext";
 import empty from "../assets/empty.svg";
 import Card from "../comp/Card";
+import { Navigate } from "react-router-dom"; 
 
 const WishList = () => {
-	const { getWishList, wishList } = useContext(MobileContext);
+	const { getWishList, wishList,user } = useContext(MobileContext);
 
 	useEffect(() => {
+		if (!user) return <Navigate to="/login" />;
 		getWishList();
-	}, [getWishList]); 
+	}, [user,getWishList]); 
 	
 	return (
 		<div className="max-w-5xl mx-auto flex flex-col gap-6 py-4 pb-10">

@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { MdDelete } from "react-icons/md";
+import { MdDelete,MdCompare } from "react-icons/md";
 import { MobileContext } from "../context/MobileContext";
-import { useNavigate } from "react-router-dom";
+import {   useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { FaHeart } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoCart } from "react-icons/io5";
 import { IoCartOutline } from "react-icons/io5";
 
-const Card = ({ info }) => {
+const Card = ({ info,comp=false }) => {
     const nav = useNavigate();
     const {
         BASE_URL,
@@ -18,14 +18,27 @@ const Card = ({ info }) => {
         wishList,
         addToCart,
         cart,
+        user,
+        compare,
+        addToCompare,
         fetchAllMobiles,
     } = useContext(MobileContext);
+   
 
     const list1 = wishList?.map((item) => item._id).includes(info._id);
     const list2 = cart?.map((item) => item._id).includes(info._id);
-    const [isLiked, setIsLiked] = useState(list1);
-    const [inCart, setInCart] = useState(list2);
-    const user = JSON.parse(sessionStorage.getItem("user")) || null;
+    const list3 = compare?.map((item) => item._id).includes(info._id);
+    const [isLiked, setIsLiked] = useState(false);
+    const [inCart, setInCart] = useState(false);
+    const [inCompare, setInCompare] = useState(false);
+
+    useEffect(() => {
+        setIsLiked(list1);
+        setInCart(list2);
+        setInCompare(list3);
+      }, [list1, list2, list3]);
+
+    // const user = JSON.parse(sessionStorage.getItem("user")) || null;
 
     async function likeHandler() {
         if (isLiked) toast.error("Removed from wishlist");
@@ -34,6 +47,18 @@ const Card = ({ info }) => {
 
         //will add or remove from wishlist ( logic done at backend)
         addToWishList(info.key);
+    }
+    async function compareHandler() {
+        if (compare.length === 4 && !inCompare) {
+            toast.error("You can compare only 4 items");
+            return;
+        }
+        if (inCompare) toast.error("Removed from Comparison");
+        else toast.success("Added to Comparision");
+        setInCompare(!inCompare);
+
+        //will add or remove from cart ( logic done at backend)
+        addToCompare(info.key);
     }
 
     async function cartHandler() {
@@ -64,7 +89,7 @@ const Card = ({ info }) => {
                 toast.error("Mobile not found");
             }
         }
-    }
+    } 
 
     const [colorClass, setColorClass] = useState("");
 
@@ -85,8 +110,8 @@ const Card = ({ info }) => {
     };
 
     return (
-        <div className="relative bg-white rounded-lg cursor-pointer shadow-md border-2 border-white overflow-hidden flex transition-shadow hover:shadow-lg hover:border-blue-500 flex-row justify-center w-full gap-8  px-4 max-sm:flex-wrap max-sm:text-sm">
-            {user?.role === "Admin" && (
+        <div className={`relative bg-white rounded-lg cursor-pointer shadow-md border-2 border-white overflow-hidden ${comp?`grid grid-cols-1 `:`flex`}  transition-shadow hover:shadow-lg hover:border-blue-500 flex-row justify-center w-full gap-8  px-4 max-sm:flex-wrap max-sm:text-sm`}>
+            {user?.role === "Admin"&& !comp && (
                 <div className="absolute top-3 right-4 flex flex-col items-center justify-center gap-2">
                     <div
                         className="p-1.5 rounded-2xl bg-gray-200 hover:scale-125 cursor-pointer transition-all duration-100 ease-in-out "
@@ -96,7 +121,7 @@ const Card = ({ info }) => {
                     </div>
                 </div>
             )}
-            <div className="w-1/3 relative">
+            <div className={`${comp?'w-full relative p-4 flex justify-center items-center':'w-1/3 relative'}`}>
                 <img src={info.mobImg} alt="mobile" className="w-[180px] pt-6   object-fit rounded-xl" />
                 { inCart && (
                   <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
@@ -104,8 +129,8 @@ const Card = ({ info }) => {
                   </div>
                 )}
             </div> 
-            <div className="w-2/3 p-4 flex flex-col justify-between">
-                <div>
+            <div className={`${comp?'w-full p-2' :'w-2/3 p-4 flex flex-col justify-between'}`}>
+                <div className={`${comp?' flex justify-center items-center flex-col':''}`}>
                     <div className=" justify-center items-center gap-4 mb-2">
                         <h1 className="font-semibold text-2xl leading-wide ">
                             {info.mobName}
@@ -127,10 +152,7 @@ const Card = ({ info }) => {
                             ({info.review} reviews)
                         </p>
                     </div>
- 
-
                    
-
                     <div className="pl-3 text-sm text-gray-600"> 
                         <p>• {info.chipset} Processor</p>
                         <p>• {info.display} inch Full HD+ display </p>
@@ -159,6 +181,13 @@ const Card = ({ info }) => {
                       aria-label={inCart ? "Remove from cart" : "Add to cart"}
                     >
                       {inCart ? <IoCart className="h-5 w-5" /> : <IoCartOutline className="h-5 w-5" />}
+                    </button>
+                    <button  
+                      onClick={compareHandler}
+                      className={`p-2 rounded-full ${inCompare ? 'bg-blue-100 text-blue-500' : 'text-gray-400 hover:bg-gray-100'}`}
+                      aria-label={inCompare ? "Remove from compare" : "Add to compare"}
+                    >
+                      {inCompare ? <MdCompare className="h-5 w-5" /> : <MdCompare className="h-5 w-5" />}
                     </button>
                     </div>
                 </div>

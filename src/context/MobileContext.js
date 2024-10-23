@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -9,7 +9,11 @@ export const MobileContext = React.createContext();
 
 export function MobileProvider({ children }) {
 
-	
+	const [user, setUser] = useState(() => {
+		const savedUser = sessionStorage.getItem("user");
+		return savedUser ? JSON.parse(savedUser) : null;
+	  });
+
 	const [brandFilter, setBrandFilter] = useState([]);
 	const [ramFil, setRamFil] = useState([]);
 	const [priceFilter, setPriceFilter] = useState([]);
@@ -51,22 +55,16 @@ export function MobileProvider({ children }) {
 	});
 
 	const [navMenu, setNavMenu] = useState(false);
-
 	const [allMob, setAllMob] = useState([]);
 	const [wishList, setWishList] = useState([]);
-
+	const [compare, setCompare] = useState([]);
 	const [cart, setCart] = useState([]);
 	const [loading, setLoading] = useState(true);
-
 	const [addProduct, setAddProduct] = useState(false);
-
 	const [filter, setFilter] = useState([]);
 	const [ramFilter, setRamFilter] = useState([]);
-
 	const [filterCount, setFilterCount] = useState(0);
-
-	const [orders, setOrders] = useState([]);
-	
+	const [orders, setOrders] = useState([]); 
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	
 	const clearFilters = useCallback(() => {
@@ -74,8 +72,96 @@ export function MobileProvider({ children }) {
         setRamFil([]);
         setPriceFilter([]);
         setRatingFilter([]);
-    }, []);
-	
+    }, []); 
+
+	const fetchAllMobiles = useCallback(async () => {
+		try {
+			setLoading(true);
+			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			// await getCart();
+			// await getWishList();
+			// await getCompare();
+
+			setLoading(false);
+			setAllMob(res.data.info);
+		} catch (error) {
+			if(error.response.status===401){
+				toast(
+					"Please Login to Continue.",
+					{
+					  duration: 4000,
+					  icon: '🔒',
+					}
+				  );
+				return nav("/login");
+			}
+			toast.error("Error while fetching all mobile ");
+			return nav("/login");
+		}
+	},[	setAllMob, nav, BASE_URL]);
+
+	const getCompare=useCallback(async () => {
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/compare`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setCompare(res.data.list);
+		} catch (error) {
+			if(error.response.status===404){
+				// toast( error.response.data.message);
+					return;
+				 
+			}
+			toast.error("Error while fetching compare");
+			nav("/login");
+		}
+	} ,[ setCompare, nav, BASE_URL]);
+
+	const getCart = useCallback(async () => {
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setCart(res.data.list);
+		} catch (error) {
+			toast.error("Error while fetching cart");
+			nav("/");
+		}
+	}, [setCart, nav, BASE_URL]);
+
+	const getWishList = useCallback(async () => {
+		try {
+			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setWishList(res.data.list);
+		} catch (error) {
+			toast.error("Error while fetching wishlist");
+			nav("/");
+		}
+	}, [setWishList, nav, BASE_URL]);
+
+	useEffect(() => {
+		if (!user) {
+			nav("/login");
+		} else {
+			fetchAllMobiles();
+			getCart();
+			getWishList();
+			getCompare();
+		}
+	}, [user, nav, fetchAllMobiles, getCart, getWishList, getCompare]);  
+
 
 	const stripeCheckout = useCallback(async (amount) => {
         try {
@@ -127,7 +213,7 @@ export function MobileProvider({ children }) {
 			// toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
-			// setUser(res.data.verifyUser);
+			setUser(res.data.verifyUser);
 
 			nav("/");
 		} catch (error) {
@@ -150,7 +236,11 @@ export function MobileProvider({ children }) {
 	const logoutHandler = useCallback(() => {
         try {
             sessionStorage.removeItem("token");
-            sessionStorage.removeItem("user");
+            sessionStorage.removeItem("user"); 
+      		setUser(null);
+      		setCart([]);
+      		setWishList([]);
+      		setCompare([]);
             toast.success("Logged Out");
             nav("/login");
         } catch (error) { 
@@ -168,32 +258,7 @@ export function MobileProvider({ children }) {
         setAllMob(sortedArr);
     }, [allMob]);
 	
-	async function fetchAllMobiles() {
-		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
-				headers: {
-					Authorization: sessionStorage.getItem("token"),
-				},
-			});
-			await getCart();
-			await getWishList();
-			setLoading(false);
-			setAllMob(res.data.info);
-		} catch (error) {
-			if(error.response.status===401){
-				toast(
-					"Please Login to Continue.",
-					{
-					  duration: 4000,
-					  icon: '🔒',
-					}
-				  );
-				return nav("/login");
-			}
-			toast.error("Error while fetching all mobile ");
-			return nav("/login");
-		}
-	}
+	
 
 	if (allMob?.length > 0 && brand?.length === 0) {
 		storeBrands();
@@ -223,20 +288,27 @@ export function MobileProvider({ children }) {
 			toast.error("Error while fetching all Ram");
 		}
 	}
+	
 
-	const getCart = useCallback(async () => {
+	const addToCompare = useCallback(async (key) => {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
+			await axios.get(`${BASE_URL}/mobiles/compare/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
 			});
-			setCart(res.data.list);
+			await getCompare();
 		} catch (error) {
-			toast.error("Error while fetching cart");
-			nav("/");
+			if(error.response.status===404){
+				toast( error.response.data.message);
+				return;
+			}
+			toast.error("Error while adding to compare");
+			nav("/login");
 		}
-	}, [setCart, nav, BASE_URL]);
+	},[ getCompare, nav, BASE_URL]);
+
+	
 
 	const addToCart = useCallback(async (key) => {
 		try {
@@ -252,19 +324,7 @@ export function MobileProvider({ children }) {
 		}
 	}, [ getCart, nav, BASE_URL]);
 
-	const getWishList = useCallback(async () => {
-		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
-				headers: {
-					Authorization: sessionStorage.getItem("token"),
-				},
-			});
-			setWishList(res.data.list);
-		} catch (error) {
-			toast.error("Error while fetching wishlist");
-			nav("/");
-		}
-	}, [setWishList, nav, BASE_URL]);
+	
 	 
 
 	const addToWishList = useCallback(async (key) => {
@@ -281,6 +341,7 @@ export function MobileProvider({ children }) {
 		}
 	}, [ getWishList, nav, BASE_URL]);
 
+	
 	 
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const fetchFilteredd = useCallback(async () => {
@@ -304,8 +365,6 @@ export function MobileProvider({ children }) {
         }
     }, [ brandFilter, ramFil, priceFilter, ratingFilter]); 
 	/* eslint-enable react-hooks/exhaustive-deps */
-	
-
  
 
 	const val = {
@@ -342,11 +401,13 @@ export function MobileProvider({ children }) {
 		brandFilter,
 		setBrandFilter,
 		ramFil,
+		compare,
+		setCompare,
 		setRamFil,
 		stripeOrder,
 		priceFilter,
 		setPriceFilter,
-		ratingFilter,
+		ratingFilter,user,addToCompare,getCompare,
 		setRatingFilter,
 		price, setPrice,orderHistoryUser,orders,logoutHandler,
 		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout,navMenu, setNavMenu

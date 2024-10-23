@@ -2,16 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { MobileContext } from "../context/MobileContext";
 import Card from "../comp/Card";
 import empty from "../assets/empty.svg";
+import { Navigate } from "react-router-dom"; 
+
 const Cart = () => {
-    const { getCart,getWishList, cart,stripeCheckout } = useContext(MobileContext);
+    const { getCart,getWishList,user, cart,stripeCheckout } = useContext(MobileContext);
 	const [total, setTotal] = useState(0);
 
     useEffect(() => {
+        if (!user) return <Navigate to="/login" />;
         getCart();
         getWishList();
-    }, [getCart,getWishList]);
+    }, [user,getCart,getWishList]);
 
 	useEffect(() => {
+        if (!user) return <Navigate to="/login" />;
         async function getTotal() {
             let sum = 0;
             cart.forEach((item) => {
@@ -21,7 +25,7 @@ const Cart = () => {
         }
 
 		getTotal();
-	},[cart]);
+	},[user,cart]);
 
     return (
         //CART COMPONENT
