@@ -56,6 +56,7 @@ export function MobileProvider({ children }) {
 
 	const [navMenu, setNavMenu] = useState(false);
 	const [allMob, setAllMob] = useState([]);
+	console.log(allMob);
 	const [wishList, setWishList] = useState([]);
 	const [compare, setCompare] = useState([]);
 	const [cart, setCart] = useState([]);
@@ -65,6 +66,7 @@ export function MobileProvider({ children }) {
 	const [ramFilter, setRamFilter] = useState([]);
 	const [filterCount, setFilterCount] = useState(0);
 	const [orders, setOrders] = useState([]); 
+	const [mobById, setMobById] = useState([]);
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 	
 	const clearFilters = useCallback(() => {
@@ -77,7 +79,7 @@ export function MobileProvider({ children }) {
 	const fetchAllMobiles = useCallback(async () => {
 		try {
 			setLoading(true);
-			const res = await axios.get(`${BASE_URL}/mobiles/all`, {
+			const res = await axios.get(`${BASE_URL}/v1/mobiles/all`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -106,7 +108,7 @@ export function MobileProvider({ children }) {
 
 	const getCompare=useCallback(async () => {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/compare`, {
+			const res = await axios.get(`${BASE_URL}/v1/compare`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -125,7 +127,7 @@ export function MobileProvider({ children }) {
 
 	const getCart = useCallback(async () => {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/cart`, {
+			const res = await axios.get(`${BASE_URL}/v1/cart`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -139,7 +141,7 @@ export function MobileProvider({ children }) {
 
 	const getWishList = useCallback(async () => {
 		try {
-			const res = await axios.get(`${BASE_URL}/mobiles/wishlist`, {
+			const res = await axios.get(`${BASE_URL}/v1/wishlist`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -162,13 +164,27 @@ export function MobileProvider({ children }) {
 		}
 	}, [user, nav, fetchAllMobiles, getCart, getWishList, getCompare]);  
 
+	const mobileById=useCallback(async(id)=>{
+		try { 
+			const res = await axios.get(`${BASE_URL}/v1/mobiles/${id}`, {
+				headers: {
+					Authorization: sessionStorage.getItem("token"),
+				},
+			});
+			setMobById(res.data.info);
+		} catch (error) {
+			toast.error("Error while fetching mobile");
+			return nav("/");
+		}
+	},[])
+
 
 	const stripeCheckout = useCallback(async (amount) => {
         try {
             const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
             if (!stripe) throw new Error('Stripe failed to initialize');
 
-            const res = await axios.post(`${BASE_URL}/mobiles/checkout`, { amount, products: cart, userId: JSON.parse(sessionStorage.getItem('user'))?._id });
+            const res = await axios.post(`${BASE_URL}/v1/checkout`, { amount, products: cart, userId: JSON.parse(sessionStorage.getItem('user'))?._id });
 
             await stripe.redirectToCheckout({
                 sessionId: res.data.id,
@@ -180,7 +196,7 @@ export function MobileProvider({ children }) {
 
 	const stripeOrder = useCallback(async (id, status) => {
         try {
-            await axios.get(`${BASE_URL}/mobiles/${status}?session_id=${id}`);
+            await axios.get(`${BASE_URL}/v1/${status}?session_id=${id}`);
         } catch (error) {
             toast.error("Error while fetching order status");
         }
@@ -194,7 +210,7 @@ export function MobileProvider({ children }) {
 			if (!user) throw new Error("User not logged in");
 			 
 			const id=JSON.parse(user)?._id;
-			const res = await axios.get(`${BASE_URL}/mobiles/orders/user/${id}` , {
+			const res = await axios.get(`${BASE_URL}/v1/orders/user/${id}` , {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -209,7 +225,7 @@ export function MobileProvider({ children }) {
 
 	async function loginRequest(userData) {
 		try {
-			const res = await axios.post(`${BASE_URL}/mobiles/login`, userData);
+			const res = await axios.post(`${BASE_URL}/v1/login`, userData);
 			// toast.success("Login Successfull");
 			sessionStorage.setItem("token", res.data.token);
 			sessionStorage.setItem("user", JSON.stringify(res.data.verifyUser));
@@ -224,7 +240,7 @@ export function MobileProvider({ children }) {
 	async function RegisterRequest(userData) {
 		try {
 			await axios.post(
-				`${BASE_URL}/mobiles/register`,
+				`${BASE_URL}/v1/register`,
 				userData
 			);
 			toast.success("Registration Successfull");
@@ -292,7 +308,7 @@ export function MobileProvider({ children }) {
 
 	const addToCompare = useCallback(async (key) => {
 		try {
-			await axios.get(`${BASE_URL}/mobiles/compare/${key}`, {
+			await axios.get(`${BASE_URL}/v1/compare/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -312,7 +328,7 @@ export function MobileProvider({ children }) {
 
 	const addToCart = useCallback(async (key) => {
 		try {
-			await axios.get(`${BASE_URL}/mobiles/cart/${key}`, {
+			await axios.get(`${BASE_URL}/v1/cart/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -329,7 +345,7 @@ export function MobileProvider({ children }) {
 
 	const addToWishList = useCallback(async (key) => {
 		try {
-			await axios.get(`${BASE_URL}/mobiles/wishlist/${key}`, {
+			await axios.get(`${BASE_URL}/v1/wishlist/${key}`, {
 				headers: {
 					Authorization: sessionStorage.getItem("token"),
 				},
@@ -350,7 +366,7 @@ export function MobileProvider({ children }) {
             if (brandFilter.length === 0 && ramFil.length === 0 && priceFilter.length === 0 && ratingFilter.length === 0) {
                 return fetchAllMobiles();
             }
-            const res = await axios.get(`${BASE_URL}/mobiles/filters`, {
+            const res = await axios.get(`${BASE_URL}/v1/filters`, {
                 params: {
                     brandFilter: JSON.stringify(brandFilter),
                     ramFil: JSON.stringify(ramFil),
@@ -407,7 +423,7 @@ export function MobileProvider({ children }) {
 		stripeOrder,
 		priceFilter,
 		setPriceFilter,
-		ratingFilter,user,addToCompare,getCompare,
+		ratingFilter,user,addToCompare,getCompare,mobileById,mobById, setMobById,
 		setRatingFilter,
 		price, setPrice,orderHistoryUser,orders,logoutHandler,
 		rating, setRating,filterCount, setFilterCount,clearFilters,stripeCheckout,navMenu, setNavMenu

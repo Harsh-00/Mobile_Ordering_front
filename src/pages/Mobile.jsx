@@ -3,7 +3,7 @@ import { MobileContext } from "../context/MobileContext";
 import Loader from "../comp/Loader";
 
 import Card from "../comp/Card";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Filterbar from "../comp/Filterbar";
 
 
@@ -12,7 +12,6 @@ const Mobile = () => {
 
     const { allMob,user, fetchAllMobiles, loading,getCart,getWishList,getCompare, setNavMenu } =
         useContext(MobileContext);
-    
     
 
     /* eslint-disable react-hooks/exhaustive-deps */
@@ -47,12 +46,16 @@ const Mobile = () => {
             ) : (
                 <div className="relative   h-full w-full   grid grid-cols-2 gap-8 p-4 pb-10 mb-6   mr-3 pt-6 mt-4 max-md:mr-2  max-md:ml-2 max-lg:grid-cols-1  ">
                     {allMob.map((item) => {
-                        return <Card key={item.key} info={item} />;
+                        return (
+                            <Link to={`/mobiles/${item.key}`} key={item.key}>
+                                <Card info={item} />;
+                            </Link>
+                        );
                     })}
                 </div>
             )}
         </div>
     );
 };
-
+// onClick={}
 export default Mobile;

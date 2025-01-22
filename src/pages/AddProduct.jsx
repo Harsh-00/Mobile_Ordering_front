@@ -37,7 +37,7 @@ const AddProduct = () => {
 
             toast.promise(
                  axios.post(
-                    `${BASE_URL}/mobiles/add`,
+                    `${BASE_URL}/v1/mobiles/add`,
                     { data },
                     {
                         headers: {

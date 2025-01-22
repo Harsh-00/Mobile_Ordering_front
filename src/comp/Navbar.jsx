@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { MobileContext } from "../context/MobileContext";
+import { FaChevronDown } from "react-icons/fa";
 
 
 const Navbar = () => {
@@ -12,7 +13,7 @@ const Navbar = () => {
     const { navMenu, setNavMenu, logoutHandler } = useContext(MobileContext);
 
     const navLinks = [
-        { to: "/", label: "Mobiles" },
+        { to: "/mobiles", label: "Mobiles" },
         checkUser?.role!=="Customer" && { to: "/add-product", label: "Add Mobile" },
         { to: "/compare", label: "Compare" },
         // { to: "/mobiles", label: "Home" },
@@ -20,7 +21,7 @@ const Navbar = () => {
  
 
     useEffect(() => {
-        const checkIfClickedOutside = (e) => {
+        const checkIfClickedOutside = (e) => {  
             if (navMenu && ref.current && !ref.current.contains(e.target)) {
                 setNavMenu(false);
             }
@@ -52,7 +53,7 @@ const Navbar = () => {
                         <span className="">MobiMart</span>
                     </Link>
                     <ul className="hidden lg:ml-6 lg:flex lg:space-x-8">
-                        {navLinks.map((item,index) => (
+                        {navLinks.map((item, index) => (
                             <li
                                 key={index}
                                 onClick={() => {
@@ -78,26 +79,30 @@ const Navbar = () => {
                                             Administrator
                                         </div>
                                     )}
-                                    <div
-                                        className="cursor-pointer hover:scale-110"
-                                        onClick={() => {
+                                    <button
+                                        type="button"
+                                        className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer hover:scale-110 transform transition duration-300 ease-in-out border-1 border-gray-400 gap-2 "
+                                        id="menu-button"
+                                        aria-expanded="true"
+                                        aria-haspopup="true"
+                                        onClick={() => { 
                                             setNavMenu(!navMenu);
                                         }}
                                     >
-                                        <div className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                            <span className="absolute -inset-1.5" />
-                                            <span className="sr-only">
-                                                Open user menu
-                                            </span>
-                                            <img
-                                                className="h-10 w-10 rounded-full"
-                                                src={`https://api.multiavatar.com/${checkUser.firstName}.png`}
-                                                // src="https://xsgames.co/randomusers/avatar.php?g=pixel"
-                                                // src="https://xsgames.co/randomusers/avatar.php?g=male"
-                                                alt=""
+                                        Accounts
+                                        <svg
+                                            className="  h-5 w-5 text-gray-400"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                                clipRule="evenodd"
                                             />
-                                        </div>
-                                    </div>
+                                        </svg>
+                                    </button>
                                 </div>
 
                                 {navMenu && (
@@ -110,10 +115,21 @@ const Navbar = () => {
                                         leaveTo="transform opacity-0 scale-95"
                                         ref={ref}
                                     >
-                                        <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <div className="absolute right-0 z-10 mt-1 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                             {checkUser && (
-                                                <div className="px-4 py-2 text-sm text-gray-700 font-semibold underline ">
-                                                    {`Hello, ${checkUser.firstName}`}
+                                                <div className="flex justify-start items-center">
+                                                    <div className="relative flex rounded-full px-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                        <img
+                                                            className="h-8 w-8 rounded-full"
+                                                            src={`https://api.multiavatar.com/${checkUser.firstName}.png`}
+                                                            // src="https://xsgames.co/randomusers/avatar.php?g=pixel"
+                                                            // src="https://xsgames.co/randomusers/avatar.php?g=male"
+                                                            alt=""
+                                                        />
+                                                    </div>
+                                                    <div className="px-1 py-4 text-sm text-gray-700 font-semibold underline ">
+                                                        {`Hello, ${checkUser.firstName}`}
+                                                    </div>
                                                 </div>
                                             )}
 
@@ -168,7 +184,7 @@ const Navbar = () => {
                             >
                                 Login
                             </button>
-                        )}                       
+                        )}
                     </div>
                 </nav>
             </header>
