@@ -21,7 +21,8 @@ const Card = ({ info,comp=false }) => {
         user,
         compare,
         addToCompare,
-        fetchAllMobiles,
+        fetchFiltered, pageLimit,fetchBrandRam,
+        // fetchAllMobiles,
     } = useContext(MobileContext);
    
 
@@ -80,7 +81,9 @@ const Card = ({ info,comp=false }) => {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                 },
             });
-            fetchAllMobiles();
+            // fetchAllMobiles();
+            fetchBrandRam();
+            fetchFiltered(1, pageLimit);
         } catch (error) {
             if (error.response.status === 401) {
                 nav("/login");

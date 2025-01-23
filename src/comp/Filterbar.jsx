@@ -17,13 +17,15 @@ const Filterbar = () => {
         ram,
         filterCount,
         setFilterCount,
-        fetchFilteredd,
+        fetchFiltered,
         rating,
         ratingFilter,
         setRatingFilter,
-        clearFilters,
-        sortAllMob,
-        user
+        clearFilters, 
+        sortBy,setSortBy,
+		sortOrder,setSortOrder,
+        user,
+        setCurrPage
     } = useContext(MobileContext);
     const ref = useRef();
 
@@ -36,11 +38,12 @@ const Filterbar = () => {
                 priceFilter.length +
                 ratingFilter.length
         );
-        fetchFilteredd();
-    }, [user,brandFilter, ramFil, priceFilter, ratingFilter, setFilterCount]);
-    /* eslint-enable react-hooks/exhaustive-deps */
+        setCurrPage(1);
+        fetchFiltered();
+    }, [user,brandFilter, ramFil, priceFilter, ratingFilter, setFilterCount,sortBy,sortOrder]);
 
-    // const [filtPanel, setFiltPanel] = useState(false);
+    /* eslint-enable react-hooks/exhaustive-deps */
+ 
     const [sortPanel, setSortPanel] = useState(false);
     const [brandPanel, setBrandPanel] = useState(false);
     const [ramPanel, setRamPanel] = useState(false);
@@ -160,11 +163,11 @@ const Filterbar = () => {
 
                         {brandPanel && (
                             <div
-                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-0 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
-                                tabindex="-1"
+                                tabIndex="-1"
                             >
                                 {brand?.map((item, idx) => (
                                     <div
@@ -224,11 +227,11 @@ const Filterbar = () => {
 
                         {ramPanel && (
                             <div
-                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-0 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
-                                tabindex="-1"
+                                tabIndex="-1"
                             >
                                 {ram?.map((item, idx) => (
                                     <div
@@ -290,11 +293,11 @@ const Filterbar = () => {
 
                         {pricePanel && (
                             <div
-                                className="absolute p-6 grid grid-cols-1 gap-4 gap-x-8 left-0 z-10 mt-1 w-44 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-1 gap-4 gap-x-8 left-0 z-10 mt-0 w-44 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
-                                tabindex="-1"
+                                tabIndex="-1"
                             >
                                 {price?.map((item, idx) => (
                                     <div
@@ -355,11 +358,11 @@ const Filterbar = () => {
 
                         {ratingPanel && (
                             <div
-                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-1 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="absolute p-6 grid grid-cols-2 gap-4 gap-x-8 left-0 z-10 mt-0 w-60 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
-                                tabindex="-1"
+                                tabIndex="-1"
                             >
                                 {rating?.map((item, idx) => (
                                     <div
@@ -425,17 +428,18 @@ const Filterbar = () => {
                             role="menu"
                             aria-orientation="vertical"
                             aria-labelledby="menu-button"
-                            tabindex="-1"
+                            tabIndex="-1"
                         >
                             <div className="py-1" role="none">
                                 <button
                                     href="#"
                                     className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
-                                    tabindex="-1"
+                                    tabIndex="-1"
                                     id="menu-item-0"
-                                    onClick={() => {
-                                        sortAllMob("priceAsc");
+                                    onClick={() => { 
+                                        setSortBy("price");
+                                        setSortOrder("asc");
                                         setSortPanel(false);
                                     }}
                                 >
@@ -445,10 +449,11 @@ const Filterbar = () => {
                                     href="#"
                                     className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
-                                    tabindex="-1"
+                                    tabIndex="-1"
                                     id="menu-item-0"
-                                    onClick={() => {
-                                        sortAllMob("priceDesc");
+                                    onClick={() => { 
+                                        setSortBy("price");
+                                        setSortOrder("desc");
                                         setSortPanel(false);
                                     }}
                                 >
@@ -458,10 +463,11 @@ const Filterbar = () => {
                                     href="#"
                                     className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
-                                    tabindex="-1"
+                                    tabIndex="-1"
                                     id="menu-item-0"
-                                    onClick={() => {
-                                        sortAllMob("ratingAsc");
+                                    onClick={() => { 
+                                        setSortBy("rating");
+                                        setSortOrder("asc");
                                         setSortPanel(false);
                                     }}
                                 >
@@ -471,10 +477,11 @@ const Filterbar = () => {
                                     href="#"
                                     className="block px-4 w-full text-left py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
-                                    tabindex="-1"
+                                    tabIndex="-1"
                                     id="menu-item-0"
-                                    onClick={() => {
-                                        sortAllMob("ratingDesc");
+                                    onClick={() => { 
+                                        setSortBy("rating");
+                                        setSortOrder("desc");
                                         setSortPanel(false);
                                     }}
                                 >
