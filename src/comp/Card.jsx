@@ -21,7 +21,7 @@ const Card = ({ info,comp=false }) => {
         user,
         compare,
         addToCompare,
-        fetchAllMobiles,
+        fetchFiltered, pageLimit,fetchBrandRam,
     } = useContext(MobileContext);
    
 
@@ -38,9 +38,9 @@ const Card = ({ info,comp=false }) => {
         setInCompare(list3);
       }, [list1, list2, list3]);
 
-    // const user = JSON.parse(sessionStorage.getItem("user")) || null;
 
-    async function likeHandler() {
+    async function likeHandler(e) {
+        e.preventDefault()  
         if (isLiked) toast.error("Removed from wishlist");
         else toast.success("Added to wishlist");
         setIsLiked(!isLiked);
@@ -48,7 +48,8 @@ const Card = ({ info,comp=false }) => {
         //will add or remove from wishlist ( logic done at backend)
         addToWishList(info.key);
     }
-    async function compareHandler() {
+    async function compareHandler(e) {
+        e.preventDefault() 
         if (compare.length === 4 && !inCompare) {
             toast.error("You can compare only 4 items");
             return;
@@ -61,7 +62,8 @@ const Card = ({ info,comp=false }) => {
         addToCompare(info.key);
     }
 
-    async function cartHandler() {
+    async function cartHandler(e) {
+        e.preventDefault() 
         if (inCart) toast.error("Removed from Cart");
         else toast.success("Added to Cart");
         setInCart(!inCart);
@@ -72,12 +74,13 @@ const Card = ({ info,comp=false }) => {
 
     async function deleteMobile() {
         try { 
-            await axios.delete(`${BASE_URL}/mobiles/delete/${info.key}`, {
+            await axios.delete(`${BASE_URL}/v1/mobiles/delete/${info.key}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                 },
             });
-            fetchAllMobiles();
+            fetchBrandRam();
+            fetchFiltered(1, pageLimit);
         } catch (error) {
             if (error.response.status === 401) {
                 nav("/login");
@@ -168,23 +171,24 @@ const Card = ({ info,comp=false }) => {
                 <div className="mt-4 flex items-center gap-y-2 flex-wrap justify-between content-center">
                   <span className="text-xl font-bold text-gray-800">${info.price}</span>
                   <div className="space-x-2 flex flex-wrap justify-center items-center">
-                    <button  
-                      onClick={likeHandler}
-                      className={`p-2 rounded-full ${ isLiked ? 'bg-red-100 text-red-500' : 'text-gray-400 hover:bg-gray-100'}`}
+                    <button 
+                      type="button" 
+                      onClick={(e)=> likeHandler(e)}
+                      className={`p-3 rounded-full ${ isLiked ? 'bg-red-100 text-red-500' : 'text-gray-400 hover:bg-gray-100'}`}
                       aria-label={isLiked ? "Remove from wishlist" : "Add to wishlist"}
                     >
                       {isLiked ? <FaHeart className="h-5 w-5" /> : <FaRegHeart className="h-5 w-5" />}
                     </button>
                     <button  
-                      onClick={cartHandler}
-                      className={`p-2 rounded-full ${inCart ? 'bg-green-100 text-green-500' : 'text-gray-400 hover:bg-gray-100'}`}
+                      onClick={(e)=> cartHandler(e)}
+                      className={`p-3 rounded-full ${inCart ? 'bg-green-100 text-green-500' : 'text-gray-400 hover:bg-gray-100'}`}
                       aria-label={inCart ? "Remove from cart" : "Add to cart"}
                     >
                       {inCart ? <IoCart className="h-5 w-5" /> : <IoCartOutline className="h-5 w-5" />}
                     </button>
                     <button  
-                      onClick={compareHandler}
-                      className={`p-2 rounded-full ${inCompare ? 'bg-blue-100 text-blue-500' : 'text-gray-400 hover:bg-gray-100'}`}
+                      onClick={(e)=> compareHandler(e)}
+                      className={`p-3 rounded-full ${inCompare ? 'bg-blue-100 text-blue-500' : 'text-gray-400 hover:bg-gray-100'}`}
                       aria-label={inCompare ? "Remove from compare" : "Add to compare"}
                     >
                       {inCompare ? <MdCompare className="h-5 w-5" /> : <MdCompare className="h-5 w-5" />}
