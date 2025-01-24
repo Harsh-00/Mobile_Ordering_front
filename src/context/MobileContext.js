@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {loadStripe} from '@stripe/stripe-js';
-import { use } from "react";
 
 
 export const MobileContext = React.createContext();
@@ -96,11 +95,7 @@ export function MobileProvider({ children }) {
 			});
 			setCompare(res.data.info);
 		} catch (error) {
-			if(error.response.status===404){
-				// toast( error.response.data.message);
-					return;
-				 
-			}
+			if(error.response.status===404) return;
 			toast.error("Error while fetching compare");
 			nav("/login");
 		}
@@ -120,7 +115,45 @@ export function MobileProvider({ children }) {
 		} catch (error) {
 			toast.error("Error while fetching brands and RAM");
 		}
-	}, []);
+	}, [BASE_URL]); 
+
+
+	/* eslint-disable react-hooks/exhaustive-deps */
+	const fetchFiltered = useCallback(async (page,limit) => {
+        try {
+            setLoading(true);
+            const res = await axios.get(`${BASE_URL}/v1/filters`, {
+                params: {
+                    brandFilter: JSON.stringify(brandFilter),
+                    ramFil: JSON.stringify(ramFil),
+                    priceFilter: JSON.stringify(priceFilter),
+                    ratingFilter: JSON.stringify(ratingFilter),
+					sortBy: sortBy,
+					sortOrder : sortOrder,
+					page,
+					limit,
+                },
+            }); 
+			
+            setLoading(false);
+			setTotalItems(res.data.extra.pagination.totalItems);
+			setTotalPages(res.data.extra.pagination.totalPages);
+            setAllMob(res.data.info);
+        } catch (error) {
+			if(error.response.status===401){
+				toast(
+					"Please Login to Continue.",
+					{
+					  duration: 4000,
+					  icon: '🔒',
+					}
+				  );
+				return nav("/login");
+			}
+            toast.error("Error while fetching mobiles");
+        }
+    }, [ brandFilter, ramFil, priceFilter, ratingFilter, sortBy, sortOrder, BASE_URL, nav]); 
+	/* eslint-enable react-hooks/exhaustive-deps */
 
 	const getCart = useCallback(async () => {
 		try {
@@ -154,8 +187,6 @@ export function MobileProvider({ children }) {
 		if (!user) {
 			nav("/login");
 		} else {
-	
-			fetchFiltered(currPage, pageLimit)
 			getCart();
 			getWishList();
 			getCompare();
@@ -165,7 +196,7 @@ export function MobileProvider({ children }) {
 	useEffect(() => {
 		fetchBrandRam();
 		fetchFiltered(currPage, pageLimit);
-	}, [user,currPage, pageLimit]);
+	}, [user,currPage, pageLimit, fetchBrandRam, fetchFiltered]);
 
 	const mobileById=useCallback(async(id)=>{
 		try { 
@@ -179,15 +210,15 @@ export function MobileProvider({ children }) {
 			toast.error("Error while fetching mobile");
 			return nav("/");
 		}
-	},[])
+	},[ BASE_URL, nav]);
 
 
-	const stripeCheckout = useCallback(async (amount) => {
+	const stripeCheckout = useCallback(async (amount,products=cart) => {
         try {
             const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
             if (!stripe) throw new Error('Stripe failed to initialize');
 
-            const res = await axios.post(`${BASE_URL}/v1/checkout`, { amount, products: cart, userId: JSON.parse(sessionStorage.getItem('user'))?._id });
+            const res = await axios.post(`${BASE_URL}/v1/checkout`, { amount, products, userId: JSON.parse(sessionStorage.getItem('user'))?._id });
 
             await stripe.redirectToCheckout({
                 sessionId: res.data.info,
@@ -320,42 +351,7 @@ export function MobileProvider({ children }) {
 	}, [ getWishList, nav, BASE_URL]);
 
 	 
-	/* eslint-disable react-hooks/exhaustive-deps */
-	const fetchFiltered = useCallback(async (page,limit) => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`${BASE_URL}/v1/filters`, {
-                params: {
-                    brandFilter: JSON.stringify(brandFilter),
-                    ramFil: JSON.stringify(ramFil),
-                    priceFilter: JSON.stringify(priceFilter),
-                    ratingFilter: JSON.stringify(ratingFilter),
-					sortBy: sortBy,
-					sortOrder : sortOrder,
-					page,
-					limit,
-                },
-            }); 
-			
-            setLoading(false);
-			setTotalItems(res.data.extra.pagination.totalItems);
-			setTotalPages(res.data.extra.pagination.totalPages);
-            setAllMob(res.data.info);
-        } catch (error) {
-			if(error.response.status===401){
-				toast(
-					"Please Login to Continue.",
-					{
-					  duration: 4000,
-					  icon: '🔒',
-					}
-				  );
-				return nav("/login");
-			}
-            toast.error("Error while fetching mobiles");
-        }
-    }, [ brandFilter, ramFil, priceFilter, ratingFilter, sortBy, sortOrder, BASE_URL]); 
-	/* eslint-enable react-hooks/exhaustive-deps */
+	
  
 
 	const val = {

@@ -34,7 +34,6 @@ const Login = () => {
             success: "Login Successfull",
             error: "Invalid Credentials",
         });
-        // loginRequest(userData);
         setInfo({ email: "", password: "" });
     }
 

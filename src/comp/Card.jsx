@@ -22,7 +22,6 @@ const Card = ({ info,comp=false }) => {
         compare,
         addToCompare,
         fetchFiltered, pageLimit,fetchBrandRam,
-        // fetchAllMobiles,
     } = useContext(MobileContext);
    
 
@@ -39,7 +38,6 @@ const Card = ({ info,comp=false }) => {
         setInCompare(list3);
       }, [list1, list2, list3]);
 
-    // const user = JSON.parse(sessionStorage.getItem("user")) || null;
 
     async function likeHandler(e) {
         e.preventDefault()  
@@ -81,7 +79,6 @@ const Card = ({ info,comp=false }) => {
                     Authorization: `Bearer ${sessionStorage.getItem("token")}`,
                 },
             });
-            // fetchAllMobiles();
             fetchBrandRam();
             fetchFiltered(1, pageLimit);
         } catch (error) {

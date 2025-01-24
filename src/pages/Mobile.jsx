@@ -14,11 +14,7 @@ const Mobile = () => {
     const {
         allMob,
         user,
-        // fetchAllMobiles,
         loading,
-        getCart,
-        getWishList,
-        getCompare,
         setNavMenu,
         fetchFiltered,pageLimit,
         totalItems,fetchBrandRam,
@@ -29,12 +25,8 @@ const Mobile = () => {
         if (!user) {
             return nav("/login");
         } else {
-            // fetchAllMobiles();
             fetchBrandRam();
             fetchFiltered(1, pageLimit);
-            // getCart();
-            // getWishList();
-            // getCompare();
         }
     }, [user]);
     /* eslint-enable react-hooks/exhaustive-deps */
@@ -53,7 +45,7 @@ const Mobile = () => {
                 <div className="min-h-screen">
                     <Loader />
                 </div>
-            ) : totalItems == 0 ? (
+            ) : totalItems === 0 ? (
                 <div className=" flex flex-col items-center justify-center h-full w-full mt-28">
                     <img
                         src={empty}
@@ -90,5 +82,4 @@ const Mobile = () => {
         </div>
     );
 };
-// onClick={}
 export default Mobile;

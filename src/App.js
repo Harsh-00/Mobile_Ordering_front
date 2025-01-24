@@ -1,7 +1,6 @@
 import "./App.css";
 import Navbar from "./comp/Navbar";
 import { Route, Routes, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
 import Mobile from "./pages/Mobile";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
@@ -25,7 +24,7 @@ function App() {
 			{loc.pathname !== "/login" && <Navbar />}
 			<Routes>
 				<Route path="/login" element={<Login />} />
-				<Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+				<Route path="/" element={user ? <Navigate to="/mobiles" /> : <Navigate to="/login" />} />
 				<Route path="/mobiles" element={user ? <Mobile /> : <Navigate to="/login" />} />
 				<Route path="/mobiles/:id" element={user ? <MobileDetail/> : <Navigate to="/login" />} />
 				<Route path="/add-product" element={ user ? <AddProduct /> : <Navigate to="/login" />} />

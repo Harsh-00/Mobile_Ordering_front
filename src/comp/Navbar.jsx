@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { MobileContext } from "../context/MobileContext";
-import { FaChevronDown } from "react-icons/fa";
 
 
 const Navbar = () => {
-    const nav = useNavigate();
+    const nav = useNavigate(); 
+    const location = useLocation();
     const ref = useRef();
     const checkUser = JSON.parse(sessionStorage?.getItem("user"));
 
@@ -15,8 +15,7 @@ const Navbar = () => {
     const navLinks = [
         { to: "/mobiles", label: "Mobiles" },
         checkUser?.role!=="Customer" && { to: "/add-product", label: "Add Mobile" },
-        { to: "/compare", label: "Compare" },
-        // { to: "/mobiles", label: "Home" },
+        { to: "/compare", label: "Compare" }, 
     ];
  
 
@@ -52,16 +51,21 @@ const Navbar = () => {
                         />
                         <span className="">MobiMart</span>
                     </Link>
-                    <ul className="hidden lg:ml-6 lg:flex lg:space-x-8">
+                    <ul className="hidden lg:ml-2 lg:flex lg:space-x-8">
                         {navLinks.map((item, index) => (
                             <li
-                                key={index}
-                                onClick={() => {
-                                    nav(item.to);
-                                }}
-                                className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-600 hover:border-gray-300 hover:text-gray-700 cursor-pointer"
+                            key={index}
+                            onClick={() => {
+                                nav(item.to);
+                            }}
+                            className={`
+                                inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium 
+                                text-gray-600 hover:text-blue-600 hover:border-blue-600 transition-all duration-300 
+                                cursor-pointer
+                                ${location.pathname === item.to ? "border-blue-600 text-blue-600" : ""}
+                            `}
                             >
-                                {item.label}
+                            {item.label}
                             </li>
                         ))}
                     </ul>

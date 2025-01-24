@@ -108,7 +108,6 @@ const Filterbar = () => {
             <div className="relative bg-white w-full flex flex-wrap items-center gap-y-4 gap-x-2 justify-center sm:justify-between p-4 rounded-lg shadow-sm">
                 <div className="flex justify-center items-center max-md:flex-col">
                     <div
-                        // onClick={() => setFiltPanel(!filtPanel)}
                         className="group cursor-pointer flex items-center font-medium text-gray-700"
                     >
                         <MdFilterListAlt
@@ -124,7 +123,6 @@ const Filterbar = () => {
                             className="text-gray-500 text-xs hover:text-gray-400 hover:underline "
                             onClick={() => {
                                 clearFilters();
-                                // setFiltPanel(false);
                             }}
                         >
                             ( Clear all )
@@ -182,7 +180,6 @@ const Filterbar = () => {
                                             id={`brand-${idx}`}
                                             onChange={brandHandler}
                                             checked={brandFilter.includes(item)}
-                                            // onChange={filterHandler}
                                         />
                                         <label
                                             htmlFor={`brand-${idx}`}
@@ -248,7 +245,6 @@ const Filterbar = () => {
                                             checked={ramFil.includes(
                                                 String(item)
                                             )}
-                                            // onChange={filterHandler}
                                         />
                                         <label
                                             htmlFor={`ram-${idx}`}
