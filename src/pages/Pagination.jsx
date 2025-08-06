@@ -12,7 +12,7 @@ export default function Pagination() {
       >
         <div className="flex flex-1 justify-center items-center gap-4 pt-1 sm:gap-8 ">
           <div 
-            className={`relative inline-flex items-center rounded-md bg-white px-3 py-1.5 text-md font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${currPage===1? ' text-gray-200 ring-gray-200 cursor-not-allowed hover:bg-white':''}`}
+            className={`relative inline-flex items-center cursor-pointer rounded-md bg-white px-3 py-1.5 text-md font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${currPage===1? ' text-gray-200 ring-gray-200 cursor-not-allowed hover:bg-white':''}`}
             onClick={() => currPage>1? setCurrPage(currPage-1):null}
           >
             Previous
@@ -21,7 +21,7 @@ export default function Pagination() {
             Page {currPage}/{totalPages}
           </div>
           <div
-            className={`relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-1.5 text-md font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${currPage===totalPages? ' text-gray-200 ring-gray-200 cursor-not-allowed hover:bg-white':''}`}
+            className={`relative ml-3 inline-flex items-center cursor-pointer rounded-md bg-white px-3 py-1.5 text-md font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0 ${currPage===totalPages? ' text-gray-200 ring-gray-200 cursor-not-allowed hover:bg-white':''}`}
             onClick={() => currPage<totalPages? setCurrPage(currPage+1):null}
           >
             Next
