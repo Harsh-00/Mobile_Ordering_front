@@ -5,6 +5,15 @@
 
 Welcome to the MERN Stack Mobile Ordering Project! This application allows users to register, sign in, browse products, apply advanced filters, add products to the cart or wishlist, and complete purchases with a seamless checkout experience. The project leverages the MERN stack (MongoDB, Express.js, React, Node.js) and incorporates various features to enhance user experience and performance.
 
+## Flow
+![alt text](image.png)
+- For Testing: Continue with Guest Login(considered as Customer)
+
+## Hosted
+- Hosted on Azure Static Webapp
+- Live Link: https://thankful-hill-0e7a04d00.5.azurestaticapps.net/
+
+
 ## Features
 
 - **User Authentication**: Users can sign in, register, or sign in as a guest using JWT authentication.
@@ -147,28 +156,6 @@ The checkout process is integrated with Stripe, providing a secure and smooth pa
 
 State management in the application is handled using Context API, which provides a way to pass data through the component tree without having to pass props down manually at every level. This approach simplifies state management and ensures that state changes are efficiently propagated across the application.
 
-## Contributing
-
-We welcome contributions to the project! To contribute, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-    ```bash
-    git checkout -b feature-name
-    ```
-3. Commit your changes.
-    ```bash
-    git commit -m 'Add feature name'
-    ```
-4. Push to the branch.
-    ```bash
-    git push origin feature-name
-    ```
-5. Create a pull request on GitHub.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 
 

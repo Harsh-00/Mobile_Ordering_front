@@ -69,7 +69,7 @@ const Mobile = () => {
                                     to={`/mobiles/${item.key}`}
                                     key={item.key}
                                 >
-                                    <Card info={item} />;
+                                    <Card info={item} />
                                 </Link>
                             );
                         })}

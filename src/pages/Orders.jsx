@@ -53,18 +53,18 @@ export default function Orders() {
                                     </p>
                                     <p
                                         className={classNames(
-                                            statuses[project.status],
+                                            statuses[project?.status],
                                             "rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset"
                                         )}
                                     >
-                                        {project.status}
+                                        {project?.status}
                                     </p>
                                     
                                 </div>
                                 <div className=" flex items-center gap-x-2 text-xs leading-5 text-gray-500">
                                     <p className="whitespace-nowrap">
                                     
-                                        Placed on : {moment(project.createdAt).format("MMM Do YYYY, h:mm a")}
+                                        Placed on : {moment(project?.createdAt).format("MMM Do YYYY, h:mm a")}
                                     </p>
                                      
                                 </div>
@@ -72,19 +72,19 @@ export default function Orders() {
                                 {project.products.map((product) => (
                                     <div className="flex gap-x-2 mt-1">
                                         <img
-                                            src={product.mobImg}
+                                            src={product?.mobImg}
                                             alt=""
                                             className="h-16 w-14 rounded-md"
                                         />
                                         <div>
                                             <p className="text-sm font-semibold leading-6 text-gray-900">
-                                                {product.mobName}
+                                                {product?.mobName}
                                             </p>
                                             <p className="text-xs text-gray-500 mb-0.5">
-                                                Brand: {product.brand}
+                                                Brand: {product?.brand}
                                             </p>
                                             <p className="text-xs text-gray-500">
-                                                Price: ${product.price}
+                                                Price: ${product?.price}
                                             </p>
                                             
                                         </div>
@@ -94,9 +94,9 @@ export default function Orders() {
                             </div>
                             <div className="flex flex-none items-center gap-x-4">
                                 <div className=" text-xl font-semibold leading-6 text-gray-900">
-                                      ${project.totalAmount}
+                                      ${project?.totalAmount}
                                     <span className="sr-only">
-                                        , {project.name}
+                                        , {project?.name}
                                     </span>
                                 </div>
                             </div>
